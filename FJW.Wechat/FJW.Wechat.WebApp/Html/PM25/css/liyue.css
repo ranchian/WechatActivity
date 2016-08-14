@@ -1,0 +1,174 @@
+
+*{
+	margin:0;
+	padding:0
+}
+ul,li{
+	list-style:none
+}
+img{
+	display:block
+}
+.liyue_banner {
+	width:100%;
+}
+.liyue_banner img{
+	width:100%;
+}
+
+.theme_bg,.content_bg,.explain_bg,.rule_bg{
+	height:130px;
+}
+.theme_bg{	
+	background:url(../images/liyue_theme.png) no-repeat left top;
+	background-size:100% 100%	
+}
+.liyue_container .liyue_title{
+	width:1080px;
+	text-align:center;
+	margin:0 auto;
+	color:#fff;
+	font-size:40px;
+	line-height:130px;
+	text-indent:0
+}
+.liyue_container p{
+	font-size:30px;
+	text-indent: 60px;
+}
+.theme_info,.content_info,.explain_info{
+	width:100%;
+	height:377px;
+}
+.theme_info{
+	background:url(../images/theme_info.png) no-repeat left center;
+	background-size:100% 100%
+}
+.liyue_text{
+	width:1080px;
+	height:377px;
+	margin:0 auto;
+	padding:60px 0;
+	line-height:40px;
+	font-weight:900	
+}
+.theme_info .liyue_text p{
+	color:#0158a8;
+}
+.content_bg{
+	background:url(../images/liyue_content.png) no-repeat left top;
+	background-size:100% 100%
+}
+.content_info{
+	background:url(../images/content_info.png) no-repeat left top;
+	background-size:100% 100%
+}
+.content_info .liyue_text p{
+	color:#00386b;
+}
+.content_info .liyue_text span{
+	color:#fbfe00
+}
+.content_time{
+	margin-top:40px
+}
+.explain_bg{
+	background:url(../images/liyue_explain.png) no-repeat left top;
+	background-size:100% 100%
+}
+.explain_info{
+	background:url(../images/explain_info.png) no-repeat left top;
+	background-size:100% 100%;
+}
+.liyue_container .explain_bg .liyue_title{
+	color:#0158a8
+}
+.liyue_container .liyue_text p{
+	color:#0158a8;
+	.text-indent:0
+}
+.rule_bg{
+	background:url(../images/liyue_rule.png) no-repeat left top;
+	background-size:100% 100%
+}
+.rule_info{
+	width:100%;
+	background:url(../images/rule_bg.png) no-repeat left top;
+	background-size:100% 100%
+}
+.rule_info .liyue_text p{
+	color:#f7fe00;
+	text-indent:0
+}
+.liyue_download{
+	width:1080px;
+	margin:0 auto;
+	text-align:center;
+	padding-bottom:50px
+}
+.liyue_download img{
+	margin-left:460px;
+	margin-bottom:10px
+}
+.liyue_container .rule_info .liyue_download p{
+	font-size:14px;
+	color:#fff;
+	line-height:20px
+}
+@media screen and (max-width:750px){
+	.theme_bg,.content_bg,.explain_bg,.rule_bg{
+		height:0.8rem;
+	}
+	.liyue_container p{
+		font-size:0.3rem;
+		text-indent:0.3rem;
+	}
+	.liyue_container .liyue_title{
+		width:6.8rem;
+		text-align:center;
+		margin:0 auto;
+		color:#fff;
+		font-size:0.4rem;
+		line-height:0.8rem;
+		text-indent:0;
+	}
+	.theme_info,.content_info,.explain_info{
+		width:100%;
+		height:4.0rem;
+	}
+	.liyue_text{
+		width:6.8rem;
+		margin:0 auto;
+		padding:0.3rem 0;
+		line-height:0.4rem;
+		font-weight:100;
+		height:auto	
+	}
+	.liyue_container p{
+		font-size:0.24rem;
+		text-indent:0.4rem;
+	}
+	.liyue_container .content_time{
+		margin-top:0.2rem;
+		text-indent:0
+	}
+	.liyue_download{
+		width:6.8rem;
+		margin:0 auto;
+		text-align:center;
+		padding-bottom:0.4rem;
+	}
+	.liyue_download img{
+		margin-left:2.9rem;
+		margin-bottom:10px;
+		width:20%
+	}
+	.liyue_container .rule_info .liyue_download p{
+		font-size:0.2rem;
+		color:#fff;
+		line-height:0.3 rem;
+	}	
+	.explain_info .liyue_text p{
+		text-indent:0
+	}
+}

@@ -1,0 +1,152 @@
+
+*{
+	margin:0;
+	padding:0;
+}
+body,html{
+	height:100%;
+}
+ul,li{
+	list-style:none
+}
+#box{
+	width:100%;
+	height:100%;
+	position:absolute;
+	left:0;
+	top:0;
+}
+#game_box{
+	position:absolute;
+	left:0;
+	top:0px;
+	bottom:0px;
+	width:100%;
+	overflow:hidden	;
+	background:url(../images/liyue_bg.png) no-repeat;
+	background-size:100% 100%;
+	display:none
+}
+.gold{
+	position:absolute;
+	width:30px;
+	height:30px;
+	background-size:100% 100%;		
+}
+.bomb{
+	position:absolute;
+	width:30px;
+	height:30px;
+	background-size:100% 100%;	
+}
+#hero{
+	width:40px;
+	height:60px;
+	background:url(../images/Hero.png) no-repeat;
+	position:absolute;
+	background-size:100%;
+	top:50%;
+	left:50%;
+	margin-left:-20px;
+	margin-top:-30px;
+}
+#stopwatch{
+	width:130px;
+	height:50px;
+	background:url(../images/stop_watch.png) no-repeat left top;
+	background-size:100% 100%;
+	z-index:99;
+	margin:0 auto;
+	color:#fff;
+	line-height: 40px;
+	text-align: center;
+	font-size:24px;
+	line-height:50px;
+}
+.game_over{
+	width:100%;
+	height:100%;
+	z-index:99;
+	background:rgba(0,0,0,.3);
+	position:absolute;
+	left:0;
+	top:0;
+	display:none
+}
+.over_info{
+	width:80%;
+	height:4.4rem;
+	position: absolute;
+	background:url(../images/over_info.png) no-repeat;
+	background-size:100% 100%;
+	left:50%;
+	top:50%;
+	margin-left:-40%;
+	margin-top:-2.2rem;
+}
+.over_info p{
+	font-size:0.44rem;
+	color:#fff;
+	text-align:center
+}
+.over_info span{
+	font-size:0.6rem;
+	color:#ff1919
+}
+.game_cong{
+	margin-top:0.4rem
+}
+.game_reward,.replay{
+	width:2rem;
+	height:0.8rem;
+	float:left;
+	margin-left:0.7rem;
+	margin-top:0.4rem
+}
+.over_info .replay{
+	background:url(../images/replay.png) no-repeat;
+	background-size:100% 100%;
+}
+.over_info .game_reward{
+	background:url(../images/game_reward.png) no-repeat;
+	background-size:100% 100%;
+}
+.over_info .title{
+	width:80%;
+	height:1.0rem;
+	background:url(../images/Game-over.png) no-repeat;
+	background-size:100% 100%;
+	margin:0 auto;
+	margin-top:-0.3rem
+}
+.game_start{
+	width:100%;
+	height:100%;
+	background:url(../images/game_start.png) no-repeat left top;
+	background-size:100% 100%;
+}
+.game_play,.check_reward{
+	width:4.0rem;
+	height:1.2rem;
+	position:absolute;
+	left:1.7rem;
+}
+.game_play{
+	bottom:2.5rem;
+	background:url(../images/play_start.png) no-repeat;
+	background-size:100% 100%
+}
+.check_reward{
+	bottom:1.0rem;
+	background:url(../images/check_reward.png) no-repeat;
+	background-size:100% 100%
+}
+.game_rule{
+	position:absolute;
+	font-size:13px;
+	left:1.7rem;
+	width:4.0rem;
+	bottom:0.4rem;
+	color:#0024ff;
+	text-align:center;
+}

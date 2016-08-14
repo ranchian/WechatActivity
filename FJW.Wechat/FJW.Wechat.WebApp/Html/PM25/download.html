@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>立即下载</title>
+		<meta content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0" name="viewport">
+		<link href="css/download.css" rel="stylesheet">
+		<script src="/Scripts/rem.js" ></script>
+		<script src="/Scripts/jquery-1.11.3.js"></script>
+        <script src="/Scripts/activityconfig.js" ></script>
+	</head>
+	<body>
+		<div class="wrap">
+			<div class="content">
+				<div class='content_top'>
+					<p>体验金可在《房金网》APP 我的账单中查看，未下载的用户可点击下载按钮下载APP</p>
+					<a href="javascript:void(0)"><img src="images/appDownload.png"></a>
+				</div>
+				<div class="content_banner">
+					<p class="gongxi">恭喜您 </p>
+					<p>本次活动获得<span class="tiyanjian"></span>体验金</p>
+				</div>
+				<div><img src="images/product.png"></div>
+				<div><img src="images/project.png"></div>
+				<div><img src="images/source.png"></div>
+				<div><img src="images/risk.png"></div>
+			</div>
+		</div>
+		<script>
+            $('.tiyanjian').html(localStorage.getItem('tiyanjin'))
+            fnReceive("pm25", "");
+		</script>
+	</body>
+</html>
