@@ -135,6 +135,10 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                 }
                 if (m.Score < score)
                 {
+                    if (score > 6000)
+                    {
+                        score = 6001;
+                    }
                     m.Score = score;
                     repositry.Update(m);
                    return Json(new ResponseModel { IsSuccess = true, Message = "" });

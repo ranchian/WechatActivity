@@ -25,7 +25,7 @@ namespace FJW.Wechat.ConsoleApp
                 _sqlConnectString = ConfigurationManager.ConnectionStrings["Default"].ConnectionString;
 
                 var repository = new ActivityRepository(_dbName, _mongoHost);
-
+                var mberRepository = new MemberRepository(_sqlConnectString);
                 var list = repository.Query<ActivityModel>(it => it.Key == "pm25").ToArray();
                 if (list.Length > 0)
                 {
@@ -33,23 +33,19 @@ namespace FJW.Wechat.ConsoleApp
                     Console.WriteLine(list[0].Key);
                     Console.WriteLine(list[0].StartTime);
                     Console.WriteLine(list[0].EndTime);
+                    var acty = list[0];
+                    var records = repository.Query<RecordModel>(it => it.Status == 1 && it.Result == -1).ToArray();
+                    //foreach (var it in records)
+                    //{
+                    //   var r = mberRepository.Give(it.MemberId, acty.RewardId, acty.ProductId, it.Score, 0);
+                    //    Console.WriteLine("MemberId:{0}, Score:{1}", it.MemberId, it.Score);
+                    //    it.Result = r;
+                    //    it.LastUpdateTime = DateTime.Now;
+                    //    repository.Update(it);
+                    //}
                 }
-                else
-                {
-                    Console.WriteLine("Length：0");
-                    var m = new ActivityModel
-                    {
-                        Key = "pm25",
-                        RewardId = 0,
-                        RewardType = 1,
-                        GameUrl = "/html/pm25/index.html",
-                        StartTime = DateTime.Now.AddDays(1).Date,
-                        EndTime = DateTime.Now.AddDays(8).Date,
-                        MaxValue = 6000
-                    };
-                    repository.Add(m);
-                    Console.WriteLine("ADD");
-                }
+
+                Console.WriteLine("OVER");
             }
             catch (Exception ex)
             {
