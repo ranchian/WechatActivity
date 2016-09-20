@@ -28,8 +28,12 @@ namespace FJW.Wechat.WebApp.Base
             var appid = Config.WechatConfig.AppId;
             if (filterContext.HttpContext.Session != null)
                 filterContext.HttpContext.Session["url"] = req.Url.PathAndQuery;
+
+            Logger.Log("Cookies" + req.Cookies.ToJson());
+
             if (string.IsNullOrEmpty(u.OpenId))
             {
+                Logger.Log("OpenId is null");
                 //1.首先 确定 OpenId
                 var callbackurl = string.Format("{0}/WAuthorize/BaseCallback", req.Url.AbsoluteUri.Replace(req.Url.PathAndQuery, string.Empty));
                 var url = OAuthApi.GetAuthorizeUrl(appid, callbackurl, "4CA8CDEED2F3309F8B987DEEB3C1C1DD", Senparc.Weixin.MP.OAuthScope.snsapi_base);
@@ -37,7 +41,8 @@ namespace FJW.Wechat.WebApp.Base
             }
             else
             {
-                var repository = new WeChatRepository(Config.ActivityConfig.DbName, Config.ActivityConfig.MongoHost);
+                Logger.Log("OpenId:"+ u.OpenId);
+                var repository = new WeChatRepository("Wechat", Config.ActivityConfig.MongoHost);
                 var wxUserInfo = repository.Query<WeChatUserModel>(it => it.OpenId == u.OpenId).FirstOrDefault();
                 if (wxUserInfo == null)
                 {

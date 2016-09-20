@@ -6,6 +6,7 @@ using Senparc.Weixin.MP;
 using System.Web.Configuration;
 using Senparc.Weixin.MP.Entities.Request;
 using System.IO;
+using FJW.Unit;
 using Senparc.Weixin.MP.MvcExtension;
 
 namespace FJW.Wechat.WebApp.Controllers
@@ -86,7 +87,6 @@ namespace FJW.Wechat.WebApp.Controllers
             }
             catch (Exception ex)
             {
-
                 Logger.Error(ex);
                 return Content("");
             }

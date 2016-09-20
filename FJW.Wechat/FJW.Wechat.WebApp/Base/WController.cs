@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using FJW.Unit;
 using FJW.Wechat.WebApp.Models;
 
 namespace FJW.Wechat.WebApp.Base
@@ -76,7 +77,7 @@ namespace FJW.Wechat.WebApp.Base
         #region json
 
         protected override JsonResult Json(object data, string contentType, Encoding contentEncoding, JsonRequestBehavior behavior) {
-            Logger.Debug("Json() working");
+            Logger.Log("Json() working");
             return new JsonetResult
             {
                 Data = data,

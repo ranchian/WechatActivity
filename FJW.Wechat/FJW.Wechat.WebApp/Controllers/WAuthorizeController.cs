@@ -18,6 +18,7 @@ namespace FJW.Wechat.WebApp.Controllers
     {
         public ActionResult UserInfoCallback(string code, string state)
         {
+            Logger.Log("UserInfoCallback\t {0} \t {1}", code, state);
             if (string.IsNullOrEmpty(code))
             {
                 return Content("您拒绝了授权！");
@@ -92,9 +93,16 @@ namespace FJW.Wechat.WebApp.Controllers
             return Redirect(url);
         }
 
-        
+        /// <summary>
+        /// 基础认证
+        /// <remarks>主要目的获取OpenId </remarks>
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="state"></param>
+        /// <returns></returns>
         public ActionResult BaseCallback(string code, string state) 
         {
+            Logger.Log("BaseCallback\t {0} \t {1}", code, state);
             if (string.IsNullOrEmpty(code))
             {
                 return Content("您拒绝了授权！");
@@ -108,22 +116,14 @@ namespace FJW.Wechat.WebApp.Controllers
             var result = OAuthApi.GetAccessToken(Config.WechatConfig.AppId, Config.WechatConfig.AppSecret, code);
             if (result.errcode != Senparc.Weixin.ReturnCode.请求成功)
             {
-                return Content("错误：" + result.errmsg);
+                return Content("错误：" + result.ToJson());
             }
 
             Session["OAuthAccessTokenStartTime"] = DateTime.Now;
             Session["OAuthAccessToken"] = result;
-            Logger.Debug("OAuthAccessToken:" + result.ToJson());
-            try
-            {
-                OAuthUserInfo userInfo = OAuthApi.GetUserInfo(result.access_token, result.openid);
-                UserInfo.OpenId = userInfo.openid;
-                SetLoginInfo(UserInfo);
-            }
-            catch (ErrorJsonResultException ex)
-            {
-                return Content(ex.Message);
-            }
+            //Logger.Log("OAuthAccessToken:" + result.ToJson());
+            UserInfo.OpenId = result.openid;
+            SetLoginInfo(UserInfo);
 
             var url = Session["url"] != null ? Session["url"].ToString() : "/";
             if (string.IsNullOrEmpty(url))
