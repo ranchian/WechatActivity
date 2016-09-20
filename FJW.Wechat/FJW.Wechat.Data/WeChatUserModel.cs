@@ -1,16 +1,13 @@
-﻿using System;
+﻿using FJW.Model.MongoDb;
+using System.ComponentModel.DataAnnotations.Schema;
+using System;
 
-
-namespace FJW.Wechat.WebApp.Base
+namespace FJW.Wechat.Data
 {
-    public class UserInfo 
+    [Table("WeChatUser")]
+    public class WeChatUserModel: BaseModel
     {
-        public long Id { get; set; }
-
-        public string Token { get; set; }
-
-
-        #region 微信
+        public long MemberId { get; set; }
 
         /// <summary>
         /// 微信用户的唯一标识
@@ -37,7 +34,7 @@ namespace FJW.Wechat.WebApp.Base
         /// </summary>
         public string City { get; set; }
 
-                
+
         public string Country { get; set; }
 
         /// <summary>
@@ -53,6 +50,19 @@ namespace FJW.Wechat.WebApp.Base
         public string UnionId { get; set; }
 
 
-        #endregion
+        public string AccessToken { get; set; }
+
+
+        public string RefreshToken { get; set; }
+
+        /// <summary>
+        /// 到期时间（秒）
+        /// </summary>
+        public int ExpiresIn { get; set; }
+
+        /// <summary>
+        /// 最后授权时间
+        /// </summary>
+        public DateTime LastAuthorizeTime { get; set; }
     }
 }

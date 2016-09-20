@@ -15,6 +15,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         private readonly string _mongoHost;
         private readonly string _dbName;
         private readonly string _sqlConnectString;
+
         public DefaultController()
         {
             _mongoHost = WebConfigurationManager.AppSettings["MongoHost"];
@@ -115,9 +116,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         /// <summary>
         /// 游戏结束
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="score"></param>
-        /// <param name="fid"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
         public ActionResult Over(ScoreModel model)

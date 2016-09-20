@@ -137,6 +137,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Activity\Views\Shared\" />
     <Folder Include="Views\Login\" />
+    <Folder Include="Views\Test\" />
     <Folder Include="Views\Wechat\" />
   </ItemGroup>
   <ItemGroup>
@@ -147,10 +148,15 @@
     <Compile Include="Areas\Activity\Controllers\ActivityController.cs" />
     <Compile Include="Areas\Activity\Controllers\DefaultController.cs" />
     <Compile Include="Areas\Activity\Models\ScoreModel.cs" />
+    <Compile Include="Base\Config.cs" />
     <Compile Include="Base\JsonetResult.cs" />
     <Compile Include="Base\UserInfo.cs" />
     <Compile Include="Base\WController.cs" />
+    <Compile Include="Base\WAuthorizeAttribute.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Controllers\WAuthorizeController.cs" />
     <Compile Include="Controllers\WechatController.cs" />
     <Compile Include="CustomMessageContext.cs" />
     <Compile Include="CustomMessageHandler.cs" />
@@ -260,6 +266,10 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FJW.Unit\FJW.Unit.csproj">
+      <Project>{d72eed5c-8b1b-43e4-8b9a-51c69b1b2c6f}</Project>
+      <Name>FJW.Unit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FJW.Wechat.Data\FJW.Wechat.Data.csproj">
       <Project>{03D1C3AC-D5BE-4035-B1A2-CE67B030639D}</Project>
       <Name>FJW.Wechat.Data</Name>

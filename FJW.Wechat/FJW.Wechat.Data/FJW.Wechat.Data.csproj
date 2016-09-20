@@ -67,6 +67,8 @@
     <Compile Include="RecordModel.cs" />
     <Compile Include="ActivityRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WeChatRepository.cs" />
+    <Compile Include="WeChatUserModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

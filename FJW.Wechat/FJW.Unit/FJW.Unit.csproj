@@ -34,6 +34,10 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.3.9\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,10 +50,19 @@
   <ItemGroup>
     <Compile Include="HttpResult.cs" />
     <Compile Include="HttpUnit.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="Log\ILogger.cs" />
+    <Compile Include="Log\NLogger.cs" />
     <Compile Include="ObjectExt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -17,7 +17,7 @@ namespace FJW.Wechat.WebApp
          * DefaultResponseMessage必须在子类中重写，用于返回没有处理过的消息类型（也可以用于默认消息，如帮助信息等）；
          * 其中所有原OnXX的抽象方法已经都改为虚方法，可以不必每个都重写。若不重写，默认返回DefaultResponseMessage方法中的结果。
          */
-
+         /*
 
 #if DEBUG
         string agentUrl = "http://localhost:12222/App/Weixin/4";
@@ -32,9 +32,10 @@ namespace FJW.Wechat.WebApp
         private string wiweihiKey = WebConfigurationManager.AppSettings["WeixinAgentWeiweihiKey"];
         //WeiweihiKey专门用于对接www.Weiweihi.com平台，获取方式见：http://www.weiweihi.com/ApiDocuments/Item/25#51
 #endif
+        */
 
-        private string appId = WebConfigurationManager.AppSettings["WeixinAppId"];
-        private string appSecret = WebConfigurationManager.AppSettings["WeixinAppSecret"];
+        private string appId = Config.WechatConfig.AppId;
+        private string appSecret = Config.WechatConfig.AppSecret;
 
         public CustomMessageHandler(Stream inputStream, PostModel postModel, int maxRecordCount = 0)
             : base(inputStream, postModel, maxRecordCount)

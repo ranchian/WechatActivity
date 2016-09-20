@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using FJW.Wechat.WebApp.Models;
 
 namespace FJW.Wechat.WebApp.Base
 {
@@ -31,13 +32,13 @@ namespace FJW.Wechat.WebApp.Base
             }
         }
 
-        protected void SetLoginInfo(UserInfo info)
+        internal void SetLoginInfo(UserInfo info)
         {
             _userInfo = info;
             HttpContext.Session[UserSessionKey] = info;
         }
 
-        protected void RemoveLoginInfo()
+        internal void RemoveLoginInfo()
         {
             _userInfo = new UserInfo();
             HttpContext.Session[UserSessionKey] = _userInfo;
@@ -45,22 +46,27 @@ namespace FJW.Wechat.WebApp.Base
 
         #endregion
 
-        #region
-
-        protected override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            //Logger.Debug("OnActionExecuting:" + Newtonsoft.Json.JsonConvert.SerializeObject(filterContext.HttpContext.Session[UserSessionKey]));
-            base.OnActionExecuting(filterContext);
-        }
+        #region override
 
         protected override void OnException(ExceptionContext filterContext)
         {
-            if (filterContext.Exception != null)
+            if (!filterContext.IsChildAction && filterContext.Exception != null && !filterContext.ExceptionHandled)
             {
                 Logger.Error(filterContext.Exception);
                 filterContext.ExceptionHandled = true;
+                if (Request.IsAjaxRequest())
+                {
+                    filterContext.Result = new JsonetResult() { Data = new ResponseModel { IsSuccess = false , Message = "error" }, JsonRequestBehavior = JsonRequestBehavior.AllowGet};
+                }
+                else
+                {
+                    filterContext.Result = RedirectToAction("Error", "Index");
+                }
             }
-            base.OnException(filterContext);
+            else
+            {
+                base.OnException(filterContext);
+            }
         }
 
 
@@ -70,6 +76,7 @@ namespace FJW.Wechat.WebApp.Base
         #region json
 
         protected override JsonResult Json(object data, string contentType, Encoding contentEncoding, JsonRequestBehavior behavior) {
+            Logger.Debug("Json() working");
             return new JsonetResult
             {
                 Data = data,
