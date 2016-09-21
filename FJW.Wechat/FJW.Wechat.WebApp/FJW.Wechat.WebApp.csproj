@@ -73,6 +73,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -132,6 +133,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Activity\Views\Shared\" />
+    <Folder Include="Areas\Activity\Views\Turntable\" />
     <Folder Include="Views\Login\" />
     <Folder Include="Views\Test\" />
     <Folder Include="Views\Wechat\" />
@@ -143,6 +145,7 @@
     <Compile Include="Areas\Activity\ActivityAreaRegistration.cs" />
     <Compile Include="Areas\Activity\Controllers\ActivityController.cs" />
     <Compile Include="Areas\Activity\Controllers\DefaultController.cs" />
+    <Compile Include="Areas\Activity\Controllers\TurntableController.cs" />
     <Compile Include="Areas\Activity\Models\ScoreModel.cs" />
     <Compile Include="Base\Config.cs" />
     <Compile Include="Base\JsonetResult.cs" />

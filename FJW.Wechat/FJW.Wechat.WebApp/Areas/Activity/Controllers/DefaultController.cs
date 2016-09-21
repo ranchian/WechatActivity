@@ -1,27 +1,15 @@
 ﻿using FJW.Wechat.Data;
 using FJW.Wechat.WebApp.Models;
-using System.Web.Mvc;
-using System.Web.Configuration;
-using System;
+
 using FJW.Wechat.WebApp.Areas.Activity.Models;
-using Newtonsoft.Json;
+using System.Web.Mvc;
+using System;
 using System.Linq;
 
 namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
 {
     public class DefaultController : ActivityController
     {
-
-        private readonly string _mongoHost;
-        private readonly string _dbName;
-        private readonly string _sqlConnectString;
-
-        public DefaultController()
-        {
-            _mongoHost = WebConfigurationManager.AppSettings["MongoHost"];
-            _dbName = WebConfigurationManager.AppSettings["DbName"];
-            _sqlConnectString = WebConfigurationManager.ConnectionStrings["Default"].ConnectionString;
-        }
 
         /// <summary>
         /// 自己玩
@@ -30,22 +18,21 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         /// <returns></returns>
         public ActionResult Game(string key)
         {
-            var acty = new ActivityRepository(_dbName, _mongoHost).GetActivity(key);
-            if (acty == null || DateTime.Now < acty.StartTime || DateTime.Now > acty.EndTime || string.IsNullOrEmpty(acty.GameUrl))
+            var state = ActivityState(key);
+            if (state == 0 )
             {
-                return Redirect("http://www.fangjinnet.com/wx/download/index");
+                return Redirect(ActivityModel.GameUrl);
             }
-            return Redirect(acty.GameUrl);
+            return Redirect("http://www.fangjinnet.com/wx/download/index");
         }
-
-
+         
         public ActionResult LoginResult(string t , string key)
         {
             if (string.IsNullOrEmpty(t))
             {
                 return Content("无效的请求");
             }
-            var mberRepository = new MemberRepository(_sqlConnectString);
+            var mberRepository = new MemberRepository(SqlConnectString);
             var m = mberRepository.GetMemberInfo(t);
             if (m == null)
             {
@@ -59,7 +46,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
             //Logger.Debug("UserInfo:" + JsonConvert.SerializeObject(Session["SessionUserInfo"]));
             //var id = string.IsNullOrEmpty(fid) ? GetSelfGameRecordId() : GetHelpGamRecordId(fid);
             var id = GetSelfGameRecordId();
-            var repositry = new ActivityRepository(_dbName, _mongoHost);
+            var repositry = new ActivityRepository(DbName, MongoHost);
             var model = repositry.GetById(id)?? new RecordModel();
 
             return Redirect(string.Format("/html/{0}/download.html?key={0}&amount={1}", key, model.Score));
@@ -75,11 +62,12 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         [HttpPost]
         public ActionResult Play(string key, string fid = "")
         {
-            var acty = new ActivityRepository(_dbName, _mongoHost).GetActivity(key);
-            if (acty == null || DateTime.Now < acty.StartTime || DateTime.Now > acty.EndTime || string.IsNullOrEmpty(acty.GameUrl))
+            var state = ActivityState(key);
+            if (state != 0)
             {
                 return Redirect("http://www.fangjinnet.com/wx/download/index");
             }
+            
             var id = string.IsNullOrEmpty(fid) ? GetSelfGameRecordId() : GetHelpGamRecordId(fid);
             if (string.IsNullOrEmpty(id))
             {
@@ -97,7 +85,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                     MemberId = 0,
                     WechatId = string.Empty
                 };
-                new ActivityRepository(_dbName, _mongoHost).Add(model);
+                new ActivityRepository(DbName, MongoHost).Add(model);
                 id = model.RecordId;
                 if (!string.IsNullOrEmpty(id))
                 {
@@ -126,7 +114,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
             var id = string.IsNullOrEmpty(fid) ? GetSelfGameRecordId() : GetHelpGamRecordId(fid);
             if (!string.IsNullOrEmpty(id))
             {
-                var repositry = new ActivityRepository(_dbName, _mongoHost);
+                var repositry = new ActivityRepository(DbName, MongoHost);
                 var m = repositry.GetById(id);
                 if (m.Status != 0)
                 {
@@ -160,15 +148,15 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
             {
                 return Json(new ResponseModel { IsSuccess = false, Message = "未登录" });
             }
-            var acty = new ActivityRepository(_dbName, _mongoHost).GetActivity(key);
-            if (acty == null || DateTime.Now < acty.StartTime || DateTime.Now > acty.EndTime || string.IsNullOrEmpty(acty.GameUrl))
+            var state = ActivityState(key);
+            if (state != 0)
             {
                 return Redirect("http://www.fangjinnet.com/wx/download/index");
             }
             var id = string.IsNullOrEmpty(fid) ? GetSelfGameRecordId() : GetHelpGamRecordId(fid);
             if (!string.IsNullOrEmpty(id))
             {
-                var repositry = new ActivityRepository(_dbName, _mongoHost);
+                var repositry = new ActivityRepository(DbName, MongoHost);
                 var model = repositry.GetById(id);
                 if (model.Status != 0)
                 {
@@ -180,9 +168,9 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                     return Json(new ResponseModel { IsSuccess = false, Message = "已经领取过奖励了" });
                 }
                 
-                var mberRepository = new MemberRepository(_sqlConnectString);
+                var mberRepository = new MemberRepository(SqlConnectString);
                 if (string.IsNullOrEmpty(fid)) {
-                    var r = mberRepository.Give(UserInfo.Id, acty.RewardId, acty.ProductId, model.Score, 0);
+                    var r = mberRepository.Give(UserInfo.Id, ActivityModel.RewardId, ActivityModel.ProductId, model.Score, 0);
                     model.MemberId = UserInfo.Id;
                     model.Result = r;
                     model.Status = 1;

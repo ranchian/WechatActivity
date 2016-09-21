@@ -14,5 +14,16 @@ namespace FJW.Unit
         {
             return JsonConvert.SerializeObject(obj);
         }
+
+        public static bool IsNullOrEmpty(this string str)
+        {
+            return string.IsNullOrEmpty(str);
+        }
+
+
+        public static T Deserialize<T>(this string str)
+        {
+            return JsonConvert.DeserializeObject<T>(str);
+        }
     }
 }

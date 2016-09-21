@@ -16,6 +16,8 @@ namespace FJW.Wechat.WebApp
         /// </summary>
         public static ActivityConfig ActivityConfig { get; private set; }
 
+        public static RedisConfig RedisConfig { get; private set; }
+
 
         static Config()
         {
@@ -33,6 +35,11 @@ namespace FJW.Wechat.WebApp
             {
                 MongoHost = host,
                 DbName = WebConfigurationManager.AppSettings["DbName"]
+            };
+
+            RedisConfig = new RedisConfig
+            {
+                ConnectionString = WebConfigurationManager.AppSettings["RedisConnection"]
             };
         }
 
@@ -68,7 +75,11 @@ namespace FJW.Wechat.WebApp
 
     }
 
+    public class RedisConfig
+    {
+        public string ConnectionString { get; set; }
+    }
 
-  
-    
+
+
 }

@@ -77,7 +77,6 @@ namespace FJW.Wechat.WebApp.Base
         #region json
 
         protected override JsonResult Json(object data, string contentType, Encoding contentEncoding, JsonRequestBehavior behavior) {
-            Logger.Log("Json() working");
             return new JsonetResult
             {
                 Data = data,

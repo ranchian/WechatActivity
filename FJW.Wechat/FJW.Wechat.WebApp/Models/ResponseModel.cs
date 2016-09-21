@@ -21,6 +21,12 @@ namespace FJW.Wechat.WebApp.Models
         public object Data { get; set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        [JsonProperty("code")]
+        public int ErrorCode { get; set; }
+
+        /// <summary>
         /// 消息
         /// </summary>
         [JsonProperty("message")]
