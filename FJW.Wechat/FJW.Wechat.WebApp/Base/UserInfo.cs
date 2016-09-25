@@ -1,14 +1,10 @@
-﻿using System;
-
-
-namespace FJW.Wechat.WebApp.Base
+﻿namespace FJW.Wechat.WebApp.Base
 {
-    public class UserInfo 
+    public class UserInfo
     {
         public long Id { get; set; }
 
         public string Token { get; set; }
-
 
         #region 微信
 
@@ -37,7 +33,6 @@ namespace FJW.Wechat.WebApp.Base
         /// </summary>
         public string City { get; set; }
 
-                
         public string Country { get; set; }
 
         /// <summary>
@@ -52,7 +47,6 @@ namespace FJW.Wechat.WebApp.Base
         /// </summary>
         public string UnionId { get; set; }
 
-
-        #endregion
+        #endregion 微信
     }
 }

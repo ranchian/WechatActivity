@@ -44,6 +44,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FJW.Ad.Entity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\DevelopDept\trunk\Business\FJW.Ad.Entity\bin\Debug\FJW.Ad.Entity.dll</HintPath>
+    </Reference>
+    <Reference Include="FJW.CommonLib">
+      <HintPath>..\..\..\FJW.Lib\FJW.CommonLib.dll</HintPath>
+    </Reference>
     <Reference Include="FJW.Model.MongoDb, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
@@ -131,7 +138,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <Folder Include="Areas\Activity\Views\Login\" />
+    <Folder Include="Areas\Activity\Views\Member\" />
     <Folder Include="Areas\Activity\Views\Shared\" />
     <Folder Include="Areas\Activity\Views\Turntable\" />
     <Folder Include="Views\Login\" />
@@ -145,10 +153,13 @@
     <Compile Include="Areas\Activity\ActivityAreaRegistration.cs" />
     <Compile Include="Areas\Activity\Controllers\ActivityController.cs" />
     <Compile Include="Areas\Activity\Controllers\DefaultController.cs" />
+    <Compile Include="Areas\Activity\Controllers\MemberController.cs" />
     <Compile Include="Areas\Activity\Controllers\TurntableController.cs" />
+    <Compile Include="Areas\Activity\Models\ResultModel.cs" />
     <Compile Include="Areas\Activity\Models\ScoreModel.cs" />
     <Compile Include="Base\Config.cs" />
     <Compile Include="Base\JsonetResult.cs" />
+    <Compile Include="Base\PushHelper.cs" />
     <Compile Include="Base\UserInfo.cs" />
     <Compile Include="Base\WController.cs" />
     <Compile Include="Base\WAuthorizeAttribute.cs" />
@@ -169,7 +180,6 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Html\PM25\css\download.css" />
@@ -228,9 +238,10 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\Activity\Views\web.config" />
-    <Content Include="NLog.config">
+    <Content Include="Config\NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Config\Method.config" />
     <None Include="Properties\PublishProfiles\wechat.fangjinnet.com.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\FunctionModule.js" />

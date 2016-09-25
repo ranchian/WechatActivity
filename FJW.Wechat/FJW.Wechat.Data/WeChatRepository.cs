@@ -1,9 +1,9 @@
-﻿using FJW.Data.MongoDb;
-using FJW.Model.MongoDb;
-using System;
+﻿using System;
+using System.Linq.Expressions;
 using System.Collections.Generic;
 
-using System.Linq.Expressions;
+using FJW.Data.MongoDb;
+using FJW.Model.MongoDb;
 
 
 namespace FJW.Wechat.Data
@@ -21,7 +21,7 @@ namespace FJW.Wechat.Data
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="openId"></param>
         /// <returns></returns>
@@ -29,7 +29,6 @@ namespace FJW.Wechat.Data
         {
             return new Repository(_mongoHost, _dbName).GetEntity<WeChatUserModel>(it => it.OpenId == openId);
         }
-
 
         public IEnumerable<T> Query<T>(Expression<Func<T, bool>> exp) where T : BaseModel
         {
@@ -54,6 +53,5 @@ namespace FJW.Wechat.Data
             model.LastUpdateTime = DateTime.Now;
             new Repository(_mongoHost, _dbName).UpdateEntity(model);
         }
-
     }
 }

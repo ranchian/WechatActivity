@@ -1,26 +1,20 @@
 ﻿using StackExchange.Redis;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FJW.Unit
 {
     public static class RedisManager
     {
         private static Lazy<ConnectionMultiplexer> _redisConnection;
-        
+
         /// <summary>
         /// 初始化
         /// </summary>
         /// <param name="connectionString"></param>
         public static void Init(string connectionString)
-        {  
+        {
             _redisConnection = new Lazy<ConnectionMultiplexer>(() => ConnectionMultiplexer.Connect(connectionString));
         }
-
-
 
         /// <summary>
         /// 释放 Redis连接

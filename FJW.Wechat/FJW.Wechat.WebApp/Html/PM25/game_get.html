@@ -1,125 +1,150 @@
 ﻿<!DOCTYPE html>
 <html>
 
-	<head>
-		<meta charset="utf-8">
-		<title>邀请有礼 注册即送</title>
-		<meta content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0" name="viewport">
-		<link href="css/game_get.css" rel="stylesheet">
-        <script src="/Scripts/rem.js"></script>
-        <script src="/Scripts/jquery-1.11.3.js"></script>
-	</head>
+<head>
+    <meta charset="utf-8">
+    <title>邀请有礼 注册即送</title>
+    <meta content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0" name="viewport">
+    <link href="css/game_get.css" rel="stylesheet">
+    <script src="/Scripts/rem.js"></script>
+    <script src="/Scripts/jquery-1.11.3.js"></script>
+</head>
 
-	<body>
-		<div class="wrap">
-			<div class="banner">
-				<div class="small-banner">
-					<div class="background">
-						<p>您本次获得：<span class="tiyanjin"></span>体验金</p>
-					</div>
-				</div>
-			</div>
-			<div class="context">
-				<div class="title">
-					<p>登记领取</p>
-				</div>
-				<div class="info">
-					<form>
-						<ul>
-							<li class="tel">
-								<span>手机号：</span>
-								<input type="tel" placeholder="请输入您的手机号" id="gamePhone" />
-							</li>
-							<li class="code">
-								<span>验证码：</span>
-								<input type="text" placeholder="请输入验证码" id="gameCode"/>
-								<a href="javascript:void(0)" id="gamebtn">获取验证码</a>
-							</li>
-							<li>
-								<span>密&nbsp;码：</span>
-								<input type="password" placeholder="请输入您的登录密码" id="gamePswd" />
-							</li>
-							<li class="submit">
-								<a href="javascript:void(0)" id="gameSubmit">立即领取</a>
-							</li>
-							<li class="lijizuce">
-								<a href="javascript:void(0)">立即注册</a>
-							</li>
-						</ul>
-					</form>
-				</div>
-			</div>
-		</div>
-		<script>
-		$('.tiyanjin').html(localStorage.getItem('tiyanjin'))
-		$('.lijizuce').on('click',function(){
-			window.location.href="game_register.html"
-		})
-			$("#gameSubmit").click(function() {
-				var phone = $("#gamePhone").val();
-				//格式验证
-				if(!/^1[3|4|5|7|8][0-9]\d{8}$/.test(phone)) {
-					alert("请输入正确的手机号");
-					return false;//不往下继续判断
-				}
-				if($("input[id=gameCode]").val() === "") {
-					alert("请输入验证码");
-					return false;
-				}
-				if($("input[name=password]").val() === "") {
-					alert("请先设置您的登录密码");
-					return false;
-				}
+<body>
+    <div class="wrap">
+        <div class="banner">
+            <div class="small-banner">
+                <div class="background">
+                    <p>您本次获得：<span class="tiyanjin"></span>体验金</p>
+                </div>
+            </div>
+        </div>
+        <div class="context">
+            <div class="title">
+                <p>登记领取</p>
+            </div>
+            <div class="info">
+                <form>
+                    <ul>
+                        <li class="tel">
+                            <span>手机号：</span>
+                            <input type="tel" placeholder="请输入您的手机号" id="gamePhone" />
+                        </li>
+                        <li class="code">
+                            <span>验证码：</span>
+                            <input type="text" placeholder="请输入验证码" id="gameCode" />
+                            <a href="javascript:void(0)" id="gamebtn">获取验证码</a>
+                        </li>
+                        <li>
+                            <span>密&nbsp;码：</span>
+                            <input type="password" placeholder="请输入您的登录密码" id="gamePswd" />
+                        </li>
+                        <li class="submit">
+                            <a href="javascript:void(0)" id="gameSubmit">立即领取</a>
+                        </li>
+                        <li class="lijizuce">
+                            <a href="javascript:void(0)">立即注册</a>
+                        </li>
+                    </ul>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        $('.tiyanjin').html(localStorage.getItem('tiyanjin'))
+        $('.lijizuce').on('click', function () {
+            window.location.href = "game_register.html"
+        })
+        $("#gameSubmit").click(function () {
 
-				var param = {
-					Phone: $("#gamePhone").val(),
-					VCode: $("#gameCode").val(),
-					Pswd: $("#gamePswd").val(),
-					Channel: (CHANNEL || ""),
-					//FriendPhone: $("#friendPhone").val()
-				};
+            $.ajax({
+                type: "post",
+                timeout: "18000",
+                dataType: "json",
+                url: "/activity/turntable/getActTimes",
+                success: function (data) {
 
-				var data = {
-					M: "Regist",
-					D: JSON.stringify(param)
-				}
+                }
+            });
 
-				$("#gamebtn").attr("disabled", true);
-				$.ajax({
-					type: "post",
-					timeout: 18000,
-					dataType: "json",
-					url: "http://api.fangjinnet.com/api",
-					data: JSON.stringify(data),
-					//请求成功时执行
-					success: function(data) {
-						if(data != null) {
-							if(data.s !== 0) {
-								alert(data.es);
-								$("#gameSubmit").attr("disabled", false);
-								return false;
-							} else {
-								location.href = "success";
-							}
-						}
-						return false;
-					},
-					//请求失败遇到异常触发
-					error: function() {
-						alert("网络堵塞,请稍后重试!");
-						$("#gameSubmit").attr("disabled", false);
-					},
-					//完成请求后触发。即在success或error触发后触发
-					complete: function(xhr, status) {
-						if(status === "timeout") {
-							$("#gameSubmit").attr("disabled", false);
-						}
-					},
-					//发送请求前触发
-					beforeSend: function() {}
-				});
-				return false;
-			});
-		</script>
-	</body>
+
+            var phone = $("#gamePhone").val();
+            //格式验证
+            if (!/^1[3|4|5|7|8][0-9]\d{8}$/.test(phone)) {
+                alert("请输入正确的手机号");
+                return false;//不往下继续判断
+            }
+            if ($("input[id=gameCode]").val() === "") {
+                //alert("请输入验证码");
+                //return false;
+            }
+            if ($("input[name=password]").val() === "") {
+                alert("请先设置您的登录密码");
+                return false;
+            }
+
+            var param = {
+                Phone: $("#gamePhone").val(),
+                VCode: $("#gameCode").val(),
+                Pswd: $("#gamePswd").val(),
+                //Channel: (CHANNEL || ""),
+                //FriendPhone: $("#friendPhone").val()
+            };
+
+            var data = {
+                M: "Login",
+                D: JSON.stringify(param)
+            }
+
+            $("#gamebtn").attr("disabled", true);
+            $.ajax({
+                type: "post",
+                timeout: 18000,
+                dataType: "json",
+                url: "/activity/member/login",
+                data: param,
+                //请求成功时执行
+                success: function (data) {
+                    
+                },
+                //请求失败遇到异常触发
+                error: function () {
+                    alert("网络堵塞,请稍后重试!");
+                    $("#gameSubmit").attr("disabled", false);
+                },
+                //完成请求后触发。即在success或error触发后触发
+                complete: function (xhr, status) {
+                    if (status === "timeout") {
+                        $("#gameSubmit").attr("disabled", false);
+                    }
+                },
+                //发送请求前触发
+                beforeSend: function () { }
+            });
+            return false;
+        });
+
+        $(function () {
+            //$.ajax({
+            //    type: "post",
+            //    timeout: "18000",
+            //    dataType: "json",
+            //    url: "/activity/turntable/play",
+            //    success: function (data) {
+
+            //    }
+            //});
+
+            $.ajax({
+                type: "post",
+                timeout: "18000",
+                dataType: "json",
+                url: "/activity/turntable/getActResult",
+                success: function (data) {
+
+                }
+            });
+        });
+    </script>
+</body>
 </html>

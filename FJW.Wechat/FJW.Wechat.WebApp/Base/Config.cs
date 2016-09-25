@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web.Configuration;
+﻿using System.Web.Configuration;
 
 namespace FJW.Wechat.WebApp
 {
@@ -8,8 +7,7 @@ namespace FJW.Wechat.WebApp
         /// <summary>
         /// 微信配置
         /// </summary>
-        public static WechatConfig WechatConfig { get; private set;}
-
+        public static WechatConfig WechatConfig { get; private set; }
 
         /// <summary>
         /// 活动配置
@@ -17,7 +15,6 @@ namespace FJW.Wechat.WebApp
         public static ActivityConfig ActivityConfig { get; private set; }
 
         public static RedisConfig RedisConfig { get; private set; }
-
 
         static Config()
         {
@@ -42,7 +39,6 @@ namespace FJW.Wechat.WebApp
                 ConnectionString = WebConfigurationManager.AppSettings["RedisConnection"]
             };
         }
-
     }
 
     /// <summary>
@@ -72,14 +68,10 @@ namespace FJW.Wechat.WebApp
         public string MongoHost { get; set; }
 
         public string DbName { get; set; }
-
     }
 
     public class RedisConfig
     {
         public string ConnectionString { get; set; }
     }
-
-
-
 }

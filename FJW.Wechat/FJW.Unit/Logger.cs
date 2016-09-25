@@ -1,6 +1,5 @@
-﻿using System;
-
-using FJW.Unit.Log;
+﻿using FJW.Unit.Log;
+using System;
 
 namespace FJW.Unit
 {
@@ -15,7 +14,7 @@ namespace FJW.Unit
 
         public static void Log(string message, params object[] args)
         {
-            if (args == null|| args.Length == 0)
+            if (args == null || args.Length == 0)
             {
                 _log.Debug(message);
             }
@@ -41,6 +40,5 @@ namespace FJW.Unit
                 _log.Error(string.Format(message, args));
             }
         }
-        
     }
 }

@@ -4,10 +4,8 @@ namespace FJW.Unit
 {
     public class HttpResult
     {
-
         public HttpResult()
         {
-
         }
 
         public HttpResult(HttpStatusCode statusCode, string resp)

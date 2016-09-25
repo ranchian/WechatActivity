@@ -1,7 +1,6 @@
 ﻿using FJW.Model.MongoDb;
 using System.ComponentModel.DataAnnotations.Schema;
 
-
 namespace FJW.Wechat.Data
 {
     [Table("Record")]
@@ -10,18 +9,18 @@ namespace FJW.Wechat.Data
         /// <summary>
         /// 记录Id
         /// </summary>
-       public string RecordId { get; set; }
+        public string RecordId { get; set; }
 
         /// <summary>
         /// 游戏 键
         /// </summary>
         public string Key { get; set; }
-        
+
         /// <summary>
         /// 得分
         /// </summary>
         public int Score { get; set; }
-        
+
         public int Total { get; set; }
 
         /// <summary>
@@ -47,7 +46,7 @@ namespace FJW.Wechat.Data
         /// <summary>
         /// 用户
         /// </summary>
-        public long  MemberId { get; set; }
+        public long MemberId { get; set; }
 
         /// <summary>
         /// 加入类型

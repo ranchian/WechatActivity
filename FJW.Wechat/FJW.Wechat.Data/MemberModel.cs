@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace FJW.Wechat.Data
+﻿namespace FJW.Wechat.Data
 {
     /// <summary>
     /// 用户
@@ -14,8 +11,13 @@ namespace FJW.Wechat.Data
         public long MemberId { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public string Token { get; set; }
+
+        /// <summary>
+        /// 手机号码
+        /// </summary>
+        public string Phone { get; set; }
     }
 }

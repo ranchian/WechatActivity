@@ -1,10 +1,9 @@
 ﻿using System;
-
+using System.Linq.Expressions;
+using System.Collections.Generic;
 
 using FJW.Data.MongoDb;
-using System.Linq.Expressions;
 using FJW.Model.MongoDb;
-using System.Collections.Generic;
 
 namespace FJW.Wechat.Data
 {
@@ -33,7 +32,6 @@ namespace FJW.Wechat.Data
             return new Repository(_mongoHost, _dbName).GetEntity<ActivityModel>(it => it.Key == key);
         }
 
-
         /// <summary>
         /// 活动记录
         /// </summary>
@@ -44,8 +42,7 @@ namespace FJW.Wechat.Data
             return new Repository(_mongoHost, _dbName).GetEntity<RecordModel>(it => it.RecordId == id);
         }
 
-
-        public IEnumerable<T> Query<T>( Expression<Func<T, bool>> exp) where T: BaseModel
+        public IEnumerable<T> Query<T>(Expression<Func<T, bool>> exp) where T : BaseModel
         {
             return new Repository(_mongoHost, _dbName).GetList(exp);
         }
@@ -54,21 +51,19 @@ namespace FJW.Wechat.Data
         /// 保存
         /// </summary>
         /// <param name="model"></param>
-        public void Add<T>(T model) where T: BaseModel
+        public void Add<T>(T model) where T : BaseModel
         {
-            new Repository(_mongoHost, _dbName).AddEntity(model);            
+            new Repository(_mongoHost, _dbName).AddEntity(model);
         }
 
         /// <summary>
         /// 更新
         /// </summary>
         /// <param name="model"></param>
-        public void Update<T>(T model) where T:BaseModel
+        public void Update<T>(T model) where T : BaseModel
         {
             model.LastUpdateTime = DateTime.Now;
             new Repository(_mongoHost, _dbName).UpdateEntity(model);
         }
-
-        
     }
 }

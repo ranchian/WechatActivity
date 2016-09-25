@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Web.Configuration;
+
 using FJW.Unit;
 using FJW.Wechat.Data;
 using FJW.Wechat.WebApp.Base;
 
 namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
 {
-
     /// <summary>
-    /// 活动 
+    /// 活动
     /// </summary>
-    public abstract class ActivityController :WController
+    public abstract class ActivityController : WController
     {
         protected readonly string MongoHost;
         protected readonly string DbName;
@@ -50,11 +50,10 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
             HttpContext.Session[SelfGameKey] = id;
         }
 
-
-       /// <summary>
-       /// 获取帮别人玩的 记录Id
-       /// </summary>
-       /// <returns></returns>
+        /// <summary>
+        /// 获取帮别人玩的 记录Id
+        /// </summary>
+        /// <returns></returns>
         protected string GetHelpGamRecordId(string fid)
         {
             var id = HttpContext.Session[fid];
@@ -96,7 +95,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                     EndTime = acty.EndTime,
                     GameUrl = acty.GameUrl
                 };
-                RedisManager.Set("Activity:" + key, acty, 30*60);
+                RedisManager.Set("Activity:" + key, acty, 30 * 60);
             }
             if (DateTime.Now < ActivityModel.StartTime || DateTime.Now > ActivityModel.EndTime || ActivityModel.GameUrl.IsNullOrEmpty())
             {

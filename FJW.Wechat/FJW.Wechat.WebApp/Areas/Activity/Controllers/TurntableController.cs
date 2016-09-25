@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+
 using FJW.Unit;
+using FJW.Unit.Helper;
 using FJW.Wechat.Data;
 using FJW.Wechat.WebApp.Models;
 
@@ -11,65 +12,136 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
 {
     public class TurntableController : ActivityController
     {
-        // GET: Activity/Turntable
         private const string GameKey = "turntable";
-        public ActionResult Index()
+
+        /// <summary>
+        /// 获取抽奖次数
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult GetActTimes()
         {
-            var state = ActivityState(GameKey);
-            if (state != 0)
-            {
-                return Redirect("http://www.fangjinnet.com/wx/download/index");
-            }
-            return Redirect(ActivityModel.GameUrl);
+            int mOnline = 0, mTimes = 1;
+
+            // 判断用户是否登陆 如果没登陆则返回数据 online=0,times=0
+            if (UserInfo.Id < 1)
+                return Json(new { online = mOnline, times = 0 });
+
+            ActTimes(ref mOnline, ref mTimes);
+            return Json(new { online = mOnline, times = mTimes });
         }
 
-        public ActionResult Game()
+        /// <summary>
+        /// 获取剩余抽奖次数
+        /// </summary>
+        /// <param name="mOnline"></param>
+        /// <param name="mTimes"></param>
+        private void ActTimes(ref int mOnline, ref int mTimes)
         {
-            var state = ActivityState(GameKey);
-            if (state != 0)
+            var repository = new MemberRepository(SqlConnectString);
+
+            var awardCnt = repository.GetMemberAward(UserInfo.Id);
+            if (awardCnt > 0)
             {
-                return Redirect("http://www.fangjinnet.com/wx/download/index");
+                mTimes = awardCnt;
+                if (mTimes <= 0) mTimes = 0;
             }
-            return Redirect("/#");
+            mOnline = 1;
         }
 
+        /// <summary>
+        /// 获取奖项列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult GetActResult()
+        {
+            var sqlRepository = new MemberRepository(SqlConnectString);
+            var dt = sqlRepository.GetRecord(GameKey);
+            return Json(new ResponseModel { ErrorCode = 0, Message = "", Data = dt.ToJson(), IsSuccess = true });
+        }
+
+        /// <summary>
+        /// 抽奖
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
         public ActionResult Play()
         {
-            if (!Request.IsAjaxRequest())
-            {
-                return Json(new ResponseModel { ErrorCode = 1, Message = "无效的请求方式" });
-            }
             var state = ActivityState(GameKey);
             if (state != 0)
             {
-                return Json(new ResponseModel { ErrorCode = 1, Message = "您来的时间不对" });
+                //return Json(new ResponseModel { ErrorCode = 1, Message = "您来的时间不对" });
             }
             if (UserInfo.Id < 1)
             {
-                return Json(new ResponseModel { ErrorCode = 2 , Message = "未登录"});
+                return Json(new ResponseModel { ErrorCode = 2, Message = "未登录" });
             }
-            
-            //TODO: 统计次数
 
-            int prize;
-            decimal money;
-            string name;
-            var sequnce = Luckdraw(out prize, out money, out name);
-            var record = new LuckdrawModel
+            try
             {
-                Sequnce = sequnce,
-                Key = GameKey,
-                MemberId = UserInfo.Id,
-                Prize = prize,
-                Money = money,
-                Name = name,
-                Status = 0,
-            };
-            var repository = new ActivityRepository(DbName, MongoHost);
-            
-            repository.Add(record);
+                //TODO: 统计次数
+                int mOnline = 0, mTimes = 1;
+                ActTimes(ref mOnline, ref mTimes);
 
-            //TODO: 发送奖励， 更改状态, 更改使用次数
+                if (mTimes > 0)
+                {
+                    int prize;
+                    string name;
+                    decimal money;
+                    var sequnce = Luckdraw(out prize, out money, out name);
+
+                    //异步执行插入操作
+                    Task.Factory.StartNew(() =>
+                    {
+
+                        //添加数据库
+                        var sqlRepository = new MemberRepository(SqlConnectString);
+                        sqlRepository.AddRecord(UserInfo.Id, name, prize, money, GameKey);
+
+                        //发送奖励
+                        sqlRepository.GiveMoney(UserInfo.Id, money, 8, sequnce);
+
+                        //mongoDb中添加数据
+                        var record = new LuckdrawModel
+                        {
+                            Sequnce = sequnce,
+                            Key = GameKey,
+                            MemberId = UserInfo.Id,
+                            Prize = prize,
+                            Money = money,
+                            Name = name,
+                            Status = 0,
+                        };
+                        var repository = new ActivityRepository(DbName, MongoHost);
+                        repository.Add(record);
+
+                        //推送消息
+                        string msg = string.Format("尊敬的房金网会员，您参加的幸运大转盘 Iphone 7 plus免费送活动，抽中了{0}，感谢您的参与", name);
+                        var userInfo = sqlRepository.GetMemberInfo(UserInfo.Token);
+                        if (userInfo != null)
+                        {
+                            var dic = new Dictionary<string, string>
+                            {
+                                {"Intro",msg},
+                                {"ReceiveType", "1"},
+                                {"PhoneList",userInfo.Phone},
+                                {"PushType","4"},
+                                {"Url",""},
+                                {"ProductId",""}
+                            };
+
+                            new PushHelper().PushMsg(dic);
+                        }
+                    });
+
+                    return Json(new ResponseModel { ErrorCode = 0, Message = "", IsSuccess = true, Data = new { name = name, prize = prize, money = money } });
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.Message);
+            }
 
             return Json(new ResponseModel());
         }

@@ -1,100 +1,100 @@
 ﻿<!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<title></title>
-		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />		
-        <link href="css/index.css" rel="stylesheet">	
-        <script src="/Scripts/rem.js"></script>
-        <script src="/Scripts/jquery-1.11.3.js"></script>
-	</head>
-	<body>
-		<div id="box">
-			<div class="game_start">
-				<div class="game_play"></div>
-				<div class="check_reward"></div>
-				<a href="javascript:void(0)" class="game_rule">点击查看活动规则</a>
-			</div>
-			<div id="game_box">
-				<div id="stopwatch">00:00</div>
-				<div id="hero"></div>
-			</div>
-			<div class="game_over" id="game_over">
-				<div class="over_info">
-					<div class="title"></div>
-					<p class="game_cong">恭喜您</p>
-					<p>共获得<span id="tiyanjin"></span>体验金</p>
-					<div class="replay" id="replay"></div>
-					<div class="game_reward"><a href="javascript:void(0)"></a></div>
-				</div>
-			</div>
-		</div>		
-		<script src="/Scripts/GlobalModule.js"></script>
-		<script src="/Scripts/GoldModule.js"></script>
-		<script src="/Scripts/FunctionModule.js"></script>
-		<script src="/Scripts/jquery-1.11.3.js"></script>
-        <script src="/Scripts/ActivityConfig.js" ></script>
-		<script>
-            var fid = getQueryString("fid") || "";
-            var isLogin = false;
-            var record = "";
-			//英雄跟随手指移动事件
-		    	Global.oHeroTop=document.documentElement.clientHeight/2;
-		    	Global.oHeroLeft=document.documentElement.clientWidth/2;
-		        Global.oHero.addEventListener('touchmove',myFunction);
-		        function myFunction(event) { 
-		            event.preventDefault();//阻止其他事件
-		            // 如果这个元素的位置内只有一个手指的话
-		            if(event.targetTouches.length == 1) {
-		                var touch = event.targetTouches[0];  // 把元素放在手指所在的位置
-		                Global.oHero.style.left = touch.pageX + 'px';
-		                Global.oHero.style.top = touch.pageY + 'px';
-		                Global.oHeroTop=Global.oHero.style.top;
-		                Global.oHeroLeft=Global.oHero.style.left;		           
-		                if(parseInt(Global.oHeroLeft)>Global.box_size.width-Global.oHero.offsetWidth/2){
-							Global.oHero.style.left=Global.box_size.width-Global.oHero.offsetWidth/2+'px';
-							touch.pageX=Global.box_size.width-Global.oHero.offsetWidth;
-						} 
-						if(parseInt(Global.oHeroLeft)<0+Global.oHero.offsetWidth/2){
-							Global.oHero.style.left=0+Global.oHero.offsetWidth/2+'px'
-						} 
-						if(parseInt(Global.oHeroTop)>Global.box_size.height-Global.oHero.offsetHeight/2){
-							Global.oHero.style.top=Global.box_size.height-Global.oHero.offsetHeight/2+'px'																		
-						}
-						if(parseInt(Global.oHeroTop)<0+Global.oHero.offsetHeight/2){
-							Global.oHero.style.top=0+Global.oHero.offsetHeight/2+'px'							
-						}
-		           }			
-		    	}
-			    $('.replay').on('click',function(){
-			        window.location.href = "/html/pm25/index.html";
-			    })
-			    $('.game_play').on('click', function () {
-			        fnPlay("pm25", fid);
-		    		GamePlay();
-		    		$('.game_start').css({"display":"none"});
-		    		$('#game_box').css({"display":"block"})
-		    	})
-			    $('.game_reward').on('click', function () {
-			        if (isLogin) {
-			            fnReceive("pm25", fid);
-			        } else {
-			            var a = Global.second * 100 + Global.msec;
-			            location.href = "http://www.fangjinnet.com/wx/friend/index?k=pm25&channel=wechat_pm25&t=game&a=" + a;
-			        }
-		    	    //window.location.href = "/html/pm25/game_get.html"
-		    	})
-		    	$('.game_rule').on('click',function(){
-		    	    window.location.href = "/html/pm25/liyue.html"
-		    	})
-		    	$('.check_reward').on('click', function () {
-		    	    if (isLogin) {
-		    	        fnReceive("pm25", fid);
-		    	    } else {
-		    	        var a = Global.second * 100 + Global.msec;
-		    	        location.href = "http://www.fangjinnet.com/wx/friend/index?k=pm25&channel=wechat_pm25&t=game&a=" + a;
-		    	    }
-		    	});
-		</script>	
-        </body>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link href="css/index.css" rel="stylesheet">
+    <script src="/Scripts/rem.js"></script>
+    <script src="/Scripts/jquery-1.11.3.js"></script>
+</head>
+<body>
+    <div id="box">
+        <div class="game_start">
+            <div class="game_play"></div>
+            <div class="check_reward"></div>
+            <a href="javascript:void(0)" class="game_rule">点击查看活动规则</a>
+        </div>
+        <div id="game_box">
+            <div id="stopwatch">00:00</div>
+            <div id="hero"></div>
+        </div>
+        <div class="game_over" id="game_over">
+            <div class="over_info">
+                <div class="title"></div>
+                <p class="game_cong">恭喜您</p>
+                <p>共获得<span id="tiyanjin"></span>体验金</p>
+                <div class="replay" id="replay"></div>
+                <div class="game_reward"><a href="javascript:void(0)"></a></div>
+            </div>
+        </div>
+    </div>
+    <script src="/Scripts/GlobalModule.js"></script>
+    <script src="/Scripts/GoldModule.js"></script>
+    <script src="/Scripts/FunctionModule.js"></script>
+    <script src="/Scripts/jquery-1.11.3.js"></script>
+    <script src="/Scripts/ActivityConfig.js"></script>
+    <script>
+        var fid = getQueryString("fid") || "";
+        var isLogin = false;
+        var record = "";
+        //英雄跟随手指移动事件
+        Global.oHeroTop = document.documentElement.clientHeight / 2;
+        Global.oHeroLeft = document.documentElement.clientWidth / 2;
+        Global.oHero.addEventListener('touchmove', myFunction);
+        function myFunction(event) {
+            event.preventDefault();//阻止其他事件
+            // 如果这个元素的位置内只有一个手指的话
+            if (event.targetTouches.length == 1) {
+                var touch = event.targetTouches[0];  // 把元素放在手指所在的位置
+                Global.oHero.style.left = touch.pageX + 'px';
+                Global.oHero.style.top = touch.pageY + 'px';
+                Global.oHeroTop = Global.oHero.style.top;
+                Global.oHeroLeft = Global.oHero.style.left;
+                if (parseInt(Global.oHeroLeft) > Global.box_size.width - Global.oHero.offsetWidth / 2) {
+                    Global.oHero.style.left = Global.box_size.width - Global.oHero.offsetWidth / 2 + 'px';
+                    touch.pageX = Global.box_size.width - Global.oHero.offsetWidth;
+                }
+                if (parseInt(Global.oHeroLeft) < 0 + Global.oHero.offsetWidth / 2) {
+                    Global.oHero.style.left = 0 + Global.oHero.offsetWidth / 2 + 'px'
+                }
+                if (parseInt(Global.oHeroTop) > Global.box_size.height - Global.oHero.offsetHeight / 2) {
+                    Global.oHero.style.top = Global.box_size.height - Global.oHero.offsetHeight / 2 + 'px'
+                }
+                if (parseInt(Global.oHeroTop) < 0 + Global.oHero.offsetHeight / 2) {
+                    Global.oHero.style.top = 0 + Global.oHero.offsetHeight / 2 + 'px'
+                }
+            }
+        }
+        $('.replay').on('click', function () {
+            window.location.href = "/html/pm25/index.html";
+        })
+        $('.game_play').on('click', function () {
+            fnPlay("pm25", fid);
+            GamePlay();
+            $('.game_start').css({ "display": "none" });
+            $('#game_box').css({ "display": "block" })
+        })
+        $('.game_reward').on('click', function () {
+            if (isLogin) {
+                fnReceive("pm25", fid);
+            } else {
+                var a = Global.second * 100 + Global.msec;
+                location.href = "http://www.fangjinnet.com/wx/friend/index?k=pm25&channel=wechat_pm25&t=game&a=" + a;
+            }
+            //window.location.href = "/html/pm25/game_get.html"
+        })
+        $('.game_rule').on('click', function () {
+            window.location.href = "/html/pm25/liyue.html"
+        })
+        $('.check_reward').on('click', function () {
+            if (isLogin) {
+                fnReceive("pm25", fid);
+            } else {
+                var a = Global.second * 100 + Global.msec;
+                location.href = "http://www.fangjinnet.com/wx/friend/index?k=pm25&channel=wechat_pm25&t=game&a=" + a;
+            }
+        });
+    </script>
+</body>
 </html>

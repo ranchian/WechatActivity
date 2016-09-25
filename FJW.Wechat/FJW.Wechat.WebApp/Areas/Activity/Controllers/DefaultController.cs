@@ -1,16 +1,15 @@
-﻿using FJW.Wechat.Data;
-using FJW.Wechat.WebApp.Models;
-
-using FJW.Wechat.WebApp.Areas.Activity.Models;
-using System.Web.Mvc;
-using System;
+﻿using System;
 using System.Linq;
+using System.Web.Mvc;
+
+using FJW.Wechat.Data;
+using FJW.Wechat.WebApp.Models;
+using FJW.Wechat.WebApp.Areas.Activity.Models;
 
 namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
 {
     public class DefaultController : ActivityController
     {
-
         /// <summary>
         /// 自己玩
         /// </summary>
@@ -19,14 +18,14 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         public ActionResult Game(string key)
         {
             var state = ActivityState(key);
-            if (state == 0 )
+            if (state == 0)
             {
                 return Redirect(ActivityModel.GameUrl);
             }
             return Redirect("http://www.fangjinnet.com/wx/download/index");
         }
-         
-        public ActionResult LoginResult(string t , string key)
+
+        public ActionResult LoginResult(string t, string key)
         {
             if (string.IsNullOrEmpty(t))
             {
@@ -41,18 +40,17 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
             UserInfo.Id = m.MemberId;
             UserInfo.Token = t;
             SetLoginInfo(UserInfo);
-            
+
             //Logger.Debug("MemberId:" + m.MemberId);
             //Logger.Debug("UserInfo:" + JsonConvert.SerializeObject(Session["SessionUserInfo"]));
             //var id = string.IsNullOrEmpty(fid) ? GetSelfGameRecordId() : GetHelpGamRecordId(fid);
             var id = GetSelfGameRecordId();
             var repositry = new ActivityRepository(DbName, MongoHost);
-            var model = repositry.GetById(id)?? new RecordModel();
+            var model = repositry.GetById(id) ?? new RecordModel();
 
             return Redirect(string.Format("/html/{0}/download.html?key={0}&amount={1}", key, model.Score));
         }
 
-   
         /// <summary>
         /// 玩游戏
         /// </summary>
@@ -67,7 +65,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
             {
                 return Redirect("http://www.fangjinnet.com/wx/download/index");
             }
-            
+
             var id = string.IsNullOrEmpty(fid) ? GetSelfGameRecordId() : GetHelpGamRecordId(fid);
             if (string.IsNullOrEmpty(id))
             {
@@ -96,7 +94,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                     SetHelpGamRecordId(fid, id);
                 }
 
-                return Json(new ResponseModel { IsSuccess = true, Data =  new { id, islogin = UserInfo.Id > 0 } });
+                return Json(new ResponseModel { IsSuccess = true, Data = new { id, islogin = UserInfo.Id > 0 } });
             }
             return Json(new ResponseModel { IsSuccess = true, Data = new { id, islogin = UserInfo.Id > 0 } });
         }
@@ -128,7 +126,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                     }
                     m.Score = score;
                     repositry.Update(m);
-                   return Json(new ResponseModel { IsSuccess = true, Message = "" });
+                    return Json(new ResponseModel { IsSuccess = true, Message = "" });
                 }
                 return Json(new ResponseModel { IsSuccess = true, Message = "", Data = new { id, islogin = UserInfo.Id > 0 } });
             }
@@ -167,9 +165,10 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                 {
                     return Json(new ResponseModel { IsSuccess = false, Message = "已经领取过奖励了" });
                 }
-                
+
                 var mberRepository = new MemberRepository(SqlConnectString);
-                if (string.IsNullOrEmpty(fid)) {
+                if (string.IsNullOrEmpty(fid))
+                {
                     var r = mberRepository.Give(UserInfo.Id, ActivityModel.RewardId, ActivityModel.ProductId, model.Score, 0);
                     model.MemberId = UserInfo.Id;
                     model.Result = r;
@@ -177,9 +176,9 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                     model.LastUpdateTime = DateTime.Now;
                     repositry.Update(model);
                     return Json(new ResponseModel { IsSuccess = true, Message = "" });
-                }                            
+                }
             }
-            
+
             return new EmptyResult();
         }
 

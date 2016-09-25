@@ -1,13 +1,13 @@
-﻿using FJW.Wechat.WebApp.Base;
-using System;
-
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using Senparc.Weixin.Exceptions;
 using Senparc.Weixin.MP.AdvancedAPIs;
 using Senparc.Weixin.MP.AdvancedAPIs.OAuth;
+
 using FJW.Unit;
 using FJW.Wechat.Data;
-using System.Linq;
+using FJW.Wechat.WebApp.Base;
 
 namespace FJW.Wechat.WebApp.Controllers
 {
@@ -84,7 +84,7 @@ namespace FJW.Wechat.WebApp.Controllers
                 return Content(ex.Message);
             }
 
-            var url =  Session["url"] != null? Session["url"].ToString():"/";
+            var url = Session["url"] != null ? Session["url"].ToString() : "/";
             if (string.IsNullOrEmpty(url))
             {
                 url = "/";
@@ -100,7 +100,7 @@ namespace FJW.Wechat.WebApp.Controllers
         /// <param name="code"></param>
         /// <param name="state"></param>
         /// <returns></returns>
-        public ActionResult BaseCallback(string code, string state) 
+        public ActionResult BaseCallback(string code, string state)
         {
             Logger.Log("BaseCallback\t {0} \t {1}", code, state);
             if (string.IsNullOrEmpty(code))
@@ -132,6 +132,5 @@ namespace FJW.Wechat.WebApp.Controllers
             }
             return Redirect(url);
         }
-         
     }
 }

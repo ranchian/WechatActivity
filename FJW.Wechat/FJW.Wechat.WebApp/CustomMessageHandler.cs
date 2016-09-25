@@ -1,12 +1,9 @@
-﻿
-using Senparc.Weixin.MP.Entities;
-using Senparc.Weixin.MP.Entities.Request;
-using Senparc.Weixin.MP.MessageHandlers;
-using System;
-
+﻿using System;
 using System.IO;
 
-using System.Web.Configuration;
+using Senparc.Weixin.MP.Entities;
+using Senparc.Weixin.MP.MessageHandlers;
+using Senparc.Weixin.MP.Entities.Request;
 
 namespace FJW.Wechat.WebApp
 {
@@ -17,22 +14,22 @@ namespace FJW.Wechat.WebApp
          * DefaultResponseMessage必须在子类中重写，用于返回没有处理过的消息类型（也可以用于默认消息，如帮助信息等）；
          * 其中所有原OnXX的抽象方法已经都改为虚方法，可以不必每个都重写。若不重写，默认返回DefaultResponseMessage方法中的结果。
          */
-         /*
+        /*
 
 #if DEBUG
-        string agentUrl = "http://localhost:12222/App/Weixin/4";
-        string agentToken = "27C455F496044A87";
-        string wiweihiKey = "CNadjJuWzyX5bz5Gn+/XoyqiqMa5DjXQ";
+       string agentUrl = "http://localhost:12222/App/Weixin/4";
+       string agentToken = "27C455F496044A87";
+       string wiweihiKey = "CNadjJuWzyX5bz5Gn+/XoyqiqMa5DjXQ";
 #else
-        //下面的Url和Token可以用其他平台的消息，或者到www.weiweihi.com注册微信用户，将自动在“微信营销工具”下得到
-        private string agentUrl = WebConfigurationManager.AppSettings["WeixinAgentUrl"];//这里使用了www.weiweihi.com微信自动托管平台
-        
-        private string agentToken = WebConfigurationManager.AppSettings["WeixinAgentToken"];//Token
-        
-        private string wiweihiKey = WebConfigurationManager.AppSettings["WeixinAgentWeiweihiKey"];
-        //WeiweihiKey专门用于对接www.Weiweihi.com平台，获取方式见：http://www.weiweihi.com/ApiDocuments/Item/25#51
+       //下面的Url和Token可以用其他平台的消息，或者到www.weiweihi.com注册微信用户，将自动在“微信营销工具”下得到
+       private string agentUrl = WebConfigurationManager.AppSettings["WeixinAgentUrl"];//这里使用了www.weiweihi.com微信自动托管平台
+
+       private string agentToken = WebConfigurationManager.AppSettings["WeixinAgentToken"];//Token
+
+       private string wiweihiKey = WebConfigurationManager.AppSettings["WeixinAgentWeiweihiKey"];
+       //WeiweihiKey专门用于对接www.Weiweihi.com平台，获取方式见：http://www.weiweihi.com/ApiDocuments/Item/25#51
 #endif
-        */
+       */
 
         private string appId = Config.WechatConfig.AppId;
         private string appSecret = Config.WechatConfig.AppSecret;
@@ -67,8 +64,6 @@ namespace FJW.Wechat.WebApp
         /// <returns></returns>
         public override Senparc.Weixin.MP.Entities.IResponseMessageBase OnTextRequest(RequestMessageText requestMessage)
         {
-
-
             //方法一（v0.1），此方法调用太过繁琐，已过时（但仍是所有方法的核心基础），建议使用方法二到四
             //var responseMessage =
             //    ResponseMessageBase.CreateFromRequestMessage(RequestMessage, ResponseMsgType.Text) as
@@ -87,9 +82,6 @@ namespace FJW.Wechat.WebApp
 
             return responseMessage;
         }
-
- 
-
 
         /// <summary>
         /// 处理图片请求
@@ -110,9 +102,6 @@ namespace FJW.Wechat.WebApp
         {
             return base.OnVoiceRequest(requestMessage);
         }
-
-
-
 
         /// <summary>
         /// 处理事件请求（这个方法一般不用重写，这里仅作为示例出现。除非需要在判断具体Event类型以外对Event信息进行统一操作

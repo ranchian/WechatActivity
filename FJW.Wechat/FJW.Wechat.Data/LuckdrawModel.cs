@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using FJW.Model.MongoDb;
+﻿using FJW.Model.MongoDb;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FJW.Wechat.Data
 {
@@ -7,7 +7,7 @@ namespace FJW.Wechat.Data
     /// 抽奖活动记录
     /// </summary>
     [Table("LuckdrawRecord")]
-    public class LuckdrawModel: BaseModel
+    public class LuckdrawModel : BaseModel
     {
         public string Key { get; set; }
 
@@ -35,11 +35,10 @@ namespace FJW.Wechat.Data
         /// 奖品名称
         /// </summary>
         public string Name { get; set; }
-        
+
         /// <summary>
         /// 状态
         /// </summary>
         public int Status { get; set; }
-
     }
 }

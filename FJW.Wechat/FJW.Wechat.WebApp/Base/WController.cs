@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web;
+﻿using System.Text;
 using System.Web.Mvc;
+
 using FJW.Unit;
 using FJW.Wechat.WebApp.Models;
 
@@ -11,8 +8,6 @@ namespace FJW.Wechat.WebApp.Base
 {
     public abstract class WController : Controller
     {
-
-
         #region User Info
 
         private const string UserSessionKey = "SessionUserInfo";
@@ -45,7 +40,7 @@ namespace FJW.Wechat.WebApp.Base
             HttpContext.Session[UserSessionKey] = _userInfo;
         }
 
-        #endregion
+        #endregion User Info
 
         #region override
 
@@ -57,7 +52,7 @@ namespace FJW.Wechat.WebApp.Base
                 filterContext.ExceptionHandled = true;
                 if (Request.IsAjaxRequest())
                 {
-                    filterContext.Result = new JsonetResult() { Data = new ResponseModel { IsSuccess = false , Message = "error" }, JsonRequestBehavior = JsonRequestBehavior.AllowGet};
+                    filterContext.Result = new JsonetResult() { Data = new ResponseModel { IsSuccess = false, Message = "error" }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                 }
                 else
                 {
@@ -70,13 +65,12 @@ namespace FJW.Wechat.WebApp.Base
             }
         }
 
-
-        #endregion
-
+        #endregion override
 
         #region json
 
-        protected override JsonResult Json(object data, string contentType, Encoding contentEncoding, JsonRequestBehavior behavior) {
+        protected override JsonResult Json(object data, string contentType, Encoding contentEncoding, JsonRequestBehavior behavior)
+        {
             return new JsonetResult
             {
                 Data = data,
@@ -85,6 +79,7 @@ namespace FJW.Wechat.WebApp.Base
                 JsonRequestBehavior = behavior
             };
         }
-        #endregion
+
+        #endregion json
     }
 }

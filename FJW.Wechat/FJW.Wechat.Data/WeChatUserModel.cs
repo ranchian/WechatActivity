@@ -1,11 +1,12 @@
-﻿using FJW.Model.MongoDb;
+﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using System;
+
+using FJW.Model.MongoDb;
 
 namespace FJW.Wechat.Data
 {
     [Table("WeChatUser")]
-    public class WeChatUserModel: BaseModel
+    public class WeChatUserModel : BaseModel
     {
         public long MemberId { get; set; }
 
@@ -34,7 +35,6 @@ namespace FJW.Wechat.Data
         /// </summary>
         public string City { get; set; }
 
-
         public string Country { get; set; }
 
         /// <summary>
@@ -49,9 +49,7 @@ namespace FJW.Wechat.Data
         /// </summary>
         public string UnionId { get; set; }
 
-
         public string AccessToken { get; set; }
-
 
         public string RefreshToken { get; set; }
 

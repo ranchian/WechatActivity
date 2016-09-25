@@ -1,5 +1,4 @@
-﻿
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace FJW.Unit
 {
@@ -19,7 +18,6 @@ namespace FJW.Unit
         {
             return string.IsNullOrEmpty(str);
         }
-
 
         public static T Deserialize<T>(this string str)
         {

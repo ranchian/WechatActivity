@@ -1,13 +1,10 @@
 ﻿using System;
-
 using System.Web.Mvc;
-
 using Senparc.Weixin.MP;
-using System.Web.Configuration;
-using Senparc.Weixin.MP.Entities.Request;
-using System.IO;
-using FJW.Unit;
 using Senparc.Weixin.MP.MvcExtension;
+using Senparc.Weixin.MP.Entities.Request;
+
+using FJW.Unit;
 
 namespace FJW.Wechat.WebApp.Controllers
 {
@@ -18,6 +15,7 @@ namespace FJW.Wechat.WebApp.Controllers
         public static readonly string EncodingAESKey = WebConfigurationManager.AppSettings["WeixinEncodingAESKey"];//与微信公众账号后台的EncodingAESKey设置保持一致，区分大小写。
         public static readonly string AppId = WebConfigurationManager.AppSettings["WeixinAppId"];//与微信公众账号后台的AppId设置保持一致，区分大小写。
         */
+
         // GET: Wechat
         public ActionResult Index(PostModel postModel, string echostr)
         {
@@ -46,7 +44,7 @@ namespace FJW.Wechat.WebApp.Controllers
 
             //v4.2.2之后的版本，可以设置每个人上下文消息储存的最大数量，防止内存占用过多，如果该参数小于等于0，则不限制
             var maxRecordCount = 10;
-            /*                       
+            /*
             var logPath = Server.MapPath(string.Format("~/App_Data/MP/{0}/", DateTime.Now.ToString("yyyy-MM-dd")));
             if (!Directory.Exists(logPath))
             {
@@ -69,7 +67,6 @@ namespace FJW.Wechat.WebApp.Controllers
                  * 收到重复消息通常是因为微信服务器没有及时收到响应，会持续发送2-5条不等的相同内容的RequestMessage*/
                 messageHandler.OmitRepeatedMessage = true;
 
-
                 //执行微信处理过程
                 messageHandler.Execute();
 
@@ -79,7 +76,6 @@ namespace FJW.Wechat.WebApp.Controllers
                 //{
                 //    throw new Exception(messageHandler.RequestDocument.ToString());
                 //}
-
 
                 //return Content(messageHandler.ResponseDocument.ToString());//v0.7-
                 //return new FixWeixinBugWeixinResult(messageHandler);//为了解决官方微信5.0软件换行bug暂时添加的方法，平时用下面一个方法即可
@@ -92,6 +88,4 @@ namespace FJW.Wechat.WebApp.Controllers
             }
         }
     }
-
-
 }

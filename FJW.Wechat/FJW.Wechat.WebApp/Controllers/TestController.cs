@@ -1,6 +1,7 @@
-﻿using FJW.Unit;
+﻿using System.Web.Mvc;
+
+using FJW.Unit;
 using FJW.Wechat.WebApp.Base;
-using System.Web.Mvc;
 
 namespace FJW.Wechat.WebApp.Controllers
 {
@@ -8,6 +9,7 @@ namespace FJW.Wechat.WebApp.Controllers
     public class TestController : WController
     {
 #if DEBUG
+
         // GET: Test
         [WAuthorize]
         public ActionResult Index()
@@ -22,7 +24,5 @@ namespace FJW.Wechat.WebApp.Controllers
         }
 
 #endif
-
-
     }
 }

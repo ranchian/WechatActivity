@@ -1,12 +1,12 @@
-﻿using System;
-
-using NLog;
+﻿using NLog;
+using System;
 
 namespace FJW.Unit.Log
 {
-    internal class NLogger: ILogger
+    internal class NLogger : ILogger
     {
         private static readonly NLog.Logger NLog = LogManager.GetCurrentClassLogger();
+
         public void Debug(string msg)
         {
             NLog.Debug(msg);
@@ -21,7 +21,5 @@ namespace FJW.Unit.Log
         {
             NLog.Error(msg);
         }
-
-         
     }
 }

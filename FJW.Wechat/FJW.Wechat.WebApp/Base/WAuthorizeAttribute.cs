@@ -1,11 +1,9 @@
-﻿using FJW.Unit;
-using FJW.Wechat.Data;
-using Senparc.Weixin.MP.AdvancedAPIs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
+using Senparc.Weixin.MP.AdvancedAPIs;
+
+using FJW.Unit;
+using FJW.Wechat.Data;
 
 namespace FJW.Wechat.WebApp.Base
 {
@@ -41,12 +39,12 @@ namespace FJW.Wechat.WebApp.Base
             }
             else
             {
-                Logger.Log("OpenId:"+ u.OpenId);
+                Logger.Log("OpenId:" + u.OpenId);
                 var repository = new WeChatRepository("Wechat", Config.ActivityConfig.MongoHost);
                 var wxUserInfo = repository.Query<WeChatUserModel>(it => it.OpenId == u.OpenId).FirstOrDefault();
                 if (wxUserInfo == null)
                 {
-                    //2.如果 库中不存在OpenId, 提示授权    
+                    //2.如果 库中不存在OpenId, 提示授权
                     var callbackurl = string.Format("{0}/WAuthorize/UserInfoCallback", req.Url.AbsoluteUri.Replace(req.Url.PathAndQuery, string.Empty));
                     var url = OAuthApi.GetAuthorizeUrl(appid, callbackurl, "4CA8CDEED2F3309F8B987DEEB3C1C1DD", Senparc.Weixin.MP.OAuthScope.snsapi_userinfo);
                     filterContext.Result = new RedirectResult(url);
@@ -67,6 +65,4 @@ namespace FJW.Wechat.WebApp.Base
             }
         }
     }
-
-
 }
