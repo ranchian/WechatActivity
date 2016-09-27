@@ -251,7 +251,7 @@ namespace FJW.Wechat.Data
         /// <param name="memberId"></param>
         /// <param name="itemName"></param>
         /// <param name="itemType"></param>
-        public void AddRecord(long memberId, string itemName, int itemType, decimal itemValue, string key)
+        public void AddRecord(long memberId, string itemName, int itemType, decimal itemValue, string key, long sequnce)
         {
             using (var conn = GetDbConnection())
             {
@@ -261,6 +261,7 @@ namespace FJW.Wechat.Data
                 param.Add("@ItemValue", itemValue, DbType.Decimal);
                 param.Add("@GameKey", key, DbType.String);
                 param.Add("@MemberID", memberId, DbType.Int64);
+                param.Add("@Sequnce", sequnce, DbType.Int64);
                 conn.ExecuteScalar(@"INSERT INTO Other.dbo.OT_AwardItem
                                             ( ItemName ,
                                               ItemType ,
@@ -268,7 +269,8 @@ namespace FJW.Wechat.Data
                                               GameKey,
                                               IsUsed ,
                                               ActivityID ,
-                                              MemberID
+                                              MemberID ,
+                                              Sequnce
                                             )
                                     VALUES  ( @ItemName ,
                                               @ItemType ,
@@ -276,7 +278,8 @@ namespace FJW.Wechat.Data
                                               @GameKey,
                                               1 ,
                                               8 ,
-                                              @MemberID
+                                              @MemberID ,
+                                              @Sequnce
                                             )", param);
             }
         }
@@ -311,7 +314,8 @@ namespace FJW.Wechat.Data
                                                             AND IsDelete = 0
                                                             AND ItemType <= 2
                                                 ) T
-                                                INNER JOIN Basic..BD_Member M ON T.MemberID = M.ID", key);
+                                                INNER JOIN Basic..BD_Member M ON T.MemberID = M.ID
+                                                ORDER BY T.ItemID DESC", key);
                 if (type == 1)
                 {
                     sql += string.Format("WHERE MemberID = {0}", mid);

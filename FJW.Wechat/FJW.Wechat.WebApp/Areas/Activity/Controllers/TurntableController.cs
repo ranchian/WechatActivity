@@ -23,8 +23,6 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         {
             int mOnline = 0, mTimes = 1;
 
-            FJW.CommonLib.Utils.Logger.Info("member Info", UserInfo.ToJson());
-
             // 判断用户是否登陆 如果没登陆则返回数据 online=0,times=0
             if (UserInfo.Id < 1)
                 return Json(new { online = mOnline, times = 0 });
@@ -60,6 +58,11 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         [HttpPost]
         public JsonResult GetActResult(int type)
         {
+            var state = ActivityState(GameKey);
+            if (state != 0)
+            {
+                return Json(new ResponseModel { ErrorCode = 1, Message = "活动未开始或已结束" });
+            }
             var sqlRepository = new MemberRepository(SqlConnectString);
             var dt = sqlRepository.GetRecord(type, UserInfo.Id, GameKey);
             return Json(new ResponseModel { ErrorCode = 0, Message = "", Data = dt.ToJson(), IsSuccess = true });
@@ -75,7 +78,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
             var state = ActivityState(GameKey);
             if (state != 0)
             {
-                //return Json(new ResponseModel { ErrorCode = 1, Message = "您来的时间不对" });
+                return Json(new ResponseModel { ErrorCode = 1, Message = "活动未开始或已结束" });
             }
             if (UserInfo.Id < 1)
             {
@@ -101,7 +104,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
 
                         //添加数据库
                         var sqlRepository = new MemberRepository(SqlConnectString);
-                        sqlRepository.AddRecord(UserInfo.Id, name, prize, money, GameKey);
+                        sqlRepository.AddRecord(UserInfo.Id, name, prize, money, GameKey, sequnce);
 
                         //发送奖励
                         sqlRepository.GiveMoney(UserInfo.Id, money, 8, sequnce);
