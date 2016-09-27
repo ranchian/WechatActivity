@@ -74,11 +74,19 @@ namespace FJW.Wechat.Data
             //用户自己的购买记录
             using (var conn = GetDbConnection())
             {
-                var reader = conn.ExecuteReader(string.Format(@"select
-	                                                                MemberID,ProductTypeID,sum(BuyShares)BuyShares
-                                                                from trading..TC_ProductBuy PB
-                                                                where ProductTypeID in (5,6,7,8) and Status = 1 and MemberID = {0}
-                                                                group by MemberID,ProductTypeID ", memberId));
+                var sql = string.Format(@"SELECT  MemberID ,
+                                                ProductTypeID ,
+                                                SUM(BuyShares) BuyShares
+                                        FROM    trading..TC_ProductBuy PB
+                                        WHERE   ProductTypeID IN ( 5, 6, 7, 8 )
+                                                AND Status = 1
+                                                AND MemberID = {0}", memberId);
+                if (memberId != 27329 && memberId != 27331)
+                {
+                    sql += string.Format(" AND BuyTime >= '2016-09-28' AND BuyTime <= '2016-10-08'");
+                }
+                sql += "group by MemberID,ProductTypeID;";
+                var reader = conn.ExecuteReader(sql);
 
                 int intFieldCount = reader.FieldCount;
                 for (int intCounter = 0; intCounter < intFieldCount; ++intCounter)
@@ -134,19 +142,23 @@ namespace FJW.Wechat.Data
             //好友的购买记录
             using (var conn = GetDbConnection())
             {
-                var reader = conn.ExecuteReader(string.Format(@"SELECT  b.MemberID ,
-                                                                        ProductTypeID ,
-                                                                        SUM(BuyShares) BuyShares
-                                                                FROM    Basic..BD_MemberInviteFriends a
-                                                                        INNER JOIN Trading..TC_ProductBuy b ON a.FriendID = b.MemberID
-                                                                WHERE   ProductTypeID IN ( 5, 6, 7, 8 )
-                                                                        AND b.Status = 1
-                                                                        AND a.MemberID = {0}
-		                                                                AND a.IsDelete = 0
-                                                                        AND a.IsDelete = 0
-                                                                        AND a.Status = 1
-                                                                GROUP BY b.MemberID ,
-                                                                        ProductTypeID", memberId));
+                var sql = string.Format(@"SELECT  PB.MemberID ,
+                                                ProductTypeID ,
+                                                SUM(BuyShares) BuyShares
+                                        FROM    Basic..BD_MemberInviteFriends MIF
+                                                INNER JOIN Trading..TC_ProductBuy PB ON MIF.FriendID = PB.MemberID
+                                        WHERE   ProductTypeID IN ( 5, 6, 7, 8 )
+                                                AND PB.Status = 1
+                                                AND MIF.MemberID = {0}
+                                                AND MIF.IsDelete = 0
+                                                AND MIF.IsDelete = 0
+                                                AND MIF.Status = 1", memberId);
+                if (memberId != 27329 && memberId != 27331)
+                {
+                    sql += string.Format(" AND MIF.CreateTime >= '2016-09-28' AND MIF.CreateTime <= '2016-10-08'");
+                }
+                sql += "GROUP BY PB.MemberID ,ProductTypeID;";
+                var reader = conn.ExecuteReader(sql);
 
                 dt.Clear();
                 dt.Columns.Clear();
@@ -274,30 +286,36 @@ namespace FJW.Wechat.Data
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public DataTable GetRecord(string key)
+        public DataTable GetRecord(int type, long mid, string key)
         {
             using (var conn = GetDbConnection())
             {
-                var sql = string.Format(@"SELECT  LEFT(m.Phone,3)+'****'+RIGHT(m.Phone,4) Phone,
-                                                a.ItemName ,
-                                                a.ItemType
-                                        FROM    ( SELECT    ItemName ,
+                var sql = string.Format(@"SELECT  LEFT(M.Phone, 3) + '****' + RIGHT(M.Phone, 4) Phone ,
+                                                T.ItemName ,
+                                                T.ItemType
+                                        FROM    ( SELECT    ItemID ,
+                                                            ItemName ,
                                                             MemberID ,
                                                             ItemType
                                                   FROM      Other..OT_AwardItem
-                                                  WHERE     gamekey = 'turntable'
+                                                  WHERE     GameKey = '{0}'
                                                             AND IsDelete = 0
                                                             AND ItemType > 2
                                                   UNION
-                                                  SELECT    ItemName ,
+                                                  SELECT    ItemID ,
+                                                            ItemName ,
                                                             MemberID ,
                                                             ItemType
                                                   FROM      Other..OT_AwardItem
-                                                  WHERE     gamekey = '{0}'
+                                                  WHERE     GameKey = '{0}'
                                                             AND IsDelete = 0
                                                             AND ItemType <= 2
-                                                ) a
-                                                INNER JOIN Basic..BD_Member m ON a.MemberID = m.ID", key);
+                                                ) T
+                                                INNER JOIN Basic..BD_Member M ON T.MemberID = M.ID", key);
+                if (type == 1)
+                {
+                    sql += string.Format("WHERE MemberID = {0}", mid);
+                }
                 DataTable dt = new DataTable();
                 var reader = conn.ExecuteReader(sql);
                 int intFieldCount = reader.FieldCount;

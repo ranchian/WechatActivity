@@ -24,7 +24,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
             Models.ResultModel<string> result = new Models.ResultModel<string>();
             result.Result = "登录失败";
             result.Success = 0;
-
+            
             try
             {
                 if (string.IsNullOrEmpty(phone))
@@ -42,7 +42,8 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                         Phone = phone,
                         Pswd = pswd
                     };
-                    ServiceResult response = ServiceEngine.Request("Login", req, 0, 60000);
+                    ServiceResult response = ServiceEngine.Request("MemberService.Login", req, 0, 60000);
+
                     if (response.Status == 0)
                     {
                         var resp = JsonHelper.JsonDeserialize<MemberModel>(response.Content);
@@ -63,9 +64,11 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                         {
                             return Content("无效的登录结果");
                         }
+
                         UserInfo.Id = memberInfo.MemberId;
                         UserInfo.Token = memberInfo.Token;
                         SetLoginInfo(UserInfo);
+
                     }
                     else
                     {

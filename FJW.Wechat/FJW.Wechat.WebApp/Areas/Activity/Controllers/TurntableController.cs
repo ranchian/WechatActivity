@@ -23,6 +23,8 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         {
             int mOnline = 0, mTimes = 1;
 
+            FJW.CommonLib.Utils.Logger.Info("member Info", UserInfo.ToJson());
+
             // 判断用户是否登陆 如果没登陆则返回数据 online=0,times=0
             if (UserInfo.Id < 1)
                 return Json(new { online = mOnline, times = 0 });
@@ -46,6 +48,8 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                 mTimes = awardCnt;
                 if (mTimes <= 0) mTimes = 0;
             }
+            else
+                mTimes = 0;
             mOnline = 1;
         }
 
@@ -54,10 +58,10 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public JsonResult GetActResult()
+        public JsonResult GetActResult(int type)
         {
             var sqlRepository = new MemberRepository(SqlConnectString);
-            var dt = sqlRepository.GetRecord(GameKey);
+            var dt = sqlRepository.GetRecord(type, UserInfo.Id, GameKey);
             return Json(new ResponseModel { ErrorCode = 0, Message = "", Data = dt.ToJson(), IsSuccess = true });
         }
 

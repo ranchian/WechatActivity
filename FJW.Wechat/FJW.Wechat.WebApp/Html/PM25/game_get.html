@@ -105,7 +105,7 @@
                 data: param,
                 //请求成功时执行
                 success: function (data) {
-                    
+
                 },
                 //请求失败遇到异常触发
                 error: function () {
@@ -125,21 +125,28 @@
         });
 
         $(function () {
-            //$.ajax({
-            //    type: "post",
-            //    timeout: "18000",
-            //    dataType: "json",
-            //    url: "/activity/turntable/play",
-            //    success: function (data) {
-
-            //    }
-            //});
-
+            var param = {
+                type: "0"
+            };
             $.ajax({
                 type: "post",
                 timeout: "18000",
                 dataType: "json",
-                url: "/activity/turntable/getActResult",
+                data: param,
+                url: "/activity/turntable/GetActResult",
+                success: function (data) {
+
+                }
+            });
+            var param = {
+                type: "0"
+            };
+            $.ajax({
+                type: "post",
+                timeout: "18000",
+                dataType: "json",
+                url: "/activity/turntable/getActTimes",
+                data: param,
                 success: function (data) {
 
                 }
