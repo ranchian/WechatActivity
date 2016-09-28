@@ -80,12 +80,15 @@ namespace FJW.Wechat.Data
                                         FROM    trading..TC_ProductBuy PB
                                         WHERE   ProductTypeID IN ( 5, 6, 7, 8 )
                                                 AND Status = 1
-                                                AND MemberID = {0}", memberId);
-                if (memberId != 27329 && memberId != 27331)
-                {
-                    sql += string.Format(" AND BuyTime >= '2016-09-28' AND BuyTime <= '2016-10-08'");
-                }
-                sql += "group by MemberID,ProductTypeID;";
+                                                AND BuyTime >= '2016-09-28'
+                                                AND BuyTime <= '2016-10-08'
+                                                AND MemberID NOT IN (
+                                                SELECT  FriendID
+                                                FROM    Basic..BD_MemberInviteFriends
+                                                WHERE   MemberID IN ( SELECT    MemberID
+                                                                      FROM      Trading..TC_DisableMember ) )
+                                                AND MemberID = {0}
+                                                GROUP BY MemberID , ProductTypeID;", memberId);
                 var reader = conn.ExecuteReader(sql);
 
                 int intFieldCount = reader.FieldCount;

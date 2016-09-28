@@ -56,7 +56,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public JsonResult GetActResult(int type)
+        public JsonResult GetActResult(int type = 0)
         {
             var state = ActivityState(GameKey);
             if (state != 0)
