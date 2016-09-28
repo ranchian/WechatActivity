@@ -124,7 +124,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                         repository.Add(record);
 
                         //推送消息
-                        string msg = string.Format("尊敬的房金网会员，您参加的幸运大转盘 Iphone 7 plus免费送活动，抽中了{0}，感谢您的参与", name);
+                        /*string msg = string.Format("尊敬的房金网会员，您参加的幸运大转盘 Iphone 7 plus免费送活动，抽中了{0}，感谢您的参与", name);
                         var userInfo = sqlRepository.GetMemberInfo(UserInfo.Token);
                         if (userInfo != null)
                         {
@@ -139,7 +139,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                             };
 
                             new PushHelper().PushMsg(dic);
-                        }
+                        }*/
                     });
 
                     return Json(new ResponseModel { ErrorCode = 0, Message = "", IsSuccess = true, Data = new { name = name, prize = prize, money = money } });

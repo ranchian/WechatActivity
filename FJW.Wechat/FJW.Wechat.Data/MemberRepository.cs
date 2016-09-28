@@ -5,7 +5,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 
 using FJW.CommonLib.ExtensionMethod;
-using System.Collections.Generic;
+using FJW.Unit;
 
 namespace FJW.Wechat.Data
 {
@@ -294,11 +294,15 @@ namespace FJW.Wechat.Data
         /// <returns></returns>
         public DataTable GetRecord(int type, long mid, string key)
         {
-            using (var conn = GetDbConnection())
+            try
             {
-                var sql = string.Format(@"SELECT  LEFT(M.Phone, 3) + '****' + RIGHT(M.Phone, 4) Phone ,
+                using (var conn = GetDbConnection())
+                {
+                    var sql = string.Format(@"SELECT  LEFT(M.Phone, 3) + '****' + RIGHT(M.Phone, 4) Phone ,
                                                 T.ItemName ,
-                                                T.ItemType
+                                                T.ItemType ,
+                                                T.ItemID ,
+                                                T.MemberID
                                         FROM    ( SELECT    ItemID ,
                                                             ItemName ,
                                                             MemberID ,
@@ -317,29 +321,37 @@ namespace FJW.Wechat.Data
                                                             AND IsDelete = 0
                                                             AND ItemType <= 2
                                                 ) T
-                                                INNER JOIN Basic..BD_Member M ON T.MemberID = M.ID
-                                                ORDER BY T.ItemID DESC", key);
-                if (type == 1)
-                {
-                    sql += string.Format("WHERE MemberID = {0}", mid);
-                }
-                DataTable dt = new DataTable();
-                var reader = conn.ExecuteReader(sql);
-                int intFieldCount = reader.FieldCount;
-                for (int intCounter = 0; intCounter < intFieldCount; ++intCounter)
-                {
-                    dt.Columns.Add(reader.GetName(intCounter), reader.GetFieldType(intCounter));
-                }
+                                                INNER JOIN Basic..BD_Member M ON T.MemberID = M.ID", key);
+                    
+                    if (type == 1)
+                    {
+                        sql += string.Format(" WHERE T.MemberID = {0}", mid);
+                    }
+                    sql += " ORDER BY T.ItemID DESC";
 
-                dt.BeginLoadData();
+                    DataTable dt = new DataTable();
+                    var reader = conn.ExecuteReader(sql);
+                    int intFieldCount = reader.FieldCount;
+                    for (int intCounter = 0; intCounter < intFieldCount; ++intCounter)
+                    {
+                        dt.Columns.Add(reader.GetName(intCounter), reader.GetFieldType(intCounter));
+                    }
 
-                object[] objValues = new object[intFieldCount];
-                while (reader.Read())
-                {
-                    reader.GetValues(objValues);
-                    dt.LoadDataRow(objValues, true);
+                    dt.BeginLoadData();
+
+                    object[] objValues = new object[intFieldCount];
+                    while (reader.Read())
+                    {
+                        reader.GetValues(objValues);
+                        dt.LoadDataRow(objValues, true);
+                    }
+                    return dt;
                 }
-                return dt;
+            }
+            catch (System.Exception ex)
+            {
+                Logger.Error(ex.Message);
+                return null;
             }
         }
     }
