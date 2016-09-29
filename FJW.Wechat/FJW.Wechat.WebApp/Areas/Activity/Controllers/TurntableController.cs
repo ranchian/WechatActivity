@@ -10,6 +10,7 @@ using FJW.Wechat.WebApp.Models;
 
 namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
 {
+
     public class TurntableController : ActivityController
     {
         private const string GameKey = "turntable";
@@ -58,14 +59,49 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         [HttpPost]
         public JsonResult GetActResult(int type = 0)
         {
+            try
+            {
+
+
+                var state = ActivityState(GameKey);
+                if (state != 0)
+                {
+                    return Json(new ResponseModel { ErrorCode = 1, Message = "活动未开始或已结束" }, JsonRequestBehavior.AllowGet);
+                }
+                if (type == 1 && UserInfo.Id < 1)
+                {
+                    return Json(new ResponseModel { ErrorCode = 1, Message = "未登录" }, JsonRequestBehavior.AllowGet);
+                }
+                var sqlRepository = new MemberRepository(SqlConnectString);
+                var dt = sqlRepository.GetRecord(type, UserInfo.Id, GameKey);
+                return Json(new ResponseModel { ErrorCode = 0, Message = "", Data = dt.ToJson(), IsSuccess = true }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return Json(new ResponseModel {ErrorCode = 1, Message = "Error"}, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        /// <summary>
+        /// 用户获奖统计
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult GetMemberSum()
+        {
             var state = ActivityState(GameKey);
             if (state != 0)
             {
-                return Json(new ResponseModel { ErrorCode = 1, Message = "活动未开始或已结束" });
+                return Json(new ResponseModel { ErrorCode = 1, Message = "活动未开始或已结束" }, JsonRequestBehavior.AllowGet);
             }
-            var sqlRepository = new MemberRepository(SqlConnectString);
-            var dt = sqlRepository.GetRecord(type, UserInfo.Id, GameKey);
-            return Json(new ResponseModel { ErrorCode = 0, Message = "", Data = dt.ToJson(), IsSuccess = true });
+            if (UserInfo.Id > 0)
+            {
+                //
+                var sqlRepository = new MemberRepository(SqlConnectString);
+                return Json(new ResponseModel { ErrorCode = 0, Message = "", Data = sqlRepository.GetRocordSum(UserInfo.Id), IsSuccess = true }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new ResponseModel { ErrorCode = 1, Message = "用户未登录" }, JsonRequestBehavior.AllowGet);
+
         }
 
         /// <summary>

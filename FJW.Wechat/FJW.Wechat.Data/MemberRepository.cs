@@ -32,7 +32,7 @@ namespace FJW.Wechat.Data
             {
                 return conn.Query<MemberModel>(
                     "select top 1 MemberID, Phone, Token from dbo.BD_MemberLoginLog where IsDelete = 0 and Token = @token order by LoginTime desc;",
-                    new { token }).FirstOrDefault();
+                    new {token}).FirstOrDefault();
             }
         }
 
@@ -115,19 +115,19 @@ namespace FJW.Wechat.Data
                         switch (dr["ProductTypeID"].ToString())
                         {
                             case "5":
-                                awardCnt += int.Parse(dr["BuyShares"].ToString()) / 10000;
+                                awardCnt += int.Parse(dr["BuyShares"].ToString())/10000;
                                 break;
 
                             case "6":
-                                awardCnt += int.Parse(dr["BuyShares"].ToString()) / 3000;
+                                awardCnt += int.Parse(dr["BuyShares"].ToString())/3000;
                                 break;
 
                             case "7":
-                                awardCnt += int.Parse(dr["BuyShares"].ToString()) / 2000;
+                                awardCnt += int.Parse(dr["BuyShares"].ToString())/2000;
                                 break;
 
                             case "8":
-                                awardCnt += int.Parse(dr["BuyShares"].ToString()) / 1000;
+                                awardCnt += int.Parse(dr["BuyShares"].ToString())/1000;
                                 break;
                         }
                     }
@@ -138,7 +138,8 @@ namespace FJW.Wechat.Data
             using (var conn = GetDbConnection())
             {
                 var useCnt = conn.ExecuteScalar(string.Format(@"SELECT COUNT(0) FROM Other..OT_AwardItem
-                                                WHERE IsDelete = 0 AND ActivityID = 8 AND MemberID = {0}", memberId)).ToInt();
+                                                WHERE IsDelete = 0 AND ActivityID = 8 AND MemberID = {0}", memberId))
+                    .ToInt();
                 awardCnt -= useCnt;
             }
 
@@ -298,37 +299,29 @@ namespace FJW.Wechat.Data
             {
                 using (var conn = GetDbConnection())
                 {
-                    var sql = string.Format(@"SELECT  LEFT(M.Phone, 3) + '****' + RIGHT(M.Phone, 4) Phone ,
-                                                T.ItemName ,
-                                                T.ItemType ,
-                                                T.ItemID ,
-                                                T.MemberID
-                                        FROM    ( SELECT    ItemID ,
-                                                            ItemName ,
-                                                            MemberID ,
-                                                            ItemType
-                                                  FROM      Other..OT_AwardItem
-                                                  WHERE     GameKey = '{0}'
-                                                            AND IsDelete = 0
-                                                            AND ItemType > 2
-                                                  UNION
-                                                  SELECT    ItemID ,
-                                                            ItemName ,
-                                                            MemberID ,
-                                                            ItemType
-                                                  FROM      Other..OT_AwardItem
-                                                  WHERE     GameKey = '{0}'
-                                                            AND IsDelete = 0
-                                                            AND ItemType <= 2
-                                                ) T
-                                                INNER JOIN Basic..BD_Member M ON T.MemberID = M.ID", key);
-                    
-                    if (type == 1)
-                    {
-                        sql += string.Format(" WHERE T.MemberID = {0}", mid);
-                    }
+                    var sql = string.Format(@"
+SELECT  LEFT(M.Phone, 3) + '****' + RIGHT(M.Phone, 4) Phone ,
+    T.ItemName ,
+    T.ItemType ,
+    T.ItemID ,
+    T.MemberID ,
+    CONVERT(nvarchar(16) ,T.CreateTime, 20) TimeStr
+FROM    
+( 
+    SELECT    ItemID ,
+            ItemName ,
+            MemberID ,
+            ItemType,
+            CreateTime
+    FROM      Other..OT_AwardItem
+    WHERE     GameKey = '{0}' {1} AND IsDelete = 0
+) T
+INNER JOIN Basic..BD_Member M ON T.MemberID = M.ID", key,
+                        type == 1 ? string.Format(" AND MemberID = {0} ", mid) : string.Empty);
+
                     sql += " ORDER BY T.ItemID DESC";
 
+                    Logger.Log("Sql:{0}", sql );
                     DataTable dt = new DataTable();
                     var reader = conn.ExecuteReader(sql);
                     int intFieldCount = reader.FieldCount;
@@ -354,5 +347,33 @@ namespace FJW.Wechat.Data
                 return null;
             }
         }
+
+        /// <summary>
+        /// 得奖统计
+        /// </summary>
+        /// <param name="memberId"></param>
+        /// <returns></returns>
+        public object GetRocordSum(long memberId )
+        {
+            using (var conn = GetDbConnection())
+            {
+                const string sql = @"declare @m decimal(18, 0) , @phoneCount int = 0, @watchCount int = 0;
+select @m = SUM(ItemValue) from Other..OT_AwardItem where IsDelete = 0 and ItemType > 2 and MemberID = @memberId;
+select @phoneCount = COUNT(ItemID) from Other..OT_AwardItem where IsDelete = 0 and ItemType = 1 and MemberID = @memberId;
+select @phoneCount = COUNT(ItemID) from Other..OT_AwardItem where IsDelete = 0 and ItemType = 2 and MemberID = @memberId;
+select ISNULL(@m, 0) SumMoney, @phoneCount PhoneCount, @watchCount WatchCount; ";
+                var data = conn.Query<RecordSum>(sql, new {memberId}).FirstOrDefault();
+                return data;
+            }
+        }
+    }
+
+    internal class RecordSum 
+    {
+        public decimal SumMoney { get; set; }
+
+        public int PhoneCount { get; set; }
+
+        public int WatchCount { get; set; }
     }
 }
