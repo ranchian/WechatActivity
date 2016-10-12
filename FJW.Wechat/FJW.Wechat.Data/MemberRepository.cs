@@ -4,7 +4,6 @@ using System.Linq;
 using System.Data.Common;
 using System.Data.SqlClient;
 
-using FJW.CommonLib.ExtensionMethod;
 using FJW.Unit;
 
 namespace FJW.Wechat.Data
@@ -62,7 +61,7 @@ namespace FJW.Wechat.Data
         }
 
         /// <summary>
-        /// 获取用户
+        /// 获取用户 抽奖次数
         /// </summary>
         /// <param name="memberId"></param>
         /// <returns></returns>
@@ -137,9 +136,7 @@ namespace FJW.Wechat.Data
             //用户自己已使用的抽奖次数
             using (var conn = GetDbConnection())
             {
-                var useCnt = conn.ExecuteScalar(string.Format(@"SELECT COUNT(0) FROM Other..OT_AwardItem
-                                                WHERE IsDelete = 0 AND ActivityID = 8 AND MemberID = {0}", memberId))
-                    .ToInt();
+                var useCnt = conn.ExecuteScalar<int>("SELECT COUNT(0) FROM Other..OT_AwardItem WHERE IsDelete = 0 AND ActivityID = 8 AND MemberID = @memberId", new { memberId});
                 awardCnt -= useCnt;
             }
 

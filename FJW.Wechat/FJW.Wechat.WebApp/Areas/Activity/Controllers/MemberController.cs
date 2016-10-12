@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Web.Mvc;
-using System.Collections.Specialized;
+using FJW.SDK2Api.Member;
+using FJW.Unit;
 
-using FJW.Unit.Helper;
 using FJW.Wechat.Data;
-using FJW.CommonLib.Utils;
-using FJW.CommonLib.XService;
-using FJW.CommonLib.ExtensionMethod;
+ 
 
 namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
 {
@@ -37,21 +35,14 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                 }
                 else
                 {
-                    var req = new
-                    {
-                        Phone = phone,
-                        Pswd = pswd
-                    };
-                    ServiceResult response = ServiceEngine.Request("MemberService.Login", req, 0, 60000);
+                    
+                    var response = AccountApi.Login(phone, pswd);
 
-                    if (response.Status == 0)
+                    if (response.IsOk )
                     {
-                        var resp = JsonHelper.JsonDeserialize<MemberModel>(response.Content);
-
-                        //设置cookie缓存
-                        NameValueCollection nvc = new NameValueCollection();
-                        nvc.Add("token", JsonHelper.JsonSerializer(resp));
-                        CookieHelper.WriteCookie("fangjinnet.com", nvc, 0);
+                        Logger.Log(response.ToJson());
+                        var resp = response.Content;
+                        
 
                         //根据token读取ID
                         var mberRepository = new MemberRepository(SqlConnectString);
@@ -79,7 +70,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
             }
             catch (Exception ex)
             {
-                Logger.Error(ex.Message);
+                Logger.Error(ex );
             }
 
             return Json(result);
@@ -116,16 +107,8 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                 }
                 else
                 {
-                    var req = new
-                    {
-                        Phone = phone,
-                        VCode = code,
-                        Pswd = pswd,
-                        FriendPhone = inviterPhone,
-                        Channel = channel
-                    };
-                    ServiceResult result = ServiceEngine.Request("Regist", req.ToJSON());
-                    if (result.Status == 0)
+                    var result = AccountApi.Regist(phone, pswd, code, inviterPhone, channel);//.Request("Regist", req.ToJSON());
+                    if (result.IsOk)
                     {
                         model.Result = "登录成功";
                         model.Success = 1;

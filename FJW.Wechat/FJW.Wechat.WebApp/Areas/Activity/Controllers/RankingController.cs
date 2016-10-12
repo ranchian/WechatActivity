@@ -1,0 +1,73 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using FJW.Unit;
+using FJW.Wechat.Data;
+
+namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
+{
+    public class RankingController : ActivityController
+    {
+
+        [OutputCache(Duration = 10)]
+        public ActionResult Today()
+        {
+            const string key = "Ranking:Today";
+            var rows = RedisManager.Get<RankingRow[]>(key);
+            if (rows == null)
+            {
+                var repository = new SqlDataRepository(SqlConnectString);
+                rows = repository.TodayRanking().ToArray();
+                foreach (var it in rows)
+                {
+                    if (it.Sequnce == 0)
+                    {
+                        it.Sequnce = 1;
+                    }
+                    it.Phone = StringHelper.CoverPhone(it.Phone);
+                }
+                RedisManager.Set(key, rows, 60);
+            }
+
+            return Json(rows, JsonRequestBehavior.AllowGet);
+        }
+
+        [OutputCache(Duration = 10)]
+        public ActionResult Total()
+        {
+            const string key = "Ranking:Total";
+            var rows = RedisManager.Get<List<RankingRow>>(key);
+            if (rows == null)
+            {
+                var repository = new SqlDataRepository(SqlConnectString);
+                rows = repository.TotalRanking().ToList();
+                AppendSequnce(rows, 6, "房金季宝");
+                AppendSequnce(rows, 7, "房金双季宝");
+                AppendSequnce(rows, 8, "房金年宝");
+                foreach (var it in rows)
+                {
+                    if (it.Sequnce == 0)
+                    {
+                        it.Sequnce = 1;
+                    }
+                    it.Phone = StringHelper.CoverPhone(it.Phone);
+                }
+                rows = rows.OrderByDescending(it => it.Id).ThenBy(it => it.Sequnce).ToList();
+                RedisManager.Set(key, rows, 60);
+            }
+            return Json(rows, JsonRequestBehavior.AllowGet);
+        }
+
+        public static void AppendSequnce(List<RankingRow> rows, long id, string title)
+        {
+            var cnt = rows.Count(it => it.Id == id);
+            if (cnt < 3)
+            {
+                rows.Add(new RankingRow { Id = id, Sequnce = cnt+ 1, Title = title});
+                AppendSequnce(rows, id, title);
+            }
+            
+        }
+
+    }
+}

@@ -21,6 +21,10 @@ namespace FJW.Unit
 
         public static T Deserialize<T>(this string str)
         {
+            if (str == null)
+            {
+                return default(T);
+            }
             return JsonConvert.DeserializeObject<T>(str);
         }
     }

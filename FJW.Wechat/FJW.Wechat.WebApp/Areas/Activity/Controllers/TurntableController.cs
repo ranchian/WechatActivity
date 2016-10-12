@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using FJW.Unit;
-using FJW.Unit.Helper;
 using FJW.Wechat.Data;
 using FJW.Wechat.WebApp.Models;
 

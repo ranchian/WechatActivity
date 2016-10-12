@@ -103,6 +103,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
             }
             return 0;
         }
+        
     }
 
     public class Activity

@@ -1,32 +1,39 @@
-﻿using System.Text;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Net.Http.Headers;
+﻿using System.IO;
+using System.Net;
+using System.Text;
+
 
 namespace FJW.Unit
 {
     public class HttpUnit
     {
-        private static readonly HttpClient Client = new HttpClient();
-
-        public static async Task<HttpResult> Post(string url, object data, Encoding code,
-            string mediaType = "application/json")
+        
+        public static  HttpResult Post(string url, string data, Encoding code)
         {
-            using (var byteContent = new StringContent(data.ToJson(), code, mediaType))
+            var request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = "POST";
+            //request.Timeout = readTimeoutMs;
+            //request.ReadWriteTimeout = readTimeoutMs;
+            //request.ContentType = "application/x-www-form-urlencoded;charset=" + code.WebName;
+
+            using (var writer = new StreamWriter(request.GetRequestStream(), code))
             {
-                if (byteContent.Headers.ContentType == null ||
-                    byteContent.Headers.ContentType.MediaType != mediaType)
-                {
-                    byteContent.Headers.ContentType = new MediaTypeHeaderValue(mediaType);
-                }
-                var result = await Client.PostAsync(url, byteContent);
-                if (result.IsSuccessStatusCode)
-                {
-                    var resp = await result.Content.ReadAsStringAsync();
-                    return new HttpResult(result.StatusCode, resp);
-                }
-                return new HttpResult(result.StatusCode, string.Empty);
+                writer.Write(data);
             }
+
+            var response = (HttpWebResponse)request.GetResponse();
+
+            var resp = string.Empty;
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var responseStream = response.GetResponseStream();
+                if (responseStream != null)
+                {
+                    using (var reader = new StreamReader(responseStream, code))
+                        resp = reader.ReadToEnd();
+                }
+            }
+            return new HttpResult(response.StatusCode, resp);
         }
     }
 }

@@ -18,4 +18,24 @@ namespace FJW.Unit
 
         public string Reponse { get; set; }
     }
+
+    public class HttpResult<T> : HttpResult where T : class
+    {
+        public HttpResult()
+        {
+            
+        }
+
+        public T Data { get; set; }
+
+        public bool IsOk { get; set; }
+
+       
+
+        public HttpResult(HttpResult result)
+        {
+            
+            Reponse = result.Reponse;
+        }
+    }
 }

@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FJW.Wechat.Data", "FJW.Wech
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FJW.Wechat.ConsoleApp", "FJW.Wechat.ConsoleApp\FJW.Wechat.ConsoleApp.csproj", "{6E3B9898-14C5-4F02-B12B-BF27889E3389}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FJW.SDK2Api", "FJW.SDK2Api\FJW.SDK2Api.csproj", "{84FD0233-9DCB-4FA6-83D6-EF22841E0151}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{6E3B9898-14C5-4F02-B12B-BF27889E3389}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E3B9898-14C5-4F02-B12B-BF27889E3389}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E3B9898-14C5-4F02-B12B-BF27889E3389}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84FD0233-9DCB-4FA6-83D6-EF22841E0151}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84FD0233-9DCB-4FA6-83D6-EF22841E0151}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84FD0233-9DCB-4FA6-83D6-EF22841E0151}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84FD0233-9DCB-4FA6-83D6-EF22841E0151}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
