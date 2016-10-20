@@ -35,10 +35,16 @@ namespace FJW.SDK2Api.Member
                 Data = dict.ToJson()
             };
 
-            var conf = ApiConfig.Section.Value.Methods["Login"];
+            var conf = ApiConfig.Section.Value.Methods["MemberService"];
+#if DEBUG
             Logger.Log("url:{0}", conf.EntryPoint);
+#endif
+
             var result = HttpUnit.Post(conf.EntryPoint, reqestData.ToJson(), Encoding.UTF8);
-            Logger.Log("req over:{0}",  result.ToJson());
+#if DEBUG
+            Logger.Log("req over:{0}", result.ToJson());
+#endif
+
             if (result.Code ==  HttpStatusCode.OK )
             {
                 var responseData = result.Reponse.Deserialize<ApiResponse>();
@@ -66,7 +72,7 @@ namespace FJW.SDK2Api.Member
                 Data = dict.ToJson()
             };
 
-            var conf = ApiConfig.Section.Value.Methods["Regist"];
+            var conf = ApiConfig.Section.Value.Methods["MemberService"];
             var result = HttpUnit.Post(conf.EntryPoint, reqestData.ToJson(), Encoding.UTF8);
             if (result.Code == HttpStatusCode.OK)
             {

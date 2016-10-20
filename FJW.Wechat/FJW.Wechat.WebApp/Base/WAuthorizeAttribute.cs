@@ -36,6 +36,7 @@ namespace FJW.Wechat.WebApp.Base
                 var callbackurl = string.Format("{0}/WAuthorize/BaseCallback", req.Url.AbsoluteUri.Replace(req.Url.PathAndQuery, string.Empty));
                 var url = OAuthApi.GetAuthorizeUrl(appid, callbackurl, "4CA8CDEED2F3309F8B987DEEB3C1C1DD", Senparc.Weixin.MP.OAuthScope.snsapi_base);
                 filterContext.Result = new RedirectResult(url);
+                Logger.Log("BaseCallback:{0}", url);
             }
             else
             {
@@ -48,6 +49,7 @@ namespace FJW.Wechat.WebApp.Base
                     var callbackurl = string.Format("{0}/WAuthorize/UserInfoCallback", req.Url.AbsoluteUri.Replace(req.Url.PathAndQuery, string.Empty));
                     var url = OAuthApi.GetAuthorizeUrl(appid, callbackurl, "4CA8CDEED2F3309F8B987DEEB3C1C1DD", Senparc.Weixin.MP.OAuthScope.snsapi_userinfo);
                     filterContext.Result = new RedirectResult(url);
+                    Logger.Log("UserInfoCallback:{0}", url);
                 }
                 else
                 {

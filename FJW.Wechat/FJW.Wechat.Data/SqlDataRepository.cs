@@ -53,6 +53,18 @@ where  T.ID in (5, 6, 7, 8)";
             }
         }
 
+        /// <summary>
+        /// Select getdate()
+        /// </summary>
+        /// <returns></returns>
+        public DateTime GetDate()
+        {
+            using (var conn = GetDbConnection())
+            {
+                return conn.ExecuteScalar<DateTime>("select GETDATE()");
+            }
+        }
+
         public IEnumerable<RankingRow> TotalRanking()
         {
             const string sql = @"with T1 as (

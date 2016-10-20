@@ -12,7 +12,9 @@ namespace FJW.Wechat.WebApp.Models
         /// 是否成功
         /// </summary>
         [JsonProperty("success")]
-        public bool IsSuccess { get; set; }
+        public bool IsSuccess {
+            get { return ErrorCode == ErrorCode.None; }
+        }
 
         /// <summary>
         /// 数据
@@ -24,12 +26,40 @@ namespace FJW.Wechat.WebApp.Models
         /// 
         /// </summary>
         [JsonProperty("code")]
-        public int ErrorCode { get; set; }
+        public ErrorCode ErrorCode { get; set; }
 
         /// <summary>
         /// 消息
         /// </summary>
         [JsonProperty("message")]
         public string Message { get; set; }
+    }
+
+    public enum ErrorCode
+    {
+        /// <summary>
+        /// 无错误，正常
+        /// </summary>
+        None,
+
+        /// <summary>
+        /// 未登录
+        /// </summary>
+        NotLogged,
+
+        /// <summary>
+        /// 未验证
+        /// </summary>
+        NotVerified,
+
+        /// <summary>
+        /// 异常
+        /// </summary>
+        Exception,
+
+        /// <summary>
+        /// 其他
+        /// </summary>
+        Other
     }
 }

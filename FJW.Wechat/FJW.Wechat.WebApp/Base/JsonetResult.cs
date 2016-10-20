@@ -1,16 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
-
+using FJW.Unit;
 using Newtonsoft.Json;
 
 namespace FJW.Wechat.WebApp.Base
 {
-    public class JsonetResult : JsonResult 
+    public class JsonetResult : ActionResult 
     {
-        public new void ExecuteResult(ControllerContext context)
+
+        public JsonRequestBehavior JsonRequestBehavior { get; set; }
+
+        public Encoding ContentEncoding { get; set; }
+
+        public object Data { get; set; }
+
+        public string ContentType { get; set; }
+
+        public override void ExecuteResult(ControllerContext context)
         {
             if (context == null)
             {

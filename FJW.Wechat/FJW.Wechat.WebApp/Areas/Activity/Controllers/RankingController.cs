@@ -9,7 +9,26 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
     public class RankingController : ActivityController
     {
 
-        [OutputCache(Duration = 10)]
+        [OutputCache(Duration = 2)]
+        public ActionResult Current()
+        {
+
+            var repository = new SqlDataRepository(SqlConnectString);
+            var rows = repository.TodayRanking().ToArray();
+            foreach (var it in rows)
+            {
+                if (it.Sequnce == 0)
+                {
+                    it.Sequnce = 1;
+                }
+                it.Phone = StringHelper.CoverPhone(it.Phone);
+            }
+            var t = repository.GetDate().ToString("yyyy-MM-dd HH:mm:ss");
+            return Json(new {t, rows}, JsonRequestBehavior.AllowGet);
+
+        }
+
+        [OutputCache(Duration = 5)]
         public ActionResult Today()
         {
             const string key = "Ranking:Today";
@@ -26,7 +45,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                     }
                     it.Phone = StringHelper.CoverPhone(it.Phone);
                 }
-                RedisManager.Set(key, rows, 60);
+                RedisManager.Set(key, rows, 30);
             }
 
             return Json(rows, JsonRequestBehavior.AllowGet);
@@ -63,10 +82,10 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
             var cnt = rows.Count(it => it.Id == id);
             if (cnt < 3)
             {
-                rows.Add(new RankingRow { Id = id, Sequnce = cnt+ 1, Title = title});
+                rows.Add(new RankingRow { Id = id, Sequnce = cnt + 1, Title = title });
                 AppendSequnce(rows, id, title);
             }
-            
+
         }
 
     }

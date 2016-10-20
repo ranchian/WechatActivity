@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>WecahtShare</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="//res.wx.qq.com/open/libs/weui/1.0.2/weui.min.css" />
+</head>
+<body>
+    <div style="padding: 5px">
+        <button class="weui-btn weui-btn_default choose-img" data-type="Avator">选择图片</button>    
+        <button class="weui-btn weui-btn_default">-----</button>
+    </div>
+
+    <script src="/Scripts/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>
+    <script type="text/javascript" src="/Scripts/wechatshare.js"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            $.fjwxconfig({
+                hideAll: false,
+                shareTimeline: true,
+                shareAppMessage: true,
+                shareQQ: true,
+                shareQZone: true,
+                shareWeibo: true,
+                title: "分享测试之标题",
+                desc: "分享测试之描述~~~~",
+                url: location.href,
+                img: "http://fangjinnet.com/static/images/pc/LOGO.png"
+            },wx);
+        })
+    </script>
+
+</body>
+</html>

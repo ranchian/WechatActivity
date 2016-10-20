@@ -19,7 +19,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public JsonResult GetActTimes()
+        public ActionResult GetActTimes()
         {
             int mOnline = 0, mTimes = 1;
 
@@ -56,7 +56,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public JsonResult GetActResult(int type = 0)
+        public ActionResult GetActResult(int type = 0)
         {
             try
             {
@@ -65,20 +65,20 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                 var state = ActivityState(GameKey);
                 if (state != 0)
                 {
-                    return Json(new ResponseModel { ErrorCode = 1, Message = "活动未开始或已结束" }, JsonRequestBehavior.AllowGet);
+                    return Json(new ResponseModel { ErrorCode = ErrorCode.NotLogged, Message = "活动未开始或已结束" });
                 }
                 if (type == 1 && UserInfo.Id < 1)
                 {
-                    return Json(new ResponseModel { ErrorCode = 1, Message = "未登录" }, JsonRequestBehavior.AllowGet);
+                    return Json(new ResponseModel { ErrorCode = ErrorCode.NotLogged, Message = "未登录" });
                 }
                 var sqlRepository = new MemberRepository(SqlConnectString);
                 var dt = sqlRepository.GetRecord(type, UserInfo.Id, GameKey);
-                return Json(new ResponseModel { ErrorCode = 0, Message = "", Data = dt.ToJson(), IsSuccess = true }, JsonRequestBehavior.AllowGet);
+                return Json(new ResponseModel { ErrorCode = 0, Message = "", Data = dt.ToJson() });
             }
             catch (Exception ex)
             {
                 Logger.Error(ex);
-                return Json(new ResponseModel {ErrorCode = 1, Message = "Error"}, JsonRequestBehavior.AllowGet);
+                return Json(new ResponseModel {ErrorCode = ErrorCode.NotLogged, Message = "Error"});
             }
         }
 
@@ -86,20 +86,20 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         /// 用户获奖统计
         /// </summary>
         /// <returns></returns>
-        public JsonResult GetMemberSum()
+        public ActionResult GetMemberSum()
         {
             var state = ActivityState(GameKey);
             if (state != 0)
             {
-                return Json(new ResponseModel { ErrorCode = 1, Message = "活动未开始或已结束" }, JsonRequestBehavior.AllowGet);
+                return Json(new ResponseModel { ErrorCode = ErrorCode.NotLogged, Message = "活动未开始或已结束" });
             }
             if (UserInfo.Id > 0)
             {
                 //
                 var sqlRepository = new MemberRepository(SqlConnectString);
-                return Json(new ResponseModel { ErrorCode = 0, Message = "", Data = sqlRepository.GetRocordSum(UserInfo.Id), IsSuccess = true }, JsonRequestBehavior.AllowGet);
+                return Json(new ResponseModel { ErrorCode = 0, Message = "", Data = sqlRepository.GetRocordSum(UserInfo.Id) });
             }
-            return Json(new ResponseModel { ErrorCode = 1, Message = "用户未登录" }, JsonRequestBehavior.AllowGet);
+            return Json(new ResponseModel { ErrorCode = ErrorCode.NotLogged, Message = "用户未登录" });
 
         }
 
@@ -113,16 +113,15 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
             var state = ActivityState(GameKey);
             if (state != 0)
             {
-                return Json(new ResponseModel { ErrorCode = 1, Message = "活动未开始或已结束" });
+                return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Message = "活动未开始或已结束" });
             }
             if (UserInfo.Id < 1)
             {
-                return Json(new ResponseModel { ErrorCode = 2, Message = "未登录" });
+                return Json(new ResponseModel { ErrorCode = ErrorCode.NotLogged, Message = "未登录" });
             }
 
             try
             {
-                //TODO: 统计次数
                 int mOnline = 0, mTimes = 1;
                 ActTimes(ref mOnline, ref mTimes);
 
@@ -177,7 +176,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                         }*/
                     });
 
-                    return Json(new ResponseModel { ErrorCode = 0, Message = "", IsSuccess = true, Data = new { name = name, prize = prize, money = money } });
+                    return Json(new ResponseModel {  Message = "", Data = new { name = name, prize = prize, money = money } });
                 }
             }
             catch (Exception ex)

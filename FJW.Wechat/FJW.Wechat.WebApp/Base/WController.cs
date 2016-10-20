@@ -52,7 +52,7 @@ namespace FJW.Wechat.WebApp.Base
                 filterContext.ExceptionHandled = true;
                 if (Request.IsAjaxRequest())
                 {
-                    filterContext.Result = new JsonetResult() { Data = new ResponseModel { IsSuccess = false, Message = "error" }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                    filterContext.Result = new JsonetResult { Data = new ResponseModel { ErrorCode = ErrorCode.Exception, Message = "error" }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                 }
                 else
                 {
@@ -69,7 +69,11 @@ namespace FJW.Wechat.WebApp.Base
 
         #region json
 
-        protected override JsonResult Json(object data, string contentType, Encoding contentEncoding, JsonRequestBehavior behavior)
+        protected new JsonetResult Json(object data, JsonRequestBehavior behavior = JsonRequestBehavior.AllowGet)
+        {
+            return Json(data, "application/json", Encoding.UTF8, behavior);
+        }
+        protected new JsonetResult Json(object data, string contentType, Encoding contentEncoding, JsonRequestBehavior behavior)
         {
             return new JsonetResult
             {

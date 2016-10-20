@@ -32,31 +32,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FJW.CommonLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\FJW.Lib\FJW.CommonLib.dll</HintPath>
-    </Reference>
     <Reference Include="FJW.Data.MongoDb">
       <HintPath>..\..\..\FJW.ReportStatistics\FJW.Data.MongoDb\bin\Release\FJW.Data.MongoDb.dll</HintPath>
     </Reference>
     <Reference Include="FJW.Model.MongoDb">
       <HintPath>..\..\..\FJW.ReportStatistics\FJW.Data.MongoDb\bin\Release\FJW.Model.MongoDb.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Common, Version=3.9.49.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\FJW.Lib\ServiceStack.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Interfaces, Version=3.9.49.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\FJW.Lib\ServiceStack.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Redis, Version=3.9.54.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\FJW.Lib\ServiceStack.Redis.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Text, Version=3.9.45.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\FJW.Lib\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -76,6 +56,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FJW.SDK2Api\FJW.SDK2Api.csproj">
+      <Project>{84fd0233-9dcb-4fa6-83d6-ef22841e0151}</Project>
+      <Name>FJW.SDK2Api</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FJW.Unit\FJW.Unit.csproj">
       <Project>{d72eed5c-8b1b-43e4-8b9a-51c69b1b2c6f}</Project>
       <Name>FJW.Unit</Name>
@@ -83,6 +67,10 @@
     <ProjectReference Include="..\FJW.Wechat.Data\FJW.Wechat.Data.csproj">
       <Project>{03d1c3ac-d5be-4035-b1a2-ce67b030639d}</Project>
       <Name>FJW.Wechat.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FJW.Wechat.WebApp\FJW.Wechat.WebApp.csproj">
+      <Project>{a7dcf7ec-e911-4a21-bc2b-8f964bb816d4}</Project>
+      <Name>FJW.Wechat.WebApp</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

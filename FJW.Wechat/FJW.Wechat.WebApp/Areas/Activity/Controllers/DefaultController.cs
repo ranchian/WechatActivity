@@ -94,9 +94,9 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                     SetHelpGamRecordId(fid, id);
                 }
 
-                return Json(new ResponseModel { IsSuccess = true, Data = new { id, islogin = UserInfo.Id > 0 } });
+                return Json(new ResponseModel {   Data = new { id, islogin = UserInfo.Id > 0 } });
             }
-            return Json(new ResponseModel { IsSuccess = true, Data = new { id, islogin = UserInfo.Id > 0 } });
+            return Json(new ResponseModel {  Data = new { id, islogin = UserInfo.Id > 0 } });
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                 var m = repositry.GetById(id);
                 if (m.Status != 0)
                 {
-                    return Json(new ResponseModel { IsSuccess = false, Message = "已经领取过奖励了" });
+                    return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Message = "已经领取过奖励了" });
                 }
                 if (m.Score < score)
                 {
@@ -126,11 +126,11 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                     }
                     m.Score = score;
                     repositry.Update(m);
-                    return Json(new ResponseModel { IsSuccess = true, Message = "" });
+                    return Json(new ResponseModel { Message = "" });
                 }
-                return Json(new ResponseModel { IsSuccess = true, Message = "", Data = new { id, islogin = UserInfo.Id > 0 } });
+                return Json(new ResponseModel {  Message = "", Data = new { id, islogin = UserInfo.Id > 0 } });
             }
-            return Json(new ResponseModel { IsSuccess = false, Message = "没有该数据", Data = new { id, islogin = UserInfo.Id > 0 } });
+            return Json(new ResponseModel { ErrorCode = ErrorCode.NotLogged, Message = "没有该数据", Data = new { id, islogin = UserInfo.Id > 0 } });
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         {
             if (UserInfo.Id < 1)
             {
-                return Json(new ResponseModel { IsSuccess = false, Message = "未登录" });
+                return Json(new ResponseModel {ErrorCode  = ErrorCode.NotLogged, Message = "未登录" });
             }
             var state = ActivityState(key);
             if (state != 0)
@@ -158,12 +158,12 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                 var model = repositry.GetById(id);
                 if (model.Status != 0)
                 {
-                    return Json(new ResponseModel { IsSuccess = false, Message = "已经领取过奖励了" });
+                    return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Message = "已经领取过奖励了" });
                 }
                 var records = repositry.Query<RecordModel>(it => it.MemberId == UserInfo.Id && it.Status > 0).ToArray();
                 if (records.Length > 0)
                 {
-                    return Json(new ResponseModel { IsSuccess = false, Message = "已经领取过奖励了" });
+                    return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Message = "已经领取过奖励了" });
                 }
 
                 var mberRepository = new MemberRepository(SqlConnectString);
@@ -175,7 +175,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                     model.Status = 1;
                     model.LastUpdateTime = DateTime.Now;
                     repositry.Update(model);
-                    return Json(new ResponseModel { IsSuccess = true, Message = "" });
+                    return Json(new ResponseModel { Message = "" });
                 }
             }
 
@@ -191,7 +191,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         {
             if (UserInfo.Id < 1)
             {
-                return Json(new ResponseModel { IsSuccess = false, Message = "未登录" }, JsonRequestBehavior.AllowGet);
+                return Json(new ResponseModel { ErrorCode  = ErrorCode.NotLogged, Message = "未登录" });
             }
             return new EmptyResult();
         }

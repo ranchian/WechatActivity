@@ -5,10 +5,10 @@ using FJW.Wechat.WebApp.Base;
 
 namespace FJW.Wechat.WebApp.Controllers
 {
-    //[WAuthorize]
+
     public class TestController : WController
     {
-#if DEBUG
+
 
         // GET: Test
         [WAuthorize]
@@ -16,7 +16,7 @@ namespace FJW.Wechat.WebApp.Controllers
         {
             return Content(Request.Cookies.ToJson());
         }
-
+#if DEBUG
         public ActionResult I()
         {
             var i = RedisManager.GetIncrement("Activitiy:Test");
