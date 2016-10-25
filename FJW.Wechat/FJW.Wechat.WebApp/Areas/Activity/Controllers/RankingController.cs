@@ -28,6 +28,13 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
 
         }
 
+        public ActionResult Time()
+        {
+            var repository = new SqlDataRepository(SqlConnectString);
+            var t = repository.GetDate().ToString("yyyy-MM-dd HH:mm:ss.fff");
+            return Json(new { t});
+        }
+
         [OutputCache(Duration = 5)]
         public ActionResult Today()
         {
