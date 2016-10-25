@@ -12,6 +12,11 @@ namespace FJW.Unit.Log
             NLog.Debug(msg);
         }
 
+        public void Info(string msg)
+        {
+            NLog.Info(msg);
+        }
+
         public void Error(Exception ex)
         {
             NLog.Error(ex.ToJson());

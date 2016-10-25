@@ -159,6 +159,7 @@
     <Compile Include="Base\WAuthorizeAttribute.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MenusController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\WAuthorizeController.cs" />
     <Compile Include="Controllers\WechatController.cs" />
@@ -169,6 +170,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\MenuModel.cs" />
     <Compile Include="Models\ResponseModel.cs" />
     <Compile Include="Models\UploadImgModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

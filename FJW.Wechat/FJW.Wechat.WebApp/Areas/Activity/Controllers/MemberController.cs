@@ -40,7 +40,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
 
                     if (response.IsOk )
                     {
-                        Logger.Log(response.ToJson());
+                        Logger.Dedug(response.ToJson());
                         var resp = response.Content;
                         
 

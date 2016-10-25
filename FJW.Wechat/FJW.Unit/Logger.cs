@@ -12,11 +12,23 @@ namespace FJW.Unit
             _log = new NLogger();
         }
 
-        public static void Log(string message, params object[] args)
+        public static void Dedug(string message, params object[] args)
         {
             if (args == null || args.Length == 0)
             {
                 _log.Debug(message);
+            }
+            else
+            {
+                _log.Debug(string.Format(message, args));
+            }
+        }
+
+        public static void Info(string message, params object[] args)
+        {
+            if (args == null || args.Length == 0)
+            {
+                _log.Info(message);
             }
             else
             {

@@ -11,6 +11,12 @@ namespace FJW.Unit.Log
         void Debug(string msg);
 
         /// <summary>
+        /// 信息记录
+        /// </summary>
+        /// <param name="msg"></param>
+        void Info(string msg);
+
+        /// <summary>
         /// 错误日志
         /// </summary>
         /// <param name="ex"></param>

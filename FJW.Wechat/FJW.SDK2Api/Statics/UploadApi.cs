@@ -43,12 +43,12 @@ namespace FJW.SDK2Api.Statics
             };
             var conf = ApiConfig.Section.Value.Methods["UploadFile"];
 #if DEBUG
-            Logger.Log("url:{0}", conf.EntryPoint);
+            Logger.Dedug("url:{0}", conf.EntryPoint);
 #endif
 
             var result = HttpUnit.Post(conf.EntryPoint, reqestData.ToJson(), Encoding.UTF8);
 #if DEBUG
-            Logger.Log("req over:{0}", result.ToJson());
+            Logger.Dedug("req over:{0}", result.ToJson());
 #endif
 
             if (result.Code == HttpStatusCode.OK)

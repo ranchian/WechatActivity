@@ -45,7 +45,7 @@ namespace FJW.Wechat.WebApp.Controllers
                 if (ms.Length > 0)
                 {
                     var result = UploadApi.UploadImg(ms, t, model.Url + ".jpg");
-                    Logger.Log("UploadImg.Result:{0}", result.ToJson());
+                    Logger.Dedug("UploadImg.Result:{0}", result.ToJson());
                     if (result.IsOk && !string.IsNullOrEmpty(result.Content?.Url))
                     {
                         //TODO:
