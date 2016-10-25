@@ -318,7 +318,7 @@ INNER JOIN Basic..BD_Member M ON T.MemberID = M.ID", key,
 
                     sql += " ORDER BY T.ItemID DESC";
 
-                    Logger.Log("Sql:{0}", sql );
+                    Logger.Dedug("Sql:{0}", sql );
                     DataTable dt = new DataTable();
                     var reader = conn.ExecuteReader(sql);
                     int intFieldCount = reader.FieldCount;

@@ -18,7 +18,7 @@ namespace FJW.Wechat.WebApp.Controllers
     {
         public ActionResult UserInfoCallback(string code, string state)
         {
-            Logger.Log("UserInfoCallback\t {0} \t {1}", code, state);
+            Logger.Dedug("UserInfoCallback\t {0} \t {1}", code, state);
             if (string.IsNullOrEmpty(code))
             {
                 return Content("您拒绝了授权！");
@@ -102,7 +102,7 @@ namespace FJW.Wechat.WebApp.Controllers
         /// <returns></returns>
         public ActionResult BaseCallback(string code, string state)
         {
-            Logger.Log("BaseCallback\t {0} \t {1}", code, state);
+            Logger.Dedug("BaseCallback\t {0} \t {1}", code, state);
             if (string.IsNullOrEmpty(code))
             {
                 return Content("您拒绝了授权！");
