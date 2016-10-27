@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using FJW.Unit;
@@ -42,16 +43,28 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
             var rows = RedisManager.Get<RankingRow[]>(key);
             if (rows == null)
             {
-                var repository = new SqlDataRepository(SqlConnectString);
-                rows = repository.TodayRanking().ToArray();
-                foreach (var it in rows)
+                if (DateTime.Now > new DateTime(2016,10,27))
                 {
-                    if (it.Sequnce == 0)
-                    {
-                        it.Sequnce = 1;
-                    }
-                    it.Phone = StringHelper.CoverPhone(it.Phone);
+                    rows = new RankingRow[4];
+                    rows[0] = new RankingRow { Title = "房金月宝"  , Phone = ""};
+                    rows[1] = new RankingRow { Title = "房金季宝", Phone = "" };
+                    rows[2] = new RankingRow { Title = "房金双季宝", Phone = "" };
+                    rows[3] = new RankingRow { Title = "房金年宝", Phone = "" };
                 }
+                else
+                {
+                    var repository = new SqlDataRepository(SqlConnectString);
+                    rows = repository.TodayRanking().ToArray();
+                    foreach (var it in rows)
+                    {
+                        if (it.Sequnce == 0)
+                        {
+                            it.Sequnce = 1;
+                        }
+                        it.Phone = StringHelper.CoverPhone(it.Phone);
+                    }
+                }
+                
                 RedisManager.Set(key, rows, 30);
             }
 
