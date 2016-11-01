@@ -1,6 +1,6 @@
 ﻿using System.Text;
 using System.Web.Mvc;
-
+using System.Web.Routing;
 using FJW.Unit;
 using FJW.Wechat.WebApp.Models;
 
@@ -44,6 +44,20 @@ namespace FJW.Wechat.WebApp.Base
 
         #region override
 
+        //OnActionExecuted
+        protected override void OnActionExecuted(ActionExecutedContext filterContext)
+        {
+            if (filterContext.HttpContext.Response != null)
+            {
+                var origin = filterContext.HttpContext.Request.Headers["Origin"] ;
+                filterContext.HttpContext.Response.Headers["Access-Control-Allow-Origin"] = origin;
+                //Access-Control-Allow-Credentials
+                filterContext.HttpContext.Response.Headers["Access-Control-Allow-Credentials"] = "true";
+            }
+
+            base.OnActionExecuted(filterContext);
+        }
+        
         protected override void OnException(ExceptionContext filterContext)
         {
             if (!filterContext.IsChildAction && filterContext.Exception != null && !filterContext.ExceptionHandled)

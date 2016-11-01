@@ -17,6 +17,11 @@ namespace FJW.Wechat.Data
         public long MemberId { get; set; }
 
         /// <summary>
+        /// 手机号
+        /// </summary>
+        public string Phone { get; set; }
+
+        /// <summary>
         /// 顺序
         /// </summary>
         public long Sequnce { get; set; }

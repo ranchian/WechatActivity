@@ -56,6 +56,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                             return Content("无效的登录结果");
                         }
 
+                        UserInfo.Phone = phone;
                         UserInfo.Id = memberInfo.MemberId;
                         UserInfo.Token = memberInfo.Token;
                         SetLoginInfo(UserInfo);

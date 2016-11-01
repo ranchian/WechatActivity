@@ -132,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Activity\Views\Login\" />
+    <Folder Include="Areas\Activity\Views\LuckCoupon\" />
     <Folder Include="Areas\Activity\Views\Member\" />
     <Folder Include="Areas\Activity\Views\Ranking\" />
     <Folder Include="Areas\Activity\Views\Shared\" />
@@ -150,6 +151,7 @@
     <Compile Include="Areas\Activity\Controllers\MemberController.cs" />
     <Compile Include="Areas\Activity\Controllers\RankingController.cs" />
     <Compile Include="Areas\Activity\Controllers\TurntableController.cs" />
+    <Compile Include="Areas\Activity\Controllers\LuckCouponController.cs" />
     <Compile Include="Areas\Activity\Models\ResultModel.cs" />
     <Compile Include="Areas\Activity\Models\ScoreModel.cs" />
     <Compile Include="Base\Config.cs" />
