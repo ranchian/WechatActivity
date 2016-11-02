@@ -24,7 +24,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                 it.Phone = StringHelper.CoverPhone(it.Phone);
             }
             var t = repository.GetDate().ToString("yyyy-MM-dd HH:mm:ss");
-            return Json(new {t, rows}, JsonRequestBehavior.AllowGet);
+            return Json(new {t, rows});
 
         }
 

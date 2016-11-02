@@ -52,6 +52,11 @@ namespace FJW.Wechat.Data
             return new Repository(_mongoHost, _dbName).GetList(exp, pageSize, pageIndex, out rowCount);
         }
 
+        public IEnumerable<T> QueryDesc<T, TKey>(Expression<Func<T, bool>> exp, Expression<Func<T, TKey>> orderExp, int pageSize, int pageIndex, out int rowCount) where T : BaseModel
+        {
+            return new Repository(_mongoHost, _dbName).GetListDesc(exp, orderExp, pageSize, pageIndex, out rowCount);
+        }
+
         /// <summary>
         /// 保存
         /// </summary>

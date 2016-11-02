@@ -50,9 +50,11 @@ namespace FJW.Wechat.WebApp.Base
             if (filterContext.HttpContext.Response != null)
             {
                 var origin = filterContext.HttpContext.Request.Headers["Origin"] ;
-                filterContext.HttpContext.Response.Headers["Access-Control-Allow-Origin"] = origin;
-                //Access-Control-Allow-Credentials
-                filterContext.HttpContext.Response.Headers["Access-Control-Allow-Credentials"] = "true";
+                if (!string.IsNullOrEmpty(origin))
+                {
+                    filterContext.HttpContext.Response.Headers["Access-Control-Allow-Origin"] = origin;
+                    filterContext.HttpContext.Response.Headers["Access-Control-Allow-Credentials"] = "true";
+                }
             }
 
             base.OnActionExecuted(filterContext);

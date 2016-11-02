@@ -25,7 +25,7 @@ namespace FJW.SDK2Api.CardCoupon
                 { "MemberId", memberId},
                 { "EventType", eventType},
                 { "ActivityId", activityId },
-                { "couponModelId", couponModelId }
+                { "CardCouponModelID", couponModelId }
             };
 
 
