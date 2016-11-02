@@ -69,6 +69,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LuckdrawModel.cs" />
     <Compile Include="SqlDataRepository.cs" />
+    <Compile Include="TotalChanceModel.cs" />
     <Compile Include="WeChatRepository.cs" />
     <Compile Include="WeChatUserModel.cs" />
   </ItemGroup>

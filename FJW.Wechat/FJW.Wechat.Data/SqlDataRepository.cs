@@ -24,6 +24,8 @@ namespace FJW.Wechat.Data
             return new SqlConnection(_connectionString);
         }
 
+        #region  投资排行榜
+
         public IEnumerable<RankingRow> TodayRanking()
         {
             const string sql = @"with T1 as (
@@ -94,6 +96,43 @@ where  T.ID in (6, 7, 8)";
             }
 
         }
+
+        #endregion
+
+        #region 红包雨 拆卡券
+
+        /// <summary>
+        /// 各类型产品购买金额
+        /// </summary>
+        /// <param name="memberId">用户Id</param>
+        /// <param name="startTime">开始时间（包含）</param>
+        /// <param name="endTime">结束时间（不包含）</param>
+        /// <returns></returns>
+        public IEnumerable<ProductTypeSumShare> GetProductTypeShares(long memberId, DateTime startTime, DateTime endTime)
+        {
+            const string sql = @"select ProductTypeID, SUM(BuyShares) as Shares from Trading..TC_ProductBuy 
+where IsDelete = 0 and MemberID =  @memberId and BuyTime >= @startTime and BuyTime < @endTime and Status = 1
+group by ProductTypeID";
+            using (var conn = GetDbConnection())
+            {
+                return conn.Query<ProductTypeSumShare>(sql, new {memberId, startTime, endTime});
+            }
+        }
+        
+        #endregion
+    }
+
+    public class ProductTypeSumShare
+    {
+        /// <summary>
+        /// 产品类型
+        /// </summary>
+        public long ProductTypeId { get; set; }
+
+        /// <summary>
+        /// 产品份额
+        /// </summary>
+        public decimal Shares { get; set; }
     }
 
     public class RankingRow

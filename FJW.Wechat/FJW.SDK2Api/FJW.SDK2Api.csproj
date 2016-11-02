@@ -49,6 +49,7 @@
     <Compile Include="ApiRequestData.cs" />
     <Compile Include="ApiResponse.cs" />
     <Compile Include="ApiSection.cs" />
+    <Compile Include="CardCoupon\CardCouponApi.cs" />
     <Compile Include="Member\AccountApi.cs" />
     <Compile Include="Member\LoginResult.cs" />
     <Compile Include="Member\MemberApi.cs" />

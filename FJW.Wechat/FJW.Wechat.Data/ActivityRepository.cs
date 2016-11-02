@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Collections.Generic;
-
+using System.Runtime.CompilerServices;
 using FJW.Data.MongoDb;
 using FJW.Model.MongoDb;
 
@@ -45,6 +45,16 @@ namespace FJW.Wechat.Data
         public IEnumerable<T> Query<T>(Expression<Func<T, bool>> exp) where T : BaseModel
         {
             return new Repository(_mongoHost, _dbName).GetList(exp);
+        }
+
+        public IEnumerable<T> Query<T>(Expression<Func<T, bool>> exp, int pageSize, int pageIndex, out int rowCount) where T : BaseModel
+        {
+            return new Repository(_mongoHost, _dbName).GetList(exp, pageSize, pageIndex, out rowCount);
+        }
+
+        public IEnumerable<T> QueryDesc<T, TKey>(Expression<Func<T, bool>> exp, Expression<Func<T, TKey>> orderExp, int pageSize, int pageIndex, out int rowCount) where T : BaseModel
+        {
+            return new Repository(_mongoHost, _dbName).GetListDesc(exp, orderExp, pageSize, pageIndex, out rowCount);
         }
 
         /// <summary>
