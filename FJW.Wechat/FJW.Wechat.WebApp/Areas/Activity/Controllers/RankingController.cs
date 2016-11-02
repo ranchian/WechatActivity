@@ -78,20 +78,32 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
             var rows = RedisManager.Get<List<RankingRow>>(key);
             if (rows == null)
             {
-                var repository = new SqlDataRepository(SqlConnectString);
-                rows = repository.TotalRanking().ToList();
-                AppendSequnce(rows, 6, "房金季宝");
-                AppendSequnce(rows, 7, "房金双季宝");
-                AppendSequnce(rows, 8, "房金年宝");
-                foreach (var it in rows)
+                if (DateTime.Now > new DateTime(2016, 10, 27))
                 {
-                    if (it.Sequnce == 0)
-                    {
-                        it.Sequnce = 1;
-                    }
-                    it.Phone = StringHelper.CoverPhone(it.Phone);
+                    rows = new List<RankingRow>(4);
+                    rows[0] = new RankingRow { Title = "房金月宝", Phone = "" };
+                    rows[1] = new RankingRow { Title = "房金季宝", Phone = "" };
+                    rows[2] = new RankingRow { Title = "房金双季宝", Phone = "" };
+                    rows[3] = new RankingRow { Title = "房金年宝", Phone = "" };
                 }
-                rows = rows.OrderByDescending(it => it.Id).ThenBy(it => it.Sequnce).ToList();
+                else
+                {
+                    var repository = new SqlDataRepository(SqlConnectString);
+                    rows = repository.TotalRanking().ToList();
+                    AppendSequnce(rows, 6, "房金季宝");
+                    AppendSequnce(rows, 7, "房金双季宝");
+                    AppendSequnce(rows, 8, "房金年宝");
+                    foreach (var it in rows)
+                    {
+                        if (it.Sequnce == 0)
+                        {
+                            it.Sequnce = 1;
+                        }
+                        it.Phone = StringHelper.CoverPhone(it.Phone);
+                    }
+                    rows = rows.OrderByDescending(it => it.Id).ThenBy(it => it.Sequnce).ToList();
+                }
+               
                 RedisManager.Set(key, rows, 60);
             }
             return Json(rows, JsonRequestBehavior.AllowGet);
