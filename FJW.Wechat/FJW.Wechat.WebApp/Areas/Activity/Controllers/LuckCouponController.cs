@@ -5,10 +5,12 @@ using System.Web.Mvc;
 using FJW.SDK2Api.CardCoupon;
 using FJW.Unit;
 using FJW.Wechat.Data;
+using FJW.Wechat.WebApp.Base;
 using FJW.Wechat.WebApp.Models;
 
 namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
 {
+    
     public class LuckCouponController : ActivityController
     {
         private const string GameKey = "luckcoupon";
@@ -36,6 +38,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         /// 总次数
         /// </summary>
         /// <returns></returns>
+        [CrossDomainFilter]
         public ActionResult Total()
         {
             if (UserInfo.Id < 1)
@@ -100,6 +103,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         /// 抽奖
         /// </summary>
         /// <returns></returns>
+        [CrossDomainFilter]
         [HttpPost]
         public ActionResult Play()
         {
@@ -184,6 +188,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         /// 首页数据（获奖记录）
         /// </summary>
         /// <returns></returns>
+        [CrossDomainFilter]
         [OutputCache(Duration = 1)]
         public ActionResult Records()
         {
@@ -206,7 +211,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         /// 自己的游戏记录
         /// </summary>
         /// <returns></returns>
-
+        [CrossDomainFilter]
         public ActionResult SelfRecords()
         {
             var uid = UserInfo.Id;

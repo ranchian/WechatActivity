@@ -155,6 +155,7 @@
     <Compile Include="Areas\Activity\Models\ResultModel.cs" />
     <Compile Include="Areas\Activity\Models\ScoreModel.cs" />
     <Compile Include="Base\Config.cs" />
+    <Compile Include="Base\CrossDomainFilterAttribute.cs" />
     <Compile Include="Base\JsonetResult.cs" />
     <Compile Include="Base\UserInfo.cs" />
     <Compile Include="Base\WController.cs" />

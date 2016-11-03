@@ -4,10 +4,12 @@ using FJW.SDK2Api.Member;
 using FJW.Unit;
 
 using FJW.Wechat.Data;
- 
+using FJW.Wechat.WebApp.Base;
+
 
 namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
 {
+    [CrossDomainFilter]
     public class MemberController : ActivityController
     {
         /// <summary>
@@ -16,6 +18,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         /// <param name="phone">手机号码</param>
         /// <param name="pswd">登录密码</param>
         /// <returns></returns>
+        //[CrossDomainFilter]
         [HttpPost]
         public ActionResult Login(string phone, string pswd)
         {
@@ -85,6 +88,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         /// <param name="pswd">密码</param>
         /// <param name="inviterPhone">邀请人手机号码</param>
         /// <returns></returns>
+        //[CrossDomainFilter]
         [HttpPost]
         public ActionResult Regist(string phone, string code, string pswd, string inviterPhone, string channel)
         {
