@@ -85,6 +85,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                     if (chances != total.Total)
                     {
                         total.Total = chances;
+                        total.NotUsed = chances - total.Used;
                         total.Remark = all.ToJson();
                         total.LastStatisticsTime = DateTime.Now;
                         activeRepository.Update(total);
@@ -528,7 +529,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         /// <returns></returns>
         private static long GetCouponId(int prize, out long activityId)
         {
-            activityId = 15;
+            activityId = 12;
             switch (prize)
             {
                 case 1001:
