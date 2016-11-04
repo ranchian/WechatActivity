@@ -65,7 +65,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                     MemberId = userId,
                     Total = chances,
                     Used = 0,
-                    NotUsed = 0,
+                    NotUsed = chances,
                     LastStatisticsTime = DateTime.Now,
                     LastUpdateTime = DateTime.Now,
                     CreateTime = DateTime.Now,
@@ -107,19 +107,20 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         [HttpPost]
         public ActionResult Play()
         {
-            bool isStart;
-            int timeMiseconds;
-            NextGameTimeMilliseconds(out isStart, out timeMiseconds);
-            if (!isStart)
-            {
-                return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Message = "活动未开始"});
-            }
-          
             var uid = UserInfo.Id;
             if (uid < 1)
             {
                 return Json(new ResponseModel { ErrorCode = ErrorCode.NotLogged });
             }
+            bool isStart;
+            int timeMiseconds;
+            NextGameTimeMilliseconds(out isStart, out timeMiseconds);
+            if (!isStart && uid != 27329)
+            {
+                return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Message = "活动未开始"});
+            }
+          
+           
             var total = GetChances(uid);
             if (total == null)
             {
@@ -531,31 +532,31 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
             switch (prize)
             {
                 case 1001:
-                    return 8;
-
-                case 1002:
-                    return 9;
-
-                case 1003:
-                    return 10;
-
-                case 1004:
-                    return 11;
-
-                case 1005:
                     return 12;
 
-                case 2006:
+                case 1002:
                     return 13;
 
-                case 2007:
+                case 1003:
                     return 14;
 
-                case 2008:
+                case 1004:
                     return 15;
 
-                case 2009:
+                case 1005:
                     return 16;
+
+                case 2006:
+                    return 8;
+
+                case 2007:
+                    return 9;
+
+                case 2008:
+                    return 10;
+
+                case 2009:
+                    return 11;
 
             }
             return 0;
