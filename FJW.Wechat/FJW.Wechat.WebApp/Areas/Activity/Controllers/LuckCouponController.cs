@@ -402,16 +402,16 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         {
             var sequnce = RedisManager.GetIncrement("Increment:" + GameKey);
 
-            var n = sequnce % 1000;
+            var n = sequnce % 100;
 
-            if (n < 150)
+            if (n < 5)
             {
                 money = 0.3m;
                 prize = 1001;
                 name = SplitePrizePrize(prize) + SplitPrizeName(prize);// "0.3%加息券";
                 return sequnce;
             }
-            if (n < 150 + 140)
+            if (n < 5 + 5)
             {
                 money = 0.5m;
                 prize = 1002;
@@ -419,7 +419,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                 return sequnce;
             }
 
-            if (n < 150 + 140 + 120)
+            if (n < 5 + 5 + 5)
             {
                 money = 0.8m;
                 prize = 1003;
@@ -427,7 +427,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                 return sequnce;
             }
 
-            if (n < 150 + 140 + 120 + 120)
+            if (n < 5 + 5 + 5 + 10)
             {
                 money = 1m;
                 prize = 1004;
@@ -435,7 +435,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                 return sequnce;
             }
 
-            if (n < 150 + 140 + 120 + 120 + 110)
+            if (n < 5 + 5 + 5 + 10 + 15)
             {
                 money = 1.5m;
                 prize = 1005;
@@ -443,7 +443,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                 return sequnce;
             }
 
-            if (n < 150 + 140 + 120 + 120 + 110 + 100)
+            if (n < 5 + 5 + 5 + 10 + 15 + 10)
             {
                 money = 1;
                 prize = 2006;
@@ -451,7 +451,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                 return sequnce;
             }
 
-            if (n < 150 + 140 + 120 + 120 + 110 + 100 + 80)
+            if (n < 5 + 5 + 5 + 10 + 15 + 10 + 15)
             {
                 money = 3;
                 prize = 2007;
@@ -459,7 +459,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                 return sequnce;
             }
 
-            if (n < 150 + 140 + 120 + 120 + 110 + 100 + 80 + 70)
+            if (n < 5 + 5 + 5 + 10 + 15 + 10 + 15 + 10)
             {
                 money = 5;
                 prize = 2008;
@@ -467,7 +467,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                 return sequnce;
             }
 
-            if (n < 150 + 140 + 120 + 120 + 110 + 100 + 80 + 70 + 50)
+            if (n < 5 + 5 + 5 + 10 + 15 + 10 + 15 + 10 + 10)
             {
                 money = 8;
                 prize = 2009;
@@ -475,7 +475,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                 return sequnce;
             }
 
-            if (n < 150 + 140 + 120 + 120 + 110 + 100 + 80 + 70 + 50 + 30)
+            if (n < 5 + 5 + 5 + 10 + 15 + 10 + 15 + 10 + 10 + 5)
             {
                 money = 1;
                 prize = 3010;
@@ -483,7 +483,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                 return sequnce;
             }
 
-            if (n < 150 + 140 + 120 + 120 + 110 + 100 + 80 + 70 + 50 + 30 + 14)
+            if (n < 5 + 5 + 5 + 10 + 15 + 10 + 15 + 10 + 10 + 5 + 5)
             {
                 money = 3;
                 prize = 3011;
@@ -491,7 +491,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                 return sequnce;
             }
 
-            if (n < 150 + 140 + 120 + 120 + 110 + 100 + 80 + 70 + 50 + 30 + 14 + 10)
+            if (n < 5 + 5 + 5 + 10 + 15 + 10 + 15 + 10 + 10 + 5 + 5 + 2)
             {
                 money = 5;
                 prize = 3012;
@@ -499,7 +499,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                 return sequnce;
             }
 
-            if (n < 150 + 140 + 120 + 120 + 110 + 100 + 80 + 70 + 50 + 30 + 14 + 10 + 3)
+            if (n < 5 + 5 + 5 + 10 + 15 + 10 + 15 + 10 + 10 + 5 + 5 + 5 + 1)
             {
                 money = 8;
                 prize = 3013;
@@ -507,7 +507,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                 return sequnce;
             }
 
-            if (n < 150 + 140 + 120 + 120 + 110 + 100 + 80 + 70 + 50 + 30 + 14 + 10 + 3 + 2)
+            if (n < 5 + 5 + 5 + 10 + 15 + 10 + 15 + 10 + 10 + 5 + 5 + 5 + 2 + 1)
             {
                 money = 50;
                 prize = 3014;
@@ -575,12 +575,17 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
             var dt = DateTime.Now;
             
             var dtStartDay = new DateTime(2016,11, 4);
-            if (dt < dtStartDay)
+            var dtEndDay = new DateTime(2016, 11, 11);
+            if (dt < dtStartDay || dt > dtEndDay)
             {
                 isStart = false;
                 timeMiSecond = 0;
                 return (int) (new DateTime(2016, 11, 4, 11, 30, 0) - dt ).TotalMilliseconds;
             }
+            timeMiSecond = (int) (dtEndDay - dt).TotalMilliseconds;
+            isStart = true;
+            return 0;
+            /*
             var dt1 = new DateTime(dt.Year, dt.Month, dt.Day, 11, 30, 0);
             var dt2 = new DateTime(dt.Year, dt.Month, dt.Day, 12, 30, 0);
             var dt3 = new DateTime(dt.Year, dt.Month, dt.Day, 20, 00, 0);
@@ -620,6 +625,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
             isStart = true;
             timeMiSecond = 0;
             return 0;
+            */
         }
 
         #endregion
