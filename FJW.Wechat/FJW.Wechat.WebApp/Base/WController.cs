@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
+using System.Web.Configuration;
 using System.Web.Mvc;
 using System.Web.Routing;
 using FJW.Unit;
@@ -50,6 +52,19 @@ namespace FJW.Wechat.WebApp.Base
             {
                 Logger.Error(filterContext.Exception);
                 filterContext.ExceptionHandled = true;
+                var enableStr = WebConfigurationManager.AppSettings["CorssDomainFilterEnable"];
+                if (enableStr == null || enableStr.Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    var origin = filterContext.HttpContext.Request.Headers["Origin"];
+                    if (!string.IsNullOrEmpty(origin))
+                    {
+                        filterContext.HttpContext.Response.Headers["Access-Control-Allow-Origin"] = origin;
+                        filterContext.HttpContext.Response.Headers["Access-Control-Allow-Credentials"] = "true";
+                        filterContext.HttpContext.Response.Headers["Access-Control-Allow-Headers"] = "Content-Type";
+                        filterContext.HttpContext.Response.Headers["Access-Control-Allow-Methods"] = "GET,POST";
+                    }
+                }
+                
                 if (Request.IsAjaxRequest())
                 {
                     filterContext.Result = new JsonetResult { Data = new ResponseModel { ErrorCode = ErrorCode.Exception, Message = "error" }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };

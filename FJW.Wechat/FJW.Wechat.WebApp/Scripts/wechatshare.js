@@ -56,93 +56,100 @@
             hidemenus.push("menuItem:share:weiboApp");
         }
 
-        $.getJSON("http://a.fangjinnet.com/Wechat/jsconfig", {
-            url: location.href
-        }, function (resp) {
+        $.ajax({
+            url: "http://a.fangjinnet.com/Wechat/jsconfig",
+            data: {
+                url: settings.url
+            },
+            crossDomain:true,
+            success: function(resp) {
 
-            if (!resp.success) {
-                debugTips(resp, "jsconfigResult");
-                return;
-            }
-
-            wx.config({
-                debug: settings.debug, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                appId: resp.data.appid, // 必填，公众号的唯一标识
-                timestamp: resp.data.timestamp, // 必填，生成签名的时间戳
-                nonceStr: resp.data.nonceStr, // 必填，生成签名的随机串
-                signature: resp.data.signature, // 必填，签名，见附录1
-                jsApiList: list // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-            });
-
-            wx.ready(function () {
-
-                var d = {
-                    title: settings.title, // 分享标题
-                    link: settings.url, // 分享链接
-                    desc: settings.desc,
-                    imgUrl: settings.img, // 分享图标
-                    success: function () {
-                        // 用户确认分享后执行的回调函数
-                    },
-                    cancel: function () {
-                        // 用户取消分享后执行的回调函数
-                    }
-                };
-                if (hidemenus.length > 0) {
-                    wx.hideMenuItems({
-                        menuList: hidemenus
-                    });
-                }
-                if (settings.hideAll) {
-                    wx.hideOptionMenu();
-                }
-                if (settings.shareAppMessage) {
-                    wx.onMenuShareAppMessage(d);
+                if (!resp.success) {
+                    debugTips(resp, "jsconfigResult");
+                    return;
                 }
 
-                if (settings.shareTimeline) {
-                    wx.onMenuShareTimeline(d);
-                }
-
-                if (settings.shareQQ) {
-                    wx.onMenuShareQQ(d);
-                }
-
-                if (settings.shareQZone) {
-                    wx.onMenuShareQZone(d);
-                }
-
-                if (settings.shareWeibo) {
-                    wx.onMenuShareWeibo(d);
-                }
-
-                //choose image
-                $(".choose-img").click(function () {
-                    var t = $(this).attr("data-type");
-                    wx.chooseImage({
-                        success: function (res) {
-                            var localIds = res.localIds;
-                            for (var i = 0; i < localIds.length; i++) {
-
-                                wx.uploadImage({
-                                    localId: localIds[i],
-                                    isShowProgressTips: 1,
-                                    success: function (uploadResp) {
-                                        uploadImg(uploadResp.serverId, t);
-                                    },
-                                    fail: function (fail) {
-                                        debugTips(fail);
-                                    }
-                                });
-                            }
-                             
-                        }
-                    });
+                wx.config({
+                    debug: settings.debug, // 开启调试模式
+                    appId: resp.data.appid, // 必填，公众号的唯一标识
+                    timestamp: resp.data.timestamp, // 必填，生成签名的时间戳
+                    nonceStr: resp.data.nonceStr, // 必填，生成签名的随机串
+                    signature: resp.data.signature, // 必填，签名，见附录1
+                    jsApiList: list // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
                 });
-                //--
+
+                wx.ready(function() {
+
+                    var d = {
+                        title: settings.title, // 分享标题
+                        link: settings.url, // 分享链接
+                        desc: settings.desc,
+                        imgUrl: settings.img, // 分享图标
+                        success: function() {
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function() {
+                            // 用户取消分享后执行的回调函数
+                        }
+                    };
+                    if (hidemenus.length > 0) {
+                        wx.hideMenuItems({
+                            menuList: hidemenus
+                        });
+                    }
+                    if (settings.hideAll) {
+                        wx.hideOptionMenu();
+                    }
+                    if (settings.shareAppMessage) {
+                        wx.onMenuShareAppMessage(d);
+                    }
+
+                    if (settings.shareTimeline) {
+                        wx.onMenuShareTimeline(d);
+                    }
+
+                    if (settings.shareQQ) {
+                        wx.onMenuShareQQ(d);
+                    }
+
+                    if (settings.shareQZone) {
+                        wx.onMenuShareQZone(d);
+                    }
+
+                    if (settings.shareWeibo) {
+                        wx.onMenuShareWeibo(d);
+                    }
+
+                    //choose image
+                    $(".choose-img").click(function() {
+                            var t = $(this).attr("data-type");
+                            wx.chooseImage({
+                                success: function(res) {
+                                    var localIds = res.localIds;
+                                    for (var i = 0; i < localIds.length; i++) {
+
+                                        wx.uploadImage({
+                                            localId: localIds[i],
+                                            isShowProgressTips: 1,
+                                            success: function(uploadResp) {
+                                                uploadImg(uploadResp.serverId, t);
+                                            },
+                                            fail: function(fail) {
+                                                debugTips(fail);
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        });
+                    //--
 
 
-            });
+                });
+            },
+            error: function(ex) {
+                console.error(ex);
+            }
         });
 
         function uploadImg(serverIds, type) {
