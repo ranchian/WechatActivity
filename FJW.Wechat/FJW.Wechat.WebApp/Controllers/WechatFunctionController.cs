@@ -15,13 +15,13 @@ using Senparc.Weixin.MP.Containers;
 
 namespace FJW.Wechat.WebApp.Controllers
 {
-
+    
     public class WechatFunctionController : WController
     {
 
 
         #region  上传图片
-
+        [CrossDomainFilter]
         public ActionResult UploadImg(UploadImgModel model)
         {
             FileType t;

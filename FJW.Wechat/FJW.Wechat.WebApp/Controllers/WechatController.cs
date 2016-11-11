@@ -100,7 +100,7 @@ namespace FJW.Wechat.WebApp.Controllers
 
 
         #region javascript share config
-
+        [CrossDomainFilter]
         public ActionResult JsConfig(string url)
         {
             try

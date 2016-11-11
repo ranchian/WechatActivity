@@ -50,5 +50,10 @@ namespace FJW.Wechat.Data
         /// 游戏地址
         /// </summary>
         public string GameUrl { get; set; }
+
+        /// <summary>
+        /// 活动配置
+        /// </summary>
+        public string Config { get; set; }
     }
 }

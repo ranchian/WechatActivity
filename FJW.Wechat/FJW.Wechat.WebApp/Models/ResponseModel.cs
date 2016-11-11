@@ -8,6 +8,17 @@ namespace FJW.Wechat.WebApp.Models
     /// </summary>
     public class ResponseModel
     {
+
+        public ResponseModel()
+        {
+            
+        }
+
+        public ResponseModel(ErrorCode code):this()
+        {
+            ErrorCode = code;
+        }
+
         /// <summary>
         /// 是否成功
         /// </summary>

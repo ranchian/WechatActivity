@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using FJW.Unit;
 using FJW.Wechat.Data;
 using FJW.Wechat.WebApp;
+using FJW.Wechat.WebApp.Areas.Activity.Controllers;
 using FJW.Wechat.WebApp.Controllers;
 using FJW.Wechat.WebApp.Models;
 
@@ -20,24 +21,42 @@ namespace FJW.Wechat.ConsoleApp
     {
         private static void Main(string[] args)
         {
-            RedisManager.Init(Config.RedisConfig.ConnectionString);
-            Console.WriteLine(Config.RedisConfig.ConnectionString);
+            var config = new MineSweeperConfig();
+            config.A = 10012;
+            config.E = 5;
+            config.ExpresssProductId = 2;
+            config.CouponActivityId = 10015;// QuotaActivityConfig.Id
+            config.H = 10108;
+            config.I = 10109;
+            config.J = 10110;
+            config.K = 10111;
+            config.L = 10112;
+            config.M = 10113;
+            config.N = 10114;
+            config.O = 10115;
+            config.P = 10116;
+            config.Q = 10117;
+            var d = new ActivityModel
+            {
+                ID = Guid.NewGuid(),
+                Config = config.ToJson(),
+                Key = "minesweeper"
+            };
 
-            try
+            var repository = new ActivityRepository( Config.ActivityConfig.DbName, Config.ActivityConfig.MongoHost);
+            var act = repository.GetActivity("minesweeper");
+            if (act != null)
             {
-                var q = RedisManager.GetIncrement("Increment:luckcoupon");
-                while (q < 970)
-                {
-                    q = RedisManager.GetIncrement("Increment:luckcoupon");
-                    Console.WriteLine(q);
-                }
+                Console.WriteLine("exists");
+                Console.WriteLine(act.ID);
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine(ex.Message);
-                Console.WriteLine(ex.Source);
-                Console.WriteLine(ex.StackTrace);
+                repository.Add(d);
             }
+            
+
+
             Console.WriteLine("OVER");
             Console.ReadLine();
         }
