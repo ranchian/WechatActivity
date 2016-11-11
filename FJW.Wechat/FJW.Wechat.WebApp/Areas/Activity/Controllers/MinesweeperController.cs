@@ -27,6 +27,23 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
             _repsitory = new ActivityRepository(DbName, MongoHost);
         }
 
+
+        [OutputCache(Duration = 10)]
+        public ActionResult Record()
+        {
+            int cnt;
+            var data = _repsitory.QueryDesc<LuckdrawModel, DateTime>(it => it.Key == Key, it => it.CreateTime, 20, 0, out cnt).Select(it => new
+            {
+                name = PrizeType(it.Prize),
+                price = PrizeAmount(it.Prize),
+                phone = StringHelper.CoverPhone(it.Phone)
+            });
+            return Json(new ResponseModel
+            {
+                Data = data
+            });
+        }
+
         /// <summary>
         /// 状态
         /// </summary>
