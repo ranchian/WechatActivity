@@ -1,134 +1,23 @@
+* { margin: 0; padding: 0; }
+img { display: block; }
+ul, li { list-style: none; }
+a { text-decoration: none; }
+.banner { width: 7.5rem; height: 200px; background: url(../images/banner.png) no-repeat left top; background-size: 100% 100%; overflow: hidden; }
+.small-banner { width: 5.4rem; height: 55px; padding: 0.2rem; background: #fff; margin-top: 1.4rem; margin-left: 0.9rem; .margin-left:0.83rem; }
+.background { width: 100%; height: 100%; background: url(../images/small-banner.png) no-repeat left top; background-size: 100% 100%; text-align: center; line-height: 0.52rem; }
+.background p { font-size: 0.3rem; line-height: 55px; }
+.background p span { font-size: 0.4rem; color: #ff4040; font-weight: 900; }
+.context { width: 5.1rem; height: 1.2rem; font-size: 18px; text-align: center; .padding:0 0.7rem; padding: 0 1.2rem; }
+.title { width: 100%; height: 1.2rem; line-height: 1.2rem; color: #0086e6; font-weight: bold; background: url(../images/title.png) no-repeat left center; background-size: 100%; }
+.context ul li { width: 100%; height: 0.9rem; border: 1px solid #cccccc; border-radius: 5px; margin-top: 0.3rem; line-height: 0.9rem; }
 
-*{
-	margin:0;
-	padding:0;
-}
-img{
-	display:block
-}
-ul,li{
-	list-style:none
-}
-a{
-	text-decoration:none
-}
-.banner{
-	width:7.5rem;
-	height:200px;
-	background:url(../images/banner.png) no-repeat left top;
-	background-size:100% 100%;
-	overflow:hidden
-}
-.small-banner{
-	width:5.4rem;
-	height:55px;
-	padding:0.2rem; 
-	background:#fff;
-	margin-top:1.4rem;
-	margin-left:0.9rem;
-	.margin-left:0.83rem;
-}
-.background{
-	width:100%;
-	height:100%;
-	background:url(../images/small-banner.png) no-repeat left top;
-	background-size:100% 100%;
-	text-align:center;
-	line-height:0.52rem;
-}
-.background p{
-	font-size:0.3rem;
-	line-height:55px;
-}
-.background p span{
-	font-size:0.4rem;
-	color:#ff4040;
-	font-weight:900;
-}
-.context{
-	width:5.1rem;
-	height:1.2rem;
-	font-size:18px;
-	text-align:center;		
-	.padding:0 0.7rem;
-	padding:0 1.2rem
-}
-.title{
-	width:100%;
-	height:1.2rem;
-	line-height:1.2rem;
-	color:#0086e6;
-	font-weight:bold;
-	background:url(../images/title.png) no-repeat left center;
-	background-size:100%;
-}
-.context ul li{
-	width:100%;
-	height:0.9rem;
-	border:1px solid #cccccc;
-	border-radius:5px;
-	margin-top:0.3rem;
-	line-height:0.9rem;
-}
-
-.code{
-	position:relative
-}
-#gamebtn{
-	width:30%;
-	position:absolute;
-	bottom:0.16rem;
-	left:3.4rem;
-	background:#fff;
-	border:1px solid #0086e6;
-	color:#0086e6;
-	height:0.6rem;	
-	border-radius:5px;
-	font-size:12px;
-	text-decoration:none;
-	line-height:0.6rem
-}
-.context ul li span{
-	font-size:14px;
-	width:30%;
-	display:block;
-	float:left;
-}
-.context ul li input{
-	outline:none;
-	border:none;
-	height:0.8rem;
-	font-size:12px;
-	color:#999;
-	width:65%;
-	display:block;
-	margin-right:1.0rem;
-}
-.submit{
-	background:#0095ff;
-	height:0.9rem;
-	width:100%;
-	font-size:16px;
-	font-weight:bold;
-	display:inline-block;
-	border:1px solid #0095ff
-}
-.submit a{
-	color:#fff;
-}
-.context .submit{
-	border:none
-}
-.context .tel{
-	margin:0
-}
-.info .lijizuce{
-	border:1px solid #0095ff;
-}
-.info .lijizuce a{
-	color:#0095ff;
-	width:100%;
-	height:100%;
-	display:inline-block
-}
-
+.code { position: relative; }
+.get-smscode { width: 30%; position: absolute; bottom: 0.16rem; left: 3.4rem; background: #fff; border: 1px solid #0086e6; color: #0086e6; height: 0.6rem; border-radius: 5px; font-size: 12px; text-decoration: none; line-height: 0.6rem; }
+.context ul li span { font-size: 14px; width: 30%; display: block; float: left; }
+.context ul li input { outline: none; border: none; height: 0.9rem; font-size: 12px; color: #999; width: 65%; display: block; margin-right: 1.0rem; }
+.signon { background: #0095ff; height: 0.9rem; width: 100%; font-size: 16px; font-weight: bold; display: inline-block; border: 1px solid #0095ff; }
+.signon a { color: #fff; padding: .3rem 1rem;}
+.context .signon { border: none; }
+.context .tel { margin: 0; }
+.info .signin { border: 1px solid #0095ff; }
+.info .signin a { color: #0095ff; width: 100%; height: 100%; display: inline-block; }

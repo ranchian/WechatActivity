@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>房金网_登记领取</title>
+    <meta name="keywords" content="房金网,房地产金融,房地产金融平台、互联网理财，理财产品，理财APP，掌上理财,p2p理财产品，互联网理财，个人理财，互联网金融">
+    <meta name="description" content="房金网理财平台,安全有保障的互联网理财平台,为投资者提供房金宝系列的优质理财产品,资金灵活！10元起投,多层理财项目审核机制,为您的资金保驾护航！互联网投资理财,就选房金网，理财更安全，收益有保障！" />
+    <meta name="author" content="Xander" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <!-- Standard iPhone -->
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="http://static.fangjinnet.com/static/images/pc/57x57.png" />
+    <!-- Retina iPhone -->
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://static.fangjinnet.com/static/images/pc/72x72.png">
+    <!-- Standard iPad -->
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://static.fangjinnet.com/static/images/pc/114x114.png" />
+    <!-- Retina iPad -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://static.fangjinnet.com/static/images/pc/144x144.png"/>
+    <link rel="shortcut icon" href="http://static.fangjinnet.com/static/images/pc/favicon.ico" type="image/x-icon" />
+    <link href="../PM25/css/game_get.css" rel="stylesheet">
+    <script src="/Scripts/rem.js"></script>
+    <script src="/Scripts/jquery-1.11.3.js"></script>
+    <script src="account.js"></script>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="banner"></div>
+        <div class="context">
+            <div class="title">
+                <p>登记领取</p>
+            </div>
+            <div class="info">
+                <form>
+                    <ul>
+                        <li class="tel">
+                            <span>手机号：</span>
+                            <input type="tel" placeholder="请输入您的手机号" id="txt-phone" />
+                        </li>
+                        <li class="code">
+                            <span>验证码：</span>
+                            <input type="tel" placeholder="请输入验证码" id="txt-smscode" />
+                            <a href="javascript:account.getCode()" class="get-smscode">获取验证码</a>
+                        </li>
+                        <li>
+                            <span>密&nbsp;码：</span>
+                            <input type="password" placeholder="请输入您的登录密码" id="txt-pswd" />
+                        </li>
+                        <li class="game_friend">
+                            <span>邀请人：</span>
+                            <input type="text" placeholder="邀请人的手机号（非必填）" id="txt-friend" />
+                        </li>
+                        <li class="signin">
+                            <a href="javascript:account.regist()" class="btn-submit">立即领取</a>
+                        </li>
+                    </ul>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

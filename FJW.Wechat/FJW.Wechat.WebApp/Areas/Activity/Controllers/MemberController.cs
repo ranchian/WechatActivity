@@ -22,10 +22,12 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         [HttpPost]
         public ActionResult Login(string phone, string pswd)
         {
-            Models.ResultModel<string> result = new Models.ResultModel<string>();
-            result.Result = "登录失败";
-            result.Success = 0;
-            
+            Models.ResultModel<string> result = new Models.ResultModel<string>
+            {
+                Result = "登录失败",
+                Success = 0
+            };
+
             try
             {
                 if (string.IsNullOrEmpty(phone))
@@ -92,9 +94,11 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         [HttpPost]
         public ActionResult Regist(string phone, string code, string pswd, string inviterPhone, string channel)
         {
-            Models.ResultModel<string> model = new Models.ResultModel<string>();
-            model.Result = "注册失败";
-            model.Success = 0;
+            Models.ResultModel<string> model = new Models.ResultModel<string>
+            {
+                Result = "注册失败",
+                Success = 0
+            };
 
             try
             {

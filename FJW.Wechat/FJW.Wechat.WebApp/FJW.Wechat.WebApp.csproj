@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -25,6 +26,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -184,59 +186,62 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Html\PM25\css\download.css" />
-    <Content Include="Html\PM25\css\game_get.css" />
-    <Content Include="Html\PM25\css\index.css" />
-    <Content Include="Html\PM25\css\liyue.css" />
-    <Content Include="Html\PM25\css\register.css" />
-    <Content Include="Html\PM25\download.html" />
-    <Content Include="Html\PM25\game_get.html" />
-    <Content Include="Html\PM25\game_register.html" />
-    <Content Include="Html\PM25\images\appDownload.png" />
-    <Content Include="Html\PM25\images\banner.png" />
-    <Content Include="Html\PM25\images\biaoge.png" />
-    <Content Include="Html\PM25\images\check_reward.png" />
-    <Content Include="Html\PM25\images\content_info.png" />
-    <Content Include="Html\PM25\images\explain_info.png" />
-    <Content Include="Html\PM25\images\Game-over.png" />
-    <Content Include="Html\PM25\images\game_downBanneer.png" />
-    <Content Include="Html\PM25\images\game_reward.png" />
-    <Content Include="Html\PM25\images\game_start.png" />
-    <Content Include="Html\PM25\images\Hero.png" />
-    <Content Include="Html\PM25\images\liyue_banner.png" />
-    <Content Include="Html\PM25\images\liyue_bg.png" />
-    <Content Include="Html\PM25\images\liyue_bomb0.png" />
-    <Content Include="Html\PM25\images\liyue_bomb1.png" />
-    <Content Include="Html\PM25\images\liyue_bomb2.png" />
-    <Content Include="Html\PM25\images\liyue_bomb3.png" />
-    <Content Include="Html\PM25\images\liyue_bomb4.png" />
-    <Content Include="Html\PM25\images\liyue_bomb5.png" />
-    <Content Include="Html\PM25\images\liyue_bomb6.png" />
-    <Content Include="Html\PM25\images\liyue_bomb7.png" />
-    <Content Include="Html\PM25\images\liyue_bomb8.png" />
-    <Content Include="Html\PM25\images\liyue_content.png" />
-    <Content Include="Html\PM25\images\liyue_download.png" />
-    <Content Include="Html\PM25\images\liyue_explain.png" />
-    <Content Include="Html\PM25\images\liyue_rule.png" />
-    <Content Include="Html\PM25\images\liyue_theme.png" />
-    <Content Include="Html\PM25\images\over_info.png" />
-    <Content Include="Html\PM25\images\play_start.png" />
-    <Content Include="Html\PM25\images\product.png" />
-    <Content Include="Html\PM25\images\project.png" />
-    <Content Include="Html\PM25\images\register.css" />
-    <Content Include="Html\PM25\images\replay.png" />
-    <Content Include="Html\PM25\images\risk.png" />
-    <Content Include="Html\PM25\images\rule_bg.png" />
-    <Content Include="Html\PM25\images\small-banner.png" />
-    <Content Include="Html\PM25\images\source.png" />
-    <Content Include="Html\PM25\images\stop_watch.png" />
-    <Content Include="Html\PM25\images\theme_info.png" />
-    <Content Include="Html\PM25\images\title.png" />
-    <Content Include="Html\PM25\images\组-12.png" />
-    <Content Include="Html\PM25\index.html" />
-    <Content Include="Html\PM25\liyue.html" />
-    <Content Include="Html\PM25\register.html" />
-    <Content Include="Html\w.html" />
+    <Content Include="html\account\account.js" />
+    <Content Include="html\account\signin.html" />
+    <Content Include="html\account\signon.html" />
+    <Content Include="html\PM25\css\download.css" />
+    <Content Include="html\PM25\css\game_get.css" />
+    <Content Include="html\PM25\css\index.css" />
+    <Content Include="html\PM25\css\liyue.css" />
+    <Content Include="html\PM25\css\register.css" />
+    <Content Include="html\PM25\download.html" />
+    <Content Include="html\PM25\game_get.html" />
+    <Content Include="html\PM25\game_register.html" />
+    <Content Include="html\PM25\images\appDownload.png" />
+    <Content Include="html\PM25\images\banner.png" />
+    <Content Include="html\PM25\images\biaoge.png" />
+    <Content Include="html\PM25\images\check_reward.png" />
+    <Content Include="html\PM25\images\content_info.png" />
+    <Content Include="html\PM25\images\explain_info.png" />
+    <Content Include="html\PM25\images\Game-over.png" />
+    <Content Include="html\PM25\images\game_downBanneer.png" />
+    <Content Include="html\PM25\images\game_reward.png" />
+    <Content Include="html\PM25\images\game_start.png" />
+    <Content Include="html\PM25\images\Hero.png" />
+    <Content Include="html\PM25\images\liyue_banner.png" />
+    <Content Include="html\PM25\images\liyue_bg.png" />
+    <Content Include="html\PM25\images\liyue_bomb0.png" />
+    <Content Include="html\PM25\images\liyue_bomb1.png" />
+    <Content Include="html\PM25\images\liyue_bomb2.png" />
+    <Content Include="html\PM25\images\liyue_bomb3.png" />
+    <Content Include="html\PM25\images\liyue_bomb4.png" />
+    <Content Include="html\PM25\images\liyue_bomb5.png" />
+    <Content Include="html\PM25\images\liyue_bomb6.png" />
+    <Content Include="html\PM25\images\liyue_bomb7.png" />
+    <Content Include="html\PM25\images\liyue_bomb8.png" />
+    <Content Include="html\PM25\images\liyue_content.png" />
+    <Content Include="html\PM25\images\liyue_download.png" />
+    <Content Include="html\PM25\images\liyue_explain.png" />
+    <Content Include="html\PM25\images\liyue_rule.png" />
+    <Content Include="html\PM25\images\liyue_theme.png" />
+    <Content Include="html\PM25\images\over_info.png" />
+    <Content Include="html\PM25\images\play_start.png" />
+    <Content Include="html\PM25\images\product.png" />
+    <Content Include="html\PM25\images\project.png" />
+    <Content Include="html\PM25\images\register.css" />
+    <Content Include="html\PM25\images\replay.png" />
+    <Content Include="html\PM25\images\risk.png" />
+    <Content Include="html\PM25\images\rule_bg.png" />
+    <Content Include="html\PM25\images\small-banner.png" />
+    <Content Include="html\PM25\images\source.png" />
+    <Content Include="html\PM25\images\stop_watch.png" />
+    <Content Include="html\PM25\images\theme_info.png" />
+    <Content Include="html\PM25\images\title.png" />
+    <Content Include="html\PM25\images\组-12.png" />
+    <Content Include="html\PM25\index.html" />
+    <Content Include="html\PM25\liyue.html" />
+    <Content Include="html\PM25\register.html" />
+    <Content Include="html\w.html" />
     <Content Include="Scripts\activityconfig.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -296,11 +301,15 @@
     <Content Include="packages.config" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
