@@ -50,6 +50,36 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         /// <returns></returns>
         public ActionResult State()
         {
+            var dt = DateTime.Now;
+            if (dt < new DateTime(2016, 11, 15, 10, 0, 0))
+            {
+                var dict = new Dictionary<string, object>
+                {
+                    ["code"] = 4,
+                    ["msg"] = "活动未开始"
+                };
+                return Json(new ResponseModel
+                {
+                    ErrorCode = ErrorCode.Other,
+                    Data = dict,
+                    Message = "活动未开始"
+                });
+            }
+
+            if (dt > new DateTime(2016, 11, 28, 17, 0, 0))
+            {
+                var dict = new Dictionary<string, object>
+                {
+                    ["code"] = 5,
+                    ["msg"] = "活动已结束"
+                };
+                return Json(new ResponseModel
+                {
+                    ErrorCode = ErrorCode.Other,
+                    Data = dict,
+                    Message = "活动已结束"
+                });
+            }
             var userId = UserInfo.Id;
             if (userId < 1)
             {
@@ -77,7 +107,36 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         public ActionResult Over(MineSweeperModel result)
         {
             var uid = UserInfo.Id;
+            var dt = DateTime.Now;
+            if (dt < new DateTime(2016, 11, 15, 10, 0, 0))
+            {
+                var dict = new Dictionary<string, object>
+                {
+                    ["code"] = 4,
+                    ["msg"] = "活动未开始"
+                };
+                return Json(new ResponseModel
+                {
+                    ErrorCode = ErrorCode.Other,
+                    Data = dict,
+                    Message = "活动未开始"
+                });
+            }
 
+            if (dt > new DateTime(2016, 11, 28, 17, 0, 0))
+            {
+                var dict = new Dictionary<string, object>
+                {
+                    ["code"] = 5,
+                    ["msg"] = "活动已结束"
+                };
+                return Json(new ResponseModel
+                {
+                    ErrorCode = ErrorCode.Other,
+                    Data = dict,
+                    Message = "活动已结束"
+                });
+            }
             if (result == null || result.Rows == null || result.Rows.Count == 0 || !CheckResult(result.Rows))
             {
                 return Json(new ResponseModel
@@ -152,6 +211,36 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
         [HttpPost]
         public ActionResult Accept()
         {
+            var dt = DateTime.Now;
+            if (dt < new DateTime(2016, 11, 15, 10, 0, 0))
+            {
+                var dict = new Dictionary<string, object>
+                {
+                    ["code"] = 4,
+                    ["msg"] = "活动未开始"
+                };
+                return Json(new ResponseModel
+                {
+                    ErrorCode = ErrorCode.Other,
+                    Data = dict,
+                    Message = "活动未开始"
+                });
+            }
+
+            if (dt > new DateTime(2016, 11, 28, 17, 0, 0))
+            {
+                var dict = new Dictionary<string, object>
+                {
+                    ["code"] = 5,
+                    ["msg"] = "活动已结束"
+                };
+                return Json(new ResponseModel
+                {
+                    ErrorCode = ErrorCode.Other,
+                    Data = dict,
+                    Message = "活动已结束"
+                });
+            }
             var uid = UserInfo.Id;
             if (uid < 1)
             {
