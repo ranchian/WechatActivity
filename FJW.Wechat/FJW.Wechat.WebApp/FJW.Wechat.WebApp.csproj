@@ -151,6 +151,7 @@
     <Compile Include="Areas\Activity\Controllers\ActivityController.cs" />
     <Compile Include="Areas\Activity\Controllers\DefaultController.cs" />
     <Compile Include="Areas\Activity\Controllers\MemberController.cs" />
+    <Compile Include="Areas\Activity\Controllers\MinesweeperController.cs" />
     <Compile Include="Areas\Activity\Controllers\RankingController.cs" />
     <Compile Include="Areas\Activity\Controllers\TurntableController.cs" />
     <Compile Include="Areas\Activity\Controllers\LuckCouponController.cs" />
@@ -265,7 +266,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\wechatshare.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

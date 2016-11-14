@@ -64,5 +64,10 @@ namespace FJW.Wechat.Data
         public string WechatId { get; set; }
 
         public long ObjectId { get; set; }
+
+        /// <summary>
+        /// 游戏数据
+        /// </summary>
+        public string Data { get; set; }
     }
 }
