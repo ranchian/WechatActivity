@@ -81,10 +81,10 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                 if (DateTime.Now > new DateTime(2016, 10, 27))
                 {
                     rows = new List<RankingRow>(4);
-                    rows[0] = new RankingRow { Title = "房金月宝", Phone = "" };
-                    rows[1] = new RankingRow { Title = "房金季宝", Phone = "" };
-                    rows[2] = new RankingRow { Title = "房金双季宝", Phone = "" };
-                    rows[3] = new RankingRow { Title = "房金年宝", Phone = "" };
+                    rows.Add(new RankingRow { Title = "房金月宝", Phone = "" });
+                    rows.Add(new RankingRow { Title = "房金季宝", Phone = "" });
+                    rows.Add(new RankingRow { Title = "房金双季宝", Phone = "" });
+                    rows.Add(new RankingRow { Title = "房金年宝", Phone = "" });
                 }
                 else
                 {
