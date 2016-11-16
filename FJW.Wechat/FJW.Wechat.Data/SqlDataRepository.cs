@@ -118,7 +118,24 @@ group by ProductTypeID";
                 return conn.Query<ProductTypeSumShare>(sql, new {memberId, startTime, endTime});
             }
         }
-        
+
+        #endregion
+
+        #region Other
+        /// <summary>
+        /// 获取用户渠道
+        /// </summary>
+        /// <param name="memberId"></param>
+        /// <returns></returns>
+        public string GetMemberChennel(long memberId)
+        {
+            const string sql = @"select top 1 [Channel] from [Report].[dbo].[DR_MemberChannel] where Isdelete = 0 and MemberId = @memberId";
+            using (var conn = GetDbConnection())
+            {
+                return conn.ExecuteScalar<string>(sql, new {memberId});
+            }
+        }
+
         #endregion
     }
 

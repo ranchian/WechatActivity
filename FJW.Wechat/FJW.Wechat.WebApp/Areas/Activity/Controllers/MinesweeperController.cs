@@ -291,6 +291,15 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                 return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Data = dict, Message = "无效的奖励" });
             }
 
+            var channl = new SqlDataRepository(SqlConnectString).GetMemberChennel(uid);
+            if (channl != null && channl.Equals("WQWLCPS", StringComparison.CurrentCultureIgnoreCase) )
+            {
+                var dict = new Dictionary<string, object>();
+                dict["code"] = 6;
+                dict["msg"] = "无法领取奖励：WQWLCPS";
+                return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Data = dict, Message = "无法领取奖励：WQWLCPS" });
+            }
+
             data.MemberId = uid;
             data.Status = 1;
             data.LastUpdateTime = DateTime.Now;
