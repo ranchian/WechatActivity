@@ -127,18 +127,32 @@ group by ProductTypeID";
         /// </summary>
         /// <param name="memberId"></param>
         /// <returns></returns>
-        public string GetMemberChennel(long memberId)
+        public MemberChannel GetMemberChennel(long memberId)
         {
-            const string sql = @"select top 1 [Channel] from [Report].[dbo].[DR_MemberChannel] where Isdelete = 0 and MemberId = @memberId";
+            const string sql = @"select top 1 [Channel], [CreateTime] from [Report].[dbo].[DR_MemberChannel] where Isdelete = 0 and MemberId = @memberId";
             using (var conn = GetDbConnection())
             {
-                return conn.ExecuteScalar<string>(sql, new {memberId});
+                var d = conn.QueryFirst<MemberChannel>(sql, new {memberId});
+                if (d != null)
+                {
+                    d.MemberId = memberId;
+                }
+                return d;
             }
+            
         }
 
         #endregion
     }
 
+    public class MemberChannel
+    {
+        public long MemberId { get; set; }
+
+        public string Channel { get; set; }
+
+        public DateTime CreateTime { get; set; }
+    }
     public class ProductTypeSumShare
     {
         /// <summary>

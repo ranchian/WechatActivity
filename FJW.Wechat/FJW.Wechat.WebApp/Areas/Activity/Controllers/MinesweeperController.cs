@@ -292,7 +292,9 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
             }
 
             var channl = new SqlDataRepository(SqlConnectString).GetMemberChennel(uid);
-            if (channl != null && channl.Equals("WQWLCPS", StringComparison.CurrentCultureIgnoreCase) )
+            if (channl != null && channl.Channel != null  
+                && channl.Channel.Equals("WQWLCPS", StringComparison.CurrentCultureIgnoreCase)
+                && channl.CreateTime > new DateTime(2016, 11, 15))
             {
                 var dict = new Dictionary<string, object>();
                 dict["code"] = 6;
