@@ -169,6 +169,7 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
             {
                 data = new RecordModel
                 {
+                    RecordId = Guid.NewGuid().ToString(),
                     MemberId = uid,
                     Total = 24,
                     Key = Key,
@@ -178,7 +179,9 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                     CreateTime = DateTime.Now
                 };
                 _repsitory.Add(data);
-                SetSelfGameRecordId(data.ID.ToString());
+                SetSelfGameRecordId(data.RecordId);
+                Logger.Dedug("SessionId:{1} SetSelfGameRecordId:{0}", data.RecordId, Session.SessionID);
+
             }
             else
             {
@@ -260,10 +263,8 @@ namespace FJW.Wechat.WebApp.Areas.Activity.Controllers
                 if (!dataId.IsNullOrEmpty())
                 {
                     data = _repsitory.GetById(dataId);
-                    if (data.MemberId != 0)
-                    {
-                        throw new Exception("数据逻辑错误");
-                    }
+                    Logger.Dedug("SessionId:{1} GetSelfGameRecordId:{0}", data.RecordId, Session.SessionID);
+                    
                 }
             }
             if (data == null)
