@@ -132,7 +132,7 @@ group by ProductTypeID";
             const string sql = @"select top 1 [Channel], [CreateTime] from [Report].[dbo].[DR_MemberChannel] where Isdelete = 0 and MemberId = @memberId";
             using (var conn = GetDbConnection())
             {
-                var d = conn.QueryFirst<MemberChannel>(sql, new {memberId});
+                var d = conn.QueryFirstOrDefault<MemberChannel>(sql, new {memberId});
                 if (d != null)
                 {
                     d.MemberId = memberId;
