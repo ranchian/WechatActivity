@@ -60,6 +60,7 @@
     <Compile Include="ObjectExt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RedisManager.cs" />
+    <Compile Include="StringExt.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="NLog.config">

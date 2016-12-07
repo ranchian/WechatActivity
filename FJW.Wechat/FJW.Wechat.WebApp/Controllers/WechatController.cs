@@ -5,10 +5,6 @@ using Senparc.Weixin.MP.MvcExtension;
 using Senparc.Weixin.MP.Entities.Request;
 
 using FJW.Unit;
-using FJW.Wechat.WebApp.Areas.Activity.Models;
-using FJW.Wechat.WebApp.Base;
-using FJW.Wechat.WebApp.Models;
-using Senparc.Weixin.MP.CommonAPIs;
 using Senparc.Weixin.MP.Containers;
 using Senparc.Weixin.MP.Helpers;
 

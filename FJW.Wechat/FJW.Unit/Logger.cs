@@ -32,7 +32,7 @@ namespace FJW.Unit
             }
             else
             {
-                _log.Debug(string.Format(message, args));
+                _log.Info(string.Format(message, args));
             }
         }
 

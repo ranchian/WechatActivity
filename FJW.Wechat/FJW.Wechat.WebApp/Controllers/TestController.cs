@@ -1,7 +1,8 @@
 ﻿using System.Web.Mvc;
 
 using FJW.Unit;
-using FJW.Wechat.WebApp.Base;
+using FJW.Wechat.Wx;
+
 
 namespace FJW.Wechat.WebApp.Controllers
 {

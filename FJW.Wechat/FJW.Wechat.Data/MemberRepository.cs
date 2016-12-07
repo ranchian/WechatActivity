@@ -61,6 +61,22 @@ namespace FJW.Wechat.Data
         }
 
         /// <summary>
+        /// 是否为不可用的要求人
+        /// </summary>
+        /// <param name="memberId"></param>
+        /// <returns></returns>
+        public bool DisableMemberInvite(long memberId)
+        {
+            using (var conn = GetDbConnection())
+            {
+                const string sql = @"declare @memberId bigint;
+select @memberId = F.MemberID from Basic..BD_MemberInviteFriends F where F.IsDelete = 0 and F.FriendID = @friendId;
+select D.MemberID from Trading.dbo.TC_DisableMember D where MemberID = @memberId;";
+                return conn.ExecuteScalar<long>(sql, new {friendId = memberId}) > 0;
+            }
+        }
+
+        /// <summary>
         /// 获取用户 抽奖次数
         /// </summary>
         /// <param name="memberId"></param>

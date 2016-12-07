@@ -52,20 +52,22 @@ namespace FJW.Unit
 
 
 
-        /// <summary>
-        /// Get
-        /// </summary>
-        /// <param name="url"></param>
-        /// <param name="encoding"></param>
-        /// <returns></returns>
-        public static HttpResult Get(string url, Encoding encoding = null)
+   
+        public static string GetString(string url, Encoding encoding = null)
         {
-            var s =  new WebClient
+            return new WebClient
             {
                 Proxy = _webProxy,
                 Encoding = encoding ?? Encoding.UTF8
             }.DownloadString(url);
-            return new HttpResult { Code =  HttpStatusCode.OK , Reponse = s};
+        }
+
+        public static byte[] GetData(string url)
+        {
+            return new WebClient
+            {
+                Proxy = _webProxy
+            }.DownloadData(url);
         }
     }
 }

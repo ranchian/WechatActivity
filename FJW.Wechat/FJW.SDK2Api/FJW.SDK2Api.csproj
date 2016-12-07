@@ -53,6 +53,7 @@
     <Compile Include="Member\AccountApi.cs" />
     <Compile Include="Member\LoginResult.cs" />
     <Compile Include="Member\MemberApi.cs" />
+    <Compile Include="Message\SmsApi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Statics\UploadApi.cs" />
     <Compile Include="Statics\UploadFileResult.cs" />

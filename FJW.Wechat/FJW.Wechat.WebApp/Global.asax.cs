@@ -2,7 +2,12 @@
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Autofac;
+using Autofac.Integration.Mvc;
+using FJW.Wechat.WebApp.Providers;
+using FJW.Wechat.Wx;
 using Senparc.Weixin.MP.Containers;
+
 
 namespace FJW.Wechat.WebApp
 {
@@ -23,6 +28,14 @@ namespace FJW.Wechat.WebApp
 
             //全局只需注册一次
             JsApiTicketContainer.Register(Config.WechatConfig.AppId, Config.WechatConfig.AppSecret);
+
+            var builder = new ContainerBuilder();
+
+            builder.RegisterType<WxMediaApi>().As<IWxMediaApi>();
+            builder.RegisterType<MongoWxAuthenRepository>().As<IWxAuthenRepository>();
+
+            var container = builder.Build();
+            DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
         }
 
         protected void Application_End()

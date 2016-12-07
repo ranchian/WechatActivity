@@ -46,6 +46,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=3.4.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.3.4.0\lib\net40\Autofac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Autofac.Integration.Mvc, Version=3.3.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.Mvc5.3.3.4\lib\net45\Autofac.Integration.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="FJW.Model.MongoDb, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
@@ -73,9 +81,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -133,12 +143,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\Activity\Views\Login\" />
-    <Folder Include="Areas\Activity\Views\LuckCoupon\" />
-    <Folder Include="Areas\Activity\Views\Member\" />
-    <Folder Include="Areas\Activity\Views\Ranking\" />
-    <Folder Include="Areas\Activity\Views\Shared\" />
-    <Folder Include="Areas\Activity\Views\Turntable\" />
+    <Folder Include="Areas\" />
     <Folder Include="Views\Login\" />
     <Folder Include="Views\Test\" />
     <Folder Include="Views\Wechat\" />
@@ -147,22 +152,6 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Areas\Activity\ActivityAreaRegistration.cs" />
-    <Compile Include="Areas\Activity\Controllers\ActivityController.cs" />
-    <Compile Include="Areas\Activity\Controllers\DefaultController.cs" />
-    <Compile Include="Areas\Activity\Controllers\MemberController.cs" />
-    <Compile Include="Areas\Activity\Controllers\MinesweeperController.cs" />
-    <Compile Include="Areas\Activity\Controllers\RankingController.cs" />
-    <Compile Include="Areas\Activity\Controllers\TurntableController.cs" />
-    <Compile Include="Areas\Activity\Controllers\LuckCouponController.cs" />
-    <Compile Include="Areas\Activity\Models\ResultModel.cs" />
-    <Compile Include="Areas\Activity\Models\ScoreModel.cs" />
-    <Compile Include="Base\Config.cs" />
-    <Compile Include="Base\CrossDomainFilterAttribute.cs" />
-    <Compile Include="Base\JsonetResult.cs" />
-    <Compile Include="Base\UserInfo.cs" />
-    <Compile Include="Base\WController.cs" />
-    <Compile Include="Base\WAuthorizeAttribute.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MenusController.cs" />
@@ -177,10 +166,10 @@
     </Compile>
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\MenuModel.cs" />
-    <Compile Include="Models\ResponseModel.cs" />
     <Compile Include="Models\UploadImgModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StringHelper.cs" />
+    <Compile Include="Providers\MongoWxAuthenRepository.cs" />
+    <Compile Include="Providers\WxMediaApi.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -246,15 +235,16 @@
     <Content Include="Scripts\activityconfig.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Areas\Activity\Views\web.config" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="config\activity.facevalue.json" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\PublishProfiles\wechat.fangjinnet.com.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\fjwx.js" />
     <Content Include="Scripts\FunctionModule.js" />
     <Content Include="Scripts\GlobalModule.js" />
     <Content Include="Scripts\GoldModule.js" />
@@ -291,6 +281,14 @@
     <ProjectReference Include="..\FJW.Unit\FJW.Unit.csproj">
       <Project>{d72eed5c-8b1b-43e4-8b9a-51c69b1b2c6f}</Project>
       <Name>FJW.Unit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FJW.Wechat.Activity\FJW.Wechat.Activity.csproj">
+      <Project>{0644b113-8905-47ca-b8da-ab10f2195527}</Project>
+      <Name>FJW.Wechat.Activity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FJW.Wechat.Base\FJW.Wechat.Base.csproj">
+      <Project>{18be11d6-9349-49d4-b52d-da5833b6d229}</Project>
+      <Name>FJW.Wechat.Base</Name>
     </ProjectReference>
     <ProjectReference Include="..\FJW.Wechat.Data\FJW.Wechat.Data.csproj">
       <Project>{03D1C3AC-D5BE-4035-B1A2-CE67B030639D}</Project>

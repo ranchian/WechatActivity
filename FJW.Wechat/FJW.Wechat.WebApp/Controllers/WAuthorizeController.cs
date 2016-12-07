@@ -3,11 +3,10 @@ using System.Linq;
 using System.Web.Mvc;
 using Senparc.Weixin.Exceptions;
 using Senparc.Weixin.MP.AdvancedAPIs;
-using Senparc.Weixin.MP.AdvancedAPIs.OAuth;
 
 using FJW.Unit;
 using FJW.Wechat.Data;
-using FJW.Wechat.WebApp.Base;
+using FJW.Wechat.Wx;
 
 namespace FJW.Wechat.WebApp.Controllers
 {
@@ -38,15 +37,17 @@ namespace FJW.Wechat.WebApp.Controllers
             Session["OAuthAccessToken"] = result;
             try
             {
-                OAuthUserInfo userInfo = OAuthApi.GetUserInfo(result.access_token, result.openid);
+                var userInfo = OAuthApi.GetUserInfo(result.access_token, result.openid);
                 UserInfo.OpenId = userInfo.openid;
-                UserInfo.NickName = userInfo.nickname;
-                UserInfo.HeadimgUrl = userInfo.headimgurl;
-                UserInfo.Sex = userInfo.sex;
-                UserInfo.Province = userInfo.province;
-                UserInfo.City = userInfo.city;
-                UserInfo.Country = userInfo.country;
-                UserInfo.UnionId = userInfo.unionid;
+                UserInfo.WxUserInfo = new WxUserInfo();
+                UserInfo.WxUserInfo.OpenId = userInfo.openid;
+                UserInfo.WxUserInfo.NickName = userInfo.nickname;
+                UserInfo.WxUserInfo.HeadimgUrl = userInfo.headimgurl;
+                UserInfo.WxUserInfo.Sex = userInfo.sex;
+                UserInfo.WxUserInfo.Province = userInfo.province;
+                UserInfo.WxUserInfo.City = userInfo.city;
+                UserInfo.WxUserInfo.Country = userInfo.country;
+                UserInfo.WxUserInfo.UnionId = userInfo.unionid;
                 SetLoginInfo(UserInfo);
 
                 var repository = new WeChatRepository("Wechat", Config.WechatConfig.MongoHost);

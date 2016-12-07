@@ -13,6 +13,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FJW.Wechat.ConsoleApp", "FJ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FJW.SDK2Api", "FJW.SDK2Api\FJW.SDK2Api.csproj", "{84FD0233-9DCB-4FA6-83D6-EF22841E0151}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FJW.Wechat.Base", "FJW.Wechat.Base\FJW.Wechat.Base.csproj", "{18BE11D6-9349-49D4-B52D-DA5833B6D229}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{41894940-4DDD-4674-B28D-143503D9E31C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FJW.Wechat.Activity", "FJW.Wechat.Activity\FJW.Wechat.Activity.csproj", "{0644B113-8905-47CA-B8DA-AB10F2195527}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,8 +45,19 @@ Global
 		{84FD0233-9DCB-4FA6-83D6-EF22841E0151}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84FD0233-9DCB-4FA6-83D6-EF22841E0151}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84FD0233-9DCB-4FA6-83D6-EF22841E0151}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18BE11D6-9349-49D4-B52D-DA5833B6D229}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18BE11D6-9349-49D4-B52D-DA5833B6D229}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18BE11D6-9349-49D4-B52D-DA5833B6D229}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18BE11D6-9349-49D4-B52D-DA5833B6D229}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0644B113-8905-47CA-B8DA-AB10F2195527}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0644B113-8905-47CA-B8DA-AB10F2195527}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0644B113-8905-47CA-B8DA-AB10F2195527}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0644B113-8905-47CA-B8DA-AB10F2195527}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6E3B9898-14C5-4F02-B12B-BF27889E3389} = {41894940-4DDD-4674-B28D-143503D9E31C}
 	EndGlobalSection
 EndGlobal

@@ -152,13 +152,13 @@ namespace FJW.SDK2Api.Member
         /// 单笔交易限额
         /// </summary>
         [JsonProperty("singlePrice")]
-        public decimal SinglePrice { get; set; }
+        public string SinglePrice { get; set; }
 
         /// <summary>
         /// 每日限额
         /// </summary>
         [JsonProperty("dayPrice")]
-        public decimal DayPrice { get; set; }
+        public string DayPrice { get; set; }
 
         /// <summary>
         /// 银行简称

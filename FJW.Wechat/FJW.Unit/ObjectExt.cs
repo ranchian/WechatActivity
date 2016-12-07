@@ -28,9 +28,8 @@ namespace FJW.Unit
             return JsonConvert.DeserializeObject<T>(str);
         }
 
-        public static string AsUrlData(this string str)
-        {
-            return System.Uri.EscapeDataString(str);
-        }
+       
+
+
     }
 }

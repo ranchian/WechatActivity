@@ -1,15 +1,13 @@
 ﻿
 using System;
 using System.IO;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using FJW.SDK2Api.Member;
 using FJW.SDK2Api.Statics;
 using FJW.Unit;
-using FJW.Wechat.WebApp.Base;
 using FJW.Wechat.WebApp.Models;
 using Senparc.Weixin.MP.AdvancedAPIs;
-using Senparc.Weixin.MP.CommonAPIs;
+
 using Senparc.Weixin.MP.Containers;
 
 

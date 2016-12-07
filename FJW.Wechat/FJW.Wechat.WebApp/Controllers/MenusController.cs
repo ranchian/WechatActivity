@@ -1,20 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using FJW.Unit;
-using FJW.Wechat.WebApp.Base;
 using FJW.Wechat.WebApp.Models;
-using Newtonsoft.Json.Serialization;
 using Senparc.Weixin.MP.CommonAPIs;
 using Senparc.Weixin.MP.Containers;
-using Senparc.Weixin.MP.Entities;
 using Senparc.Weixin.MP.Entities.Menu;
 using Newtonsoft.Json;
 using Senparc.Weixin;
-using Senparc.Weixin.Entities;
+
 
 namespace FJW.Wechat.WebApp.Controllers
 {
