@@ -57,7 +57,7 @@ namespace FJW.Wechat.Activity.Controllers
             var uid = UserInfo.Id;
 
             var mediaId = Request.Form["url"];
-            var key = $"{mediaId}.jpg";
+            var key = $"activity/{Key}/{mediaId}.jpg";
           
             var bytes = DependencyResolver.Current.GetService<IWxMediaApi>().Get(mediaId);
             
@@ -153,7 +153,7 @@ namespace FJW.Wechat.Activity.Controllers
                 });
             }
             var uid = UserInfo.Id;
-            var dt = DateTime.Now;
+           
             if (uid < 1)
             {
                 return Json(new ResponseModel { ErrorCode = ErrorCode.NotLogged });
