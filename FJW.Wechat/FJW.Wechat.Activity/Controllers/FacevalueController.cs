@@ -36,6 +36,24 @@ namespace FJW.Wechat.Activity.Controllers
         [HttpPost]
         public ActionResult Appraise()
         {
+            var config = GetConfig();
+            if (config.StartTime > DateTime.Now )
+            {
+                return Json(new ResponseModel(ErrorCode.Other)
+                {
+                    Data = new Dictionary<string, object>{ ["code"] = 10,["msg"] = "活动未开始"},
+                    Message = "活动未开始"
+                });
+            }
+            if (config.EndTime < DateTime.Now)
+            {
+                return Json(new ResponseModel(ErrorCode.Other)
+                {
+                    Data = new Dictionary<string, object> { ["code"] = 10, ["msg"] = "活动已结束" },
+                    Message = "活动已结束"
+                });
+            }
+
             var uid = UserInfo.Id;
 
             var mediaId = Request.Form["url"];
@@ -117,6 +135,23 @@ namespace FJW.Wechat.Activity.Controllers
         [HttpPost]
         public ActionResult Accept()
         {
+            var config = GetConfig();
+            if (config.StartTime > DateTime.Now)
+            {
+                return Json(new ResponseModel(ErrorCode.Other)
+                {
+                    Data = new Dictionary<string, object> { ["code"] = 10, ["msg"] = "活动未开始" },
+                    Message = "活动未开始"
+                });
+            }
+            if (config.EndTime < DateTime.Now)
+            {
+                return Json(new ResponseModel(ErrorCode.Other)
+                {
+                    Data = new Dictionary<string, object> { ["code"] = 10, ["msg"] = "活动已结束" },
+                    Message = "活动已结束"
+                });
+            }
             var uid = UserInfo.Id;
             var dt = DateTime.Now;
             if (uid < 1)
