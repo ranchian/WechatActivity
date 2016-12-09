@@ -92,41 +92,37 @@ namespace FJW.Wechat.Activity.Controllers
         [HttpPost]
         public ActionResult Regist(string phone, string code, string pswd, string inviterPhone, string channel)
         {
-            ResultModel<string> model = new ResultModel<string>
-            {
-                Result = "注册失败",
-                Success = 0
-            };
-
+            var message = "注册成功"; ;
+            var success = 0;
             try
             {
                 if (string.IsNullOrEmpty(phone))
                 {
-                    model.Result = "手机号码不可为空";
+                    message = "手机号码不可为空";
                 }
                 else if (string.IsNullOrEmpty(code))
                 {
-                    model.Result = "验证码不可为空";
+                    message = "验证码不可为空";
                 }
                 else if (string.IsNullOrEmpty(pswd))
                 {
-                    model.Result = "登录密码不可为空";
+                    message = "登录密码不可为空";
                 }
                 else
                 {
                     var result = AccountApi.Regist(phone, pswd, code, inviterPhone, channel);//.Request("Regist", req.ToJSON());
                     if (result.IsOk)
                     {
-                        model.Result = "登录成功";
-                        model.Success = 1;
+                        success = 1;
                     }
                 }
             }
             catch (Exception ex)
             {
+                message = "注册错误，请稍后重试";
                 Logger.Error(ex.Message);
             }
-            return Json(model);
+            return Json(new {message, success});
         }
     }
 }
