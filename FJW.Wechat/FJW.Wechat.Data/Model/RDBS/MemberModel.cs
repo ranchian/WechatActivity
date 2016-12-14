@@ -1,4 +1,4 @@
-﻿namespace FJW.Wechat.Data
+﻿namespace FJW.Wechat.Data.Model.RDBS
 {
     /// <summary>
     /// 用户

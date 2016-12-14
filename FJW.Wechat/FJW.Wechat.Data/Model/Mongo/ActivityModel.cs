@@ -1,10 +1,9 @@
 ﻿using System;
-using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel.DataAnnotations.Schema;
-
 using FJW.Model.MongoDb;
+using MongoDB.Bson.Serialization.Attributes;
 
-namespace FJW.Wechat.Data
+namespace FJW.Wechat.Data.Model.Mongo
 {
     [Table("Activity")]
     public class ActivityModel : BaseModel

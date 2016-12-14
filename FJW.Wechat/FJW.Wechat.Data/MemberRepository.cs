@@ -1,10 +1,13 @@
-﻿using Dapper;
+﻿using System;
+using System.Collections.Generic;
+using Dapper;
 using System.Data;
 using System.Linq;
 using System.Data.Common;
 using System.Data.SqlClient;
 
 using FJW.Unit;
+using FJW.Wechat.Data.Model.RDBS;
 
 namespace FJW.Wechat.Data
 {
@@ -240,6 +243,31 @@ select D.MemberID from Trading.dbo.TC_DisableMember D where MemberID = @memberId
             }
             return awardCnt;
         }
+
+        /// <summary>
+        /// 指定时间内购买产品的汇总
+        /// </summary>
+        /// <param name="memberId"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <param name="productTypeParentId">1 活期， 2 定期</param>
+        /// <returns></returns>
+        public IEnumerable<ProductTypeSumShare> GetBuySummary(long memberId, DateTime startTime, DateTime endTime, long productTypeParentId  = 2)
+        {
+            using (var conn = GetDbConnection())
+            {
+                const string sql = @"select 
+	B.ProductTypeID, SUM(B.BuyShares) BuyShares 
+from TC_ProductBuy B 
+where B.IsDelete = 0 and B.Status = 1 and B.ProductTypeParentID = @productTypeParentId
+and B.MemberID = @memberId and B.BuyTime >= @startTime and B.BuyTime < @endTime
+group by B.ProductTypeID;";
+
+                return conn.Query<ProductTypeSumShare>(sql, new {memberId, startTime, endTime, productTypeParentId });
+            }
+        }
+
+
 
         /// <summary>
         /// 送 现金奖励

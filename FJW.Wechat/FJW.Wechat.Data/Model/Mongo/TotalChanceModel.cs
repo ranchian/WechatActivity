@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using FJW.Model.MongoDb;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace FJW.Wechat.Data
+namespace FJW.Wechat.Data.Model.Mongo
 {
     /// <summary>
     /// 总次数统计（mongo）
@@ -34,6 +34,11 @@ namespace FJW.Wechat.Data
         /// 备注
         /// </summary>
         public string Remark { get; set; }
+
+        /// <summary>
+        /// 奖品
+        /// </summary>
+        public string Prizes { get; set; }
 
         /// <summary>
         /// 最后统计时间

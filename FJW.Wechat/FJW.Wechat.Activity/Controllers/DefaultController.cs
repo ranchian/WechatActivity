@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 using FJW.Wechat.Activity.Models;
 using FJW.Wechat.Data;
+using FJW.Wechat.Data.Model.Mongo;
 
 namespace FJW.Wechat.Activity.Controllers
 {

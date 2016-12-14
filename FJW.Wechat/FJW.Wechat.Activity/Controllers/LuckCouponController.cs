@@ -5,6 +5,8 @@ using System.Web.Mvc;
 using FJW.SDK2Api.CardCoupon;
 using FJW.Unit;
 using FJW.Wechat.Data;
+using FJW.Wechat.Data.Model.Mongo;
+using FJW.Wechat.Data.Model.RDBS;
 
 namespace FJW.Wechat.Activity.Controllers
 {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using FJW.Data.MongoDb;
 using FJW.Model.MongoDb;
+using FJW.Wechat.Data.Model.Mongo;
 
 namespace FJW.Wechat.Data
 {

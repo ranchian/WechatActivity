@@ -1,7 +1,7 @@
-﻿using FJW.Model.MongoDb;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using FJW.Model.MongoDb;
 
-namespace FJW.Wechat.Data
+namespace FJW.Wechat.Data.Model.Mongo
 {
     /// <summary>
     /// 抽奖活动记录
@@ -45,5 +45,10 @@ namespace FJW.Wechat.Data
         /// 状态
         /// </summary>
         public int Status { get; set; }
+
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public string Remark { get; set; }
     }
 }
