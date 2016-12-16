@@ -414,6 +414,9 @@ namespace FJW.Wechat.Activity.Controllers
         public int Hour { get; set; }
 
         public int Minute { get; set; }
+
+        public int GiveTimeDiff { get; set; }
+        
     }
     public class SplitloversModel
     {

@@ -1,4 +1,5 @@
 {
+  "giveTimeDiff": 0,//奖励发放时间 0当天 -1前一天
   "activityId": 10023,
   "endTime": "2016-12-31 10:00:00",
   "experienceId": 10006,

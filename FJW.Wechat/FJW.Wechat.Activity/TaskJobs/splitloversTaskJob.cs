@@ -27,8 +27,9 @@ namespace FJW.Wechat.Activity.TaskJobs
         {
             try
             {
+                var config = GetConfig();
                 List<RecordModel> data;
-                var date = DateTime.Now.Date.AddDays(-1);
+                var date = DateTime.Now.Date.AddDays(config.GiveTimeDiff);
                 var num = 0;
                 int cnt;
                 data = new ActivityRepository(Config.ActivityConfig.DbName, Config.ActivityConfig.MongoHost).QueryDesc<RecordModel, int>(it => it.Key == Key && it.MemberId != 0
