@@ -24,7 +24,8 @@ namespace FJW.Wechat.WebApp
 
             var config = GetConfig();
 
-            IJobDetail updateJob = JobBuilder.Create<splitloversTaskJob>().WithIdentity("UpdateJob", "MinuteGroup").Build();
+
+            IJobDetail updateJob = JobBuilder.Create<SplitloversTaskJob>().WithIdentity("UpdateJob", "MinuteGroup").Build();
 
             ITrigger upDateTrigger = TriggerBuilder.Create()
                     .WithIdentity("UpdateJob", "MinuteGroup")
@@ -38,7 +39,7 @@ namespace FJW.Wechat.WebApp
             ITrigger keepliveTrigger = TriggerBuilder.Create()
                     .WithIdentity("KeepliveJobJob", "KeepliveGroup")
                     .StartNow()
-                    .WithSimpleSchedule(x => x.WithIntervalInSeconds(10).RepeatForever()).ForJob(keepliveJob)
+                    .WithSimpleSchedule(x => x.WithIntervalInSeconds(600).RepeatForever()).ForJob(keepliveJob)
                     .Build();
 
             _scheduler.ScheduleJob(keepliveJob, keepliveTrigger);

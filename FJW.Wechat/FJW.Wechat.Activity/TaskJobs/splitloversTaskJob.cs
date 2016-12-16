@@ -13,7 +13,7 @@ using FJW.Wechat.Cache;
 
 namespace FJW.Wechat.Activity.TaskJobs
 {
-    public class splitloversTaskJob : IJob
+    public class SplitloversTaskJob : IJob
     {
 
         private const string Key = "splitlovers";

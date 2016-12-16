@@ -1,10 +1,10 @@
 {
-  "giveTimeDiff": 0,//奖励发放时间 0当天 -1前一天
+  "giveTimeDiff": 0,
   "activityId": 10023,
   "endTime": "2016-12-31 10:00:00",
   "experienceId": 10006,
-  "Hour": 18,
-  "Minute": 23,
+  "Hour": 11,
+  "Minute": 60,
   "moneyA": 1888,
   "moneyB": 888,
   "rateCouponA": 30128,
