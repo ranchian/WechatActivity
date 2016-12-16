@@ -45,6 +45,7 @@ namespace FJW.Wechat.Activity.Controllers
             dict["chance"] = total.Total;
             dict["used"] = total.Used;
             dict["notUsed"] = total.NotUsed;
+
             return Json(new ResponseModel { Data = dict });
        
         }
@@ -144,16 +145,8 @@ namespace FJW.Wechat.Activity.Controllers
         /// 兑换
         /// </summary>
         /// <returns></returns>
-        public ActionResult Exchange()
-        {
-            return Json(null);
-        }
-
-        /// <summary>
-        /// 翻开
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult Accept()
+        [HttpPost]
+        public ActionResult Exchange(int type, CardType? card = null) 
         {
             var userId = UserInfo.Id;
             if (userId < 1)
@@ -164,49 +157,182 @@ namespace FJW.Wechat.Activity.Controllers
             var config = GetConfig();
 
             var total = GetChances(userId, config.StartTime, config.EndTime);
-           
-
-
-            if (total.Total > total.Used)
+            var prizes = total.Prizes.Deserialize<List<CardPrize>>() ?? new List<CardPrize>();
+            var activityRepository = new ActivityRepository(DbName, MongoHost );
+            var memberRepository = new MemberRepository(SqlConnectString);
+            if (type == 1)
             {
-                var activeRepository = new ActivityRepository(DbName, MongoHost);
-                var prizes = total.Prizes.Deserialize<List<CardPrize>>() ?? new List<CardPrize>();
-                //
-                var card = LuckDraw();
-                //
+                if (prizes.Any(it => it.Card == CardType.FjCard && !it.Used)
+                && prizes.Any(it => it.Card == CardType.PtCard && !it.Used)
+                && prizes.Any(it => it.Card == CardType.AuCard && !it.Used)
+                && prizes.Any(it => it.Card == CardType.AgCard && !it.Used)
+                && prizes.Any(it => it.Card == CardType.CuCard && !it.Used)
+                && prizes.Any(it => it.Card == CardType.FeCard && !it.Used))
+                {
+                    var fj = prizes.FirstOrDefault(it => it.Card == CardType.FjCard && !it.Used);
+                    fj.Used = true;
 
+                    var pt = prizes.FirstOrDefault(it => it.Card == CardType.PtCard && !it.Used);
+                    pt.Used = true;
+
+                    var au = prizes.FirstOrDefault(it => it.Card == CardType.AuCard && !it.Used);
+                    au.Used = true;
+
+                    var ag = prizes.FirstOrDefault(it => it.Card == CardType.AgCard && !it.Used);
+                    ag.Used = true;
+
+                    var cu = prizes.FirstOrDefault(it => it.Card == CardType.CuCard && !it.Used);
+                    cu.Used = true;
+
+                    var fe = prizes.FirstOrDefault(it => it.Card == CardType.FeCard && !it.Used);
+                    fe.Used = true;
+                    
+                    //发送奖励
+                    var date = DateTime.Now;
+                    var objId = 318 * 1000000 + date.Year * 10000 + date.Month * 100 + date.Day;
+                    memberRepository.GiveMoney(userId, 318, config.RewardId, objId);
+                    var luckModel = new LuckdrawModel
+                    {
+                        Key = GameKey,
+                        Money = userId,
+                        Prize =(int)config.RewardId,
+                        Name = "318元",
+                        Type = "现金红包",
+                        CreateTime = DateTime.Now
+                    };
+                    total.Prizes = prizes.ToJson();
+                    activityRepository.Add(luckModel);
+                    activityRepository.Update(total);
+                    return Json(new ResponseModel());
+                }
+                return Json(new ResponseModel(ErrorCode.Other) { Message = "福卡的种类不全"});
+            }
+            if (type == 2 && card != null)
+            {
+                var cards = prizes.Where(it => it.Card == card.Value && !it.Used).ToList();
+                if (cards.Count >= 8)
+                {
+                    for (var i = 0; i < 8; i++)
+                    {
+                        var c = cards[i];
+                        c.Used = true;
+                    }
+                    var date = DateTime.Now;
+                    var objId = 8 * 1000000 + date.Year * 10000 + date.Month * 100 + date.Day;
+                    //发送奖励
+                    memberRepository.GiveMoney(userId, 8, config.RewardId, objId);
+                    var luckModel = new LuckdrawModel
+                    {
+                        Key = GameKey,
+                        Money = userId,
+                        Prize = (int)config.RewardId,
+                        Name = "8元",
+                        Type = "现金红包",
+                        CreateTime = DateTime.Now
+                    };
+                    total.Prizes = prizes.ToJson();
+                    activityRepository.Add(luckModel);
+                    activityRepository.Update(total);
+                    return Json(new ResponseModel());
+                }
+                return Json(new ResponseModel(ErrorCode.Other) { Message = "这种福卡的数量不足8张" });
+            }
+            return Json(new ResponseModel( ErrorCode.NotVerified ) { Message = "无效的兑换请求"});
+        }
+
+        /// <summary>
+        /// 翻开
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Accept( bool isAll = false )
+        {
+            var userId = UserInfo.Id;
+            if (userId < 1)
+            {
+                return Json(new ResponseModel { ErrorCode = ErrorCode.NotLogged });
+            }
+
+            var config = GetConfig();
+
+            var total = GetChances(userId, config.StartTime, config.EndTime);
+
+
+            if (total.Total <= total.Used)
+                return Json(new ResponseModel {ErrorCode = ErrorCode.Other, Message = "您没有机会了"});
+
+            var count = 1;
+            if (isAll)
+            {
+                count = total.Total - total.Used;
+            }
+            var activeRepository = new ActivityRepository(DbName, MongoHost);
+            var prizes = total.Prizes.Deserialize<List<CardPrize>>() ?? new List<CardPrize>();
+            var luckdraws = new LuckdrawModel[count];
+            var cards = new CardPrize[count];
+            for (var i = 0; i < count; i++)
+            {
+                //福卡
+                var card = LuckDraw();
+
+                //卡券
                 long activityId;
-                var couponId = LuckCoupon(out activityId);
+                string name;
+                string type;
+                var couponId = LuckCoupon(out activityId, out type, out name);
                 var reuslt = CardCouponApi.UserGrant(userId, activityId, couponId);
                 var luckdraw = new LuckdrawModel
                 {
                     MemberId = userId,
                     Key = GameKey,
                     Remark = reuslt.Data,
+                    Type = type,
+                    Name = name,
                     Prize = (int)couponId,
                     CreateTime = DateTime.Now,
                     LastUpdateTime = DateTime.Now
                 };
-
-                activeRepository.Add(luckdraw);
-                
-                //
-                prizes.Add(new CardPrize
+                luckdraws[i] = luckdraw;
+                cards[count] = new CardPrize
                 {
-                    Card = card, CouponId = couponId
-                });
-                //
-                total.Used++;
-                total.NotUsed = total.Total - total.Used;
-                total.Prizes = prizes.ToJson();
-                total.LastUpdateTime = DateTime.Now;
-                activeRepository.Update(total);
-                
-
-
+                    Card = card,
+                    CouponId = couponId
+                };
             }
-            return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Message = "您没有抽奖机会了" });
+          
+            activeRepository.AddMany(luckdraws);
+                
+            //
+            prizes.AddRange(cards);
+            //
+            total.Used += count;
+            total.NotUsed = total.Total - total.Used;
+            total.Prizes = prizes.ToJson();
+            total.LastUpdateTime = DateTime.Now;
+            activeRepository.Update(total);
+            var cardPrizes = cards.GroupBy(it => it.Card).Select(it => new { card = it.Key, count = it.Count()});
+            var couponPrizes = luckdraws.GroupBy(it => it.Name + it.Type).Select(it => new { coupon = it.Key, count = it.Count() });
+            return Json(new ResponseModel { Data = new { couponPrizes, cardPrizes } });
             
+        }
+
+        /// <summary>
+        /// 游戏结果
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Result()
+        {
+            var userId = UserInfo.Id;
+            if (userId < 1)
+            {
+                return Json(new ResponseModel { ErrorCode = ErrorCode.NotLogged });
+            }
+            var rows = new ActivityRepository(DbName, MongoHost).Query<LuckdrawModel>(it=>it.Key == GameKey && it.MemberId == userId).ToList();
+            var data = new ResponseModel
+            {
+                Data = rows.Select(it=> new { time = it.CreateTime.ToString("yyyy-MM-dd HH:mm:ss"), it.Type, it.Name}).ToArray()
+            };
+            return Json(data);
         }
 
         /// <summary>
@@ -242,53 +368,68 @@ namespace FJW.Wechat.Activity.Controllers
         /// 抽券
         /// </summary>
         /// <returns></returns>
-        private long LuckCoupon(out long activityId)
+        private long LuckCoupon(out long activityId, out string type, out string name)
         {
             var config = GetConfig();
             activityId = config.ActivityId;
             var n = LuckRandom.Next(0, 100);
             if ( n < 3)
             {
+                type = "现金券";
+                name = "4元";
                 //4元现金券
                 return config.CashCardA;
             }
 
             if (n < 3 + 5)
             {
+                type = "现金券";
+                name = "5元";
                 //5元现金券
                 return config.CashCardB;
             }
 
             if (n < 3 + 5 + 5)
             {
+                type = "现金券";
+                name = "8元";
                 //8元现金券
                 return config.CashCardC;
             }
 
             if (n < 3 + 5 + 5 + 12)
             {
+                type = "现金券";
+                name = "10元";
                 //10元现金券
                 return config.CashCardD;
             }
 
             if (n < 3 + 5 + 5 + 12 + 30)
             {
+                type = "加息券";
+                name = "1%";
                 //1%加息券
                 return config.RateCardA;
             }
 
             if (n < 3 + 5 + 5 + 12 + 30 + 20)
             {
+                type = "加息券";
+                name = "1.5%";
                 //1.5%加息券
                 return config.RateCardB;
             }
 
             if (n < 3 + 5 + 5 + 12 + 30 + 20 + 15)
             {
+                type = "加息券";
+                name = "2%";
                 //2%加息券
                 return config.RateCardC;
             }
-
+            type = "加息券";
+            name = "2.5%";
             //2.5%加息券
             return config.RateCardD;
 

@@ -42,6 +42,11 @@ namespace FJW.Wechat.Data.Model.Mongo
         public string Name { get; set; }
 
         /// <summary>
+        /// 类型
+        /// </summary>
+        public string Type { get; set; }
+
+        /// <summary>
         /// 状态
         /// </summary>
         public int Status { get; set; }

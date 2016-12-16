@@ -37,5 +37,7 @@ namespace FJW.Wechat.Activity.ConfigModel
 
 
         public long RateCardD { get; set; }
+
+        public long RewardId { get; set; }
     }
 }
