@@ -69,6 +69,11 @@ namespace FJW.Wechat.Data
         /// 游戏数据
         /// </summary>
         public string Data { get; set; }
- 
+
+        /// <summary>
+        /// 手机号
+        /// </summary>
+        public string Phone { get; set; }
+
     }
 }

@@ -74,6 +74,7 @@ namespace FJW.Wechat
             }
             else
             {
+                Logger.Error("IsChildAction:{0},Exception:{1}, ExceptionHandled:{2}", filterContext.IsChildAction, filterContext.Exception.ToJson(), filterContext.ExceptionHandled);
                 base.OnException(filterContext);
             }
         }

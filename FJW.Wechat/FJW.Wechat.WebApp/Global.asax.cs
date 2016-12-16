@@ -29,6 +29,8 @@ namespace FJW.Wechat.WebApp
             //全局只需注册一次
             JsApiTicketContainer.Register(Config.WechatConfig.AppId, Config.WechatConfig.AppSecret);
 
+
+
             var builder = new ContainerBuilder();
 
             builder.RegisterType<WxMediaApi>().As<IWxMediaApi>();
@@ -36,11 +38,16 @@ namespace FJW.Wechat.WebApp
 
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+
+            JobConfig.Start();
+
+
         }
 
         protected void Application_End()
         {
             RedisManager.Disponse();
+            JobConfig.Stop();
         }
     }
 }

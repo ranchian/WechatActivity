@@ -4,6 +4,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FJW.Wechat.WebApp", "FJW.Wechat.WebApp\FJW.Wechat.WebApp.csproj", "{A7DCF7EC-E911-4A21-BC2B-8F964BB816D4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0644B113-8905-47CA-B8DA-AB10F2195527} = {0644B113-8905-47CA-B8DA-AB10F2195527}
+		{18BE11D6-9349-49D4-B52D-DA5833B6D229} = {18BE11D6-9349-49D4-B52D-DA5833B6D229}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FJW.Unit", "FJW.Unit\FJW.Unit.csproj", "{D72EED5C-8B1B-43E4-8B9A-51C69B1B2C6F}"
 EndProject
