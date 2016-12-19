@@ -1,7 +1,7 @@
-﻿using FJW.Model.MongoDb;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using FJW.Model.MongoDb;
 
-namespace FJW.Wechat.Data
+namespace FJW.Wechat.Data.Model.Mongo
 {
     [Table("Record")]
     public class RecordModel : BaseModel

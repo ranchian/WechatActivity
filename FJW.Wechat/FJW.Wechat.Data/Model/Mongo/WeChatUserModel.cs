@@ -1,9 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
-
 using FJW.Model.MongoDb;
 
-namespace FJW.Wechat.Data
+namespace FJW.Wechat.Data.Model.Mongo
 {
     [Table("WeChatUser")]
     public class WeChatUserModel : BaseModel

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using FJW.Data.MongoDb;
 using FJW.Model.MongoDb;
+using FJW.Wechat.Data.Model.Mongo;
 
 namespace FJW.Wechat.Data
 {
@@ -64,6 +66,11 @@ namespace FJW.Wechat.Data
         public void Add<T>(T model) where T : BaseModel
         {
             new Repository(_mongoHost, _dbName).AddEntity(model);
+        }
+
+        public void AddMany<T>(IEnumerable<T> models) where T : BaseModel
+        {
+            new Repository(_mongoHost, _dbName).AddEntity(models.ToArray());
         }
 
         /// <summary>

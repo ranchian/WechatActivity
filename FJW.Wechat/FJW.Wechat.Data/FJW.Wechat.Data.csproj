@@ -61,17 +61,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActivityModel.cs" />
-    <Compile Include="MemberModel.cs" />
+    <Compile Include="Model\Mongo\ActivityModel.cs" />
+    <Compile Include="Model\RDBS\MemberChannel.cs" />
+    <Compile Include="Model\RDBS\ProductTypeSumShare.cs" />
+    <Compile Include="Model\RDBS\MemberModel.cs" />
     <Compile Include="MemberRepository.cs" />
-    <Compile Include="RecordModel.cs" />
+    <Compile Include="Model\Mongo\RecordModel.cs" />
     <Compile Include="ActivityRepository.cs" />
+    <Compile Include="Model\RDBS\RankingRow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="LuckdrawModel.cs" />
+    <Compile Include="Model\Mongo\LuckdrawModel.cs" />
     <Compile Include="SqlDataRepository.cs" />
-    <Compile Include="TotalChanceModel.cs" />
+    <Compile Include="Model\Mongo\TotalChanceModel.cs" />
     <Compile Include="WeChatRepository.cs" />
-    <Compile Include="WeChatUserModel.cs" />
+    <Compile Include="Model\Mongo\WeChatUserModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

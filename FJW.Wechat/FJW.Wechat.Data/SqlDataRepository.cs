@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.UI.WebControls;
+
 using Dapper;
+using FJW.Wechat.Data.Model.RDBS;
 
 namespace FJW.Wechat.Data
 {
@@ -145,37 +143,7 @@ group by ProductTypeID";
         #endregion
     }
 
-    public class MemberChannel
-    {
-        public long MemberId { get; set; }
+ 
 
-        public string Channel { get; set; }
-
-        public DateTime CreateTime { get; set; }
-    }
-    public class ProductTypeSumShare
-    {
-        /// <summary>
-        /// 产品类型
-        /// </summary>
-        public long ProductTypeId { get; set; }
-
-        /// <summary>
-        /// 产品份额
-        /// </summary>
-        public decimal Shares { get; set; }
-    }
-
-    public class RankingRow
-    {
-        public long Id { get; set; }
-
-        public string Phone { get; set; }
-
-        public string Title { get; set; }
-
-        public int Shares { get; set; }
-
-        public int Sequnce { get; set; }
-    }
+    
 }

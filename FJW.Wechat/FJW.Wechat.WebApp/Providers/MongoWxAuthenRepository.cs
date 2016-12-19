@@ -1,5 +1,6 @@
 ﻿using System;
 using FJW.Wechat.Data;
+using FJW.Wechat.Data.Model.Mongo;
 using FJW.Wechat.Wx;
 
 namespace FJW.Wechat.WebApp.Providers

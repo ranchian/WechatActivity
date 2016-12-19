@@ -9,6 +9,7 @@ using FJW.Unit;
 using FJW.Wechat.Activity.Unit;
 using FJW.Wechat.Cache;
 using FJW.Wechat.Data;
+using FJW.Wechat.Data.Model.Mongo;
 using FJW.Wechat.Wx;
 
 namespace FJW.Wechat.Activity.Controllers

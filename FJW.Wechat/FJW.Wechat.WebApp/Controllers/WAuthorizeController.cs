@@ -6,6 +6,7 @@ using Senparc.Weixin.MP.AdvancedAPIs;
 
 using FJW.Unit;
 using FJW.Wechat.Data;
+using FJW.Wechat.Data.Model.Mongo;
 using FJW.Wechat.Wx;
 
 namespace FJW.Wechat.WebApp.Controllers

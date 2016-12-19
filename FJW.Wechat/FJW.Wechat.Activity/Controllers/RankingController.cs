@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using FJW.Unit;
 using FJW.Wechat.Data;
+using FJW.Wechat.Data.Model.RDBS;
 
 namespace FJW.Wechat.Activity.Controllers
 {
