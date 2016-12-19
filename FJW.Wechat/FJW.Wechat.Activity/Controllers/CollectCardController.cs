@@ -201,6 +201,7 @@ namespace FJW.Wechat.Activity.Controllers
                         Key = GameKey,
                         Money = userId,
                         Prize =(int)config.RewardId,
+                        Phone = UserInfo.Phone,
                         Name = "318元",
                         Type = "现金红包",
                         CreateTime = DateTime.Now
@@ -231,6 +232,7 @@ namespace FJW.Wechat.Activity.Controllers
                         Key = GameKey,
                         Money = userId,
                         Prize = (int)config.RewardId,
+                        Phone = UserInfo.Phone,
                         Name = "8元",
                         Type = "现金红包",
                         CreateTime = DateTime.Now
@@ -266,6 +268,16 @@ namespace FJW.Wechat.Activity.Controllers
             if (total.Total <= total.Used)
                 return Json(new ResponseModel {ErrorCode = ErrorCode.Other, Message = "您没有机会了"});
 
+            var channel = new SqlDataRepository(SqlConnectString).GetMemberChennel(userId);
+            if (channel.Channel != null && channel.Channel.Equals("WQWLCPS", StringComparison.CurrentCultureIgnoreCase ) && channel.CreateTime > config.StartTime)
+            {
+                return Json(new ResponseModel(ErrorCode.Other) {Message = "您无法参与这次活动：WQWLCPS" });
+            }
+            if (new MemberRepository(SqlConnectString).DisableMemberInvite(userId))
+            {
+                return Json(new ResponseModel(ErrorCode.Other) { Message = "您无法参与这次活动：特殊的邀请人" });
+            }
+
             var count = 1;
             if (isAll)
             {
@@ -294,6 +306,7 @@ namespace FJW.Wechat.Activity.Controllers
                     Type = type,
                     Name = name,
                     Prize = (int)couponId,
+                    Phone = UserInfo.Phone,
                     CreateTime = DateTime.Now,
                     LastUpdateTime = DateTime.Now
                 };
@@ -336,6 +349,17 @@ namespace FJW.Wechat.Activity.Controllers
             var data = new ResponseModel
             {
                 Data = rows.Select(it=> new { time = it.CreateTime.ToString("yyyy-MM-dd HH:mm:ss"), type = it.Type, name = it.Name}).ToArray()
+            };
+            return Json(data);
+        }
+
+        [OutputCache(Duration = 5 * 60)]
+        public ActionResult Record()
+        {
+            var rows = new ActivityRepository(DbName, MongoHost).Query<LuckdrawModel>(it => it.Key == GameKey).ToList();
+            var data = new ResponseModel
+            {
+                Data = rows.Select(it => new { phone = StringHelper.CoverPhone(it.Phone), type = it.Type, name = it.Name }).ToArray()
             };
             return Json(data);
         }
