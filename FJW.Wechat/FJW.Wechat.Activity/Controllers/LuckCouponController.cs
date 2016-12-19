@@ -372,19 +372,19 @@ namespace FJW.Wechat.Activity.Controllers
                 switch (share.ProductTypeId)
                 {
                     case 5: //月宝
-                        chance = chance + (int)share.Shares / 500;
+                        chance = chance + (int)share.BuyShares / 500;
                         break;
 
                     case 6: //季宝
-                        chance = chance + (int)share.Shares / 300;
+                        chance = chance + (int)share.BuyShares / 300;
                         break;
 
                     case 7: //双季宝
-                        chance = chance + (int)share.Shares / 200;
+                        chance = chance + (int)share.BuyShares / 200;
                         break;
 
                     case 8: //年宝
-                        chance = chance + (int)share.Shares / 100;
+                        chance = chance + (int)share.BuyShares / 100;
                         break;
                 }
             }

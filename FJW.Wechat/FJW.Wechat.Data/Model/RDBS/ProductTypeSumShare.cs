@@ -13,6 +13,6 @@
         /// <summary>
         /// 产品份额
         /// </summary>
-        public decimal Shares { get; set; }
+        public decimal BuyShares { get; set; }
     }
 }

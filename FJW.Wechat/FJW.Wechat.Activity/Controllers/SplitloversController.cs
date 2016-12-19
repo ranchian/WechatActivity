@@ -8,6 +8,7 @@ using FJW.Unit;
 using FJW.Wechat.Cache;
 using FJW.Wechat.Data;
 using Quartz;
+using FJW.Wechat.Data.Model.Mongo;
 
 namespace FJW.Wechat.Activity.Controllers
 {

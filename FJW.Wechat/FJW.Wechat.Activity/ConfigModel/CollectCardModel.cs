@@ -15,28 +15,28 @@ namespace FJW.Wechat.Activity.ConfigModel
         public long ActivityId { get; set; }
 
 
-        public long CashCardA { get; set; }
+        public long CashCouponA { get; set; }
 
 
-        public long CashCardB { get; set; }
+        public long CashCouponB { get; set; }
 
 
-        public long CashCardC { get; set; }
+        public long CashCouponC { get; set; }
 
 
-        public long CashCardD { get; set; }
+        public long CashCouponD { get; set; }
 
 
-        public long RateCardA { get; set; }
+        public long RateCouponA { get; set; }
 
 
-        public long RateCardB { get; set; }
+        public long RateCouponB { get; set; }
 
 
-        public long RateCardC { get; set; }
+        public long RateCouponC { get; set; }
 
 
-        public long RateCardD { get; set; }
+        public long RateCouponD { get; set; }
 
         public long RewardId { get; set; }
     }

@@ -14,6 +14,7 @@ using FJW.Wechat.Cache;
 
 namespace FJW.Wechat.Activity.Controllers
 {
+    [CrossDomainFilter]
     public class CollectCardController : ActivityController
     {
 
@@ -40,12 +41,16 @@ namespace FJW.Wechat.Activity.Controllers
             var config = GetConfig();
 
             var total = GetChances(userId, config.StartTime, config.EndTime);
+            var prizes = total.Prizes.Deserialize<List<CardPrize>>() ?? new List<CardPrize>();
 
-            var dict = new Dictionary<string, int>();
+            var dict = new Dictionary<string, object>();
             dict["chance"] = total.Total;
             dict["used"] = total.Used;
             dict["notUsed"] = total.NotUsed;
-
+            dict["cards"] =
+                prizes.Where(it => !it.Used)
+                    .GroupBy(it => it.Card)
+                    .Select(it => new {card = it.Key, count = it.Count()});
             return Json(new ResponseModel { Data = dict });
        
         }
@@ -96,7 +101,7 @@ namespace FJW.Wechat.Activity.Controllers
                     if (chances != total.Total)
                     {
                         total.Total = chances;
-                        total.NotUsed = chances - total.NotUsed;
+                        total.NotUsed = chances - total.Used;
                         total.Remark = all.ToJson();
                         total.LastStatisticsTime = DateTime.Now;
                         activeRepository.Update(total);
@@ -123,16 +128,16 @@ namespace FJW.Wechat.Activity.Controllers
                 switch (r.ProductTypeId)
                 {
                     case 5:
-                        count += (int) r.Shares/1200;
+                        count += (int) r.BuyShares / 1200;
                         break;
                     case 6:
-                        count += (int)r.Shares / 400;
+                        count += (int)r.BuyShares / 400;
                         break;
                     case 7:
-                        count += (int)r.Shares / 200;
+                        count += (int)r.BuyShares / 200;
                         break;
                     case 8:
-                        count += (int)r.Shares / 100;
+                        count += (int)r.BuyShares / 100;
                         break;
                 }
             }
@@ -146,7 +151,7 @@ namespace FJW.Wechat.Activity.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Exchange(int type, CardType? card = null) 
+        public ActionResult Exchange(int type, CardType card = CardType.None) 
         {
             var userId = UserInfo.Id;
             if (userId < 1)
@@ -207,9 +212,9 @@ namespace FJW.Wechat.Activity.Controllers
                 }
                 return Json(new ResponseModel(ErrorCode.Other) { Message = "福卡的种类不全"});
             }
-            if (type == 2 && card != null)
+            if (type == 2 && card != CardType.None)
             {
-                var cards = prizes.Where(it => it.Card == card.Value && !it.Used).ToList();
+                var cards = prizes.Where(it => it.Card == card && !it.Used).ToList();
                 if (cards.Count >= 8)
                 {
                     for (var i = 0; i < 8; i++)
@@ -293,7 +298,7 @@ namespace FJW.Wechat.Activity.Controllers
                     LastUpdateTime = DateTime.Now
                 };
                 luckdraws[i] = luckdraw;
-                cards[count] = new CardPrize
+                cards[i] = new CardPrize
                 {
                     Card = card,
                     CouponId = couponId
@@ -330,7 +335,7 @@ namespace FJW.Wechat.Activity.Controllers
             var rows = new ActivityRepository(DbName, MongoHost).Query<LuckdrawModel>(it=>it.Key == GameKey && it.MemberId == userId).ToList();
             var data = new ResponseModel
             {
-                Data = rows.Select(it=> new { time = it.CreateTime.ToString("yyyy-MM-dd HH:mm:ss"), it.Type, it.Name}).ToArray()
+                Data = rows.Select(it=> new { time = it.CreateTime.ToString("yyyy-MM-dd HH:mm:ss"), type = it.Type, name = it.Name}).ToArray()
             };
             return Json(data);
         }
@@ -378,7 +383,7 @@ namespace FJW.Wechat.Activity.Controllers
                 type = "现金券";
                 name = "4元";
                 //4元现金券
-                return config.CashCardA;
+                return config.CashCouponA;
             }
 
             if (n < 3 + 5)
@@ -386,7 +391,7 @@ namespace FJW.Wechat.Activity.Controllers
                 type = "现金券";
                 name = "5元";
                 //5元现金券
-                return config.CashCardB;
+                return config.CashCouponB;
             }
 
             if (n < 3 + 5 + 5)
@@ -394,7 +399,7 @@ namespace FJW.Wechat.Activity.Controllers
                 type = "现金券";
                 name = "8元";
                 //8元现金券
-                return config.CashCardC;
+                return config.CashCouponC;
             }
 
             if (n < 3 + 5 + 5 + 12)
@@ -402,7 +407,7 @@ namespace FJW.Wechat.Activity.Controllers
                 type = "现金券";
                 name = "10元";
                 //10元现金券
-                return config.CashCardD;
+                return config.CashCouponD;
             }
 
             if (n < 3 + 5 + 5 + 12 + 30)
@@ -410,7 +415,7 @@ namespace FJW.Wechat.Activity.Controllers
                 type = "加息券";
                 name = "1%";
                 //1%加息券
-                return config.RateCardA;
+                return config.RateCouponA;
             }
 
             if (n < 3 + 5 + 5 + 12 + 30 + 20)
@@ -418,7 +423,7 @@ namespace FJW.Wechat.Activity.Controllers
                 type = "加息券";
                 name = "1.5%";
                 //1.5%加息券
-                return config.RateCardB;
+                return config.RateCouponB;
             }
 
             if (n < 3 + 5 + 5 + 12 + 30 + 20 + 15)
@@ -426,12 +431,12 @@ namespace FJW.Wechat.Activity.Controllers
                 type = "加息券";
                 name = "2%";
                 //2%加息券
-                return config.RateCardC;
+                return config.RateCouponC;
             }
             type = "加息券";
             name = "2.5%";
             //2.5%加息券
-            return config.RateCardD;
+            return config.RateCouponD;
 
         }
     }
@@ -443,9 +448,14 @@ namespace FJW.Wechat.Activity.Controllers
     public enum CardType
     {
         /// <summary>
+        /// 无效的福卡
+        /// </summary>
+        None ,
+
+        /// <summary>
         /// 房金卡
         /// </summary>
-        FjCard = 1,
+        FjCard ,
         
         /// <summary>
         /// 铂金卡

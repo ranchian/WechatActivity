@@ -10,6 +10,7 @@ using FJW.Wechat.Data;
 using Quartz.Util;
 using FJW.SDK2Api.CardCoupon;
 using FJW.Wechat.Cache;
+using FJW.Wechat.Data.Model.Mongo;
 
 namespace FJW.Wechat.Activity.TaskJobs
 {

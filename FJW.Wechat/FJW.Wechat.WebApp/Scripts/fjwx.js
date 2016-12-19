@@ -62,7 +62,7 @@
             $.ajax({
                 url: "http://a.fangjinnet.com/Wechat/jsconfig",
                 data: {
-                    url: settings.url
+                    url: location.href
                 },
                 crossDomain: true,
                 success: function (resp) {

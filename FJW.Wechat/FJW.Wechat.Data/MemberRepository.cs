@@ -258,7 +258,7 @@ select D.MemberID from Trading.dbo.TC_DisableMember D where MemberID = @memberId
             {
                 const string sql = @"select 
 	B.ProductTypeID, SUM(B.BuyShares) BuyShares 
-from TC_ProductBuy B 
+from Trading..TC_ProductBuy B 
 where B.IsDelete = 0 and B.Status = 1 and B.ProductTypeParentID = @productTypeParentId
 and B.MemberID = @memberId and B.BuyTime >= @startTime and B.BuyTime < @endTime
 group by B.ProductTypeID;";
