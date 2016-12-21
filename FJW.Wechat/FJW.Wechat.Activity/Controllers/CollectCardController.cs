@@ -269,7 +269,7 @@ namespace FJW.Wechat.Activity.Controllers
                 return Json(new ResponseModel {ErrorCode = ErrorCode.Other, Message = "您没有机会了"});
 
             var channel = new SqlDataRepository(SqlConnectString).GetMemberChennel(userId);
-            if (channel.Channel != null && channel.Channel.Equals("WQWLCPS", StringComparison.CurrentCultureIgnoreCase ) && channel.CreateTime > config.StartTime)
+            if (channel != null && channel.Channel != null && channel.Channel.Equals("WQWLCPS", StringComparison.CurrentCultureIgnoreCase ) && channel.CreateTime > config.StartTime)
             {
                 return Json(new ResponseModel(ErrorCode.Other) {Message = "您无法参与这次活动：WQWLCPS" });
             }
@@ -330,7 +330,7 @@ namespace FJW.Wechat.Activity.Controllers
             activeRepository.Update(total);
             var cardPrizes = cards.GroupBy(it => it.Card).Select(it => new { card = it.Key, count = it.Count()});
             var couponPrizes = luckdraws.GroupBy(it => it.Name + it.Type).Select(it => new { coupon = it.Key, count = it.Count() });
-            return Json(new ResponseModel { Data = new { couponPrizes, cardPrizes } });
+            return Json(new ResponseModel { Data = new { couponPrizes, cardPrizes , notUsed = total.NotUsed} });
             
         }
 
@@ -353,7 +353,11 @@ namespace FJW.Wechat.Activity.Controllers
             return Json(data);
         }
 
-        [OutputCache(Duration = 5 * 60)]
+
+        /// <summary>
+        /// 首页数据
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Record()
         {
             var rows = new ActivityRepository(DbName, MongoHost).Query<LuckdrawModel>(it => it.Key == GameKey).ToList();
