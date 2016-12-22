@@ -108,6 +108,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Controllers\TurntableController.cs" />
+    <Compile Include="Models\CardExchangeModel.cs" />
     <Compile Include="Models\ResultModel.cs" />
     <Compile Include="Models\ScoreModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
