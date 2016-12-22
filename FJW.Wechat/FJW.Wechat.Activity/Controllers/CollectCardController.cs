@@ -288,7 +288,7 @@ namespace FJW.Wechat.Activity.Controllers
                     msg = "福卡数量不足";
                     return false;
                 }
-                money += cnt * 8;
+                money += tuple.Count * 8;
                 usedCards.AddRange(tmps);
             }
 
