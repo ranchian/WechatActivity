@@ -24,13 +24,26 @@ namespace FJW.Wechat.Activity.Controllers
 
         private const string GameKey = "collectcard";
 
+        private static readonly CardType[] CardSqunce = {
+CardType.AuCard, CardType.CuCard, CardType.AgCard, CardType.PtCard, CardType.AuCard, CardType.PtCard, CardType.FeCard, CardType.AuCard,CardType.FeCard,CardType.PtCard,
+CardType.AuCard, CardType.FjCard,CardType.AuCard,CardType.CuCard,CardType.PtCard,CardType.PtCard,CardType.FeCard,CardType.FeCard,CardType.CuCard,CardType.AgCard,
+CardType.AgCard,CardType.AuCard,CardType.AuCard,CardType.CuCard,CardType.CuCard,CardType.AuCard,CardType.AuCard,CardType.AuCard,CardType.AgCard,CardType.FeCard,
+CardType.FeCard,CardType.CuCard,CardType.CuCard,CardType.FeCard,CardType.CuCard,CardType.PtCard,CardType.AuCard,CardType.PtCard,CardType.PtCard,CardType.AgCard,CardType.AuCard,
+CardType.PtCard,CardType.CuCard,CardType.CuCard,CardType.AuCard,CardType.FeCard,CardType.AgCard,CardType.AuCard,CardType.AgCard,CardType.AuCard,CardType.FeCard,CardType.FeCard,
+CardType.AuCard,CardType.FeCard,CardType.AuCard,CardType.AgCard,
+CardType.AgCard,CardType.AgCard,CardType.AuCard,CardType.FeCard,CardType.AuCard,CardType.AuCard,CardType.AgCard,CardType.FeCard,CardType.AuCard,CardType.FeCard,CardType.AgCard,
+CardType.FeCard,CardType.FeCard,CardType.FeCard,CardType.AgCard,CardType.AuCard,CardType.AuCard,CardType.AuCard,CardType.FeCard,CardType.FeCard,CardType.AuCard,CardType.AgCard,
+CardType.AgCard,CardType.FeCard,CardType.AgCard,CardType.FeCard,CardType.AuCard,CardType.FeCard,CardType.AuCard,CardType.AgCard,CardType.FeCard,CardType.AgCard,CardType.AgCard,
+CardType.AgCard,CardType.AuCard,CardType.FeCard,CardType.FeCard,CardType.AuCard,CardType.FeCard,CardType.FeCard,CardType.FeCard,CardType.AuCard,CardType.FeCard,CardType.FeCard
+        };
+
         private CollectCardModel GetConfig()
         {
             return JsonConfig.GetJson<CollectCardModel>("config/activity.collectcard.json");
         }
 
         #region 获取机会
-        
+
         /// <summary>
         /// 获取机会
         /// </summary>
@@ -158,7 +171,7 @@ namespace FJW.Wechat.Activity.Controllers
         #endregion
 
         #region  兑换
-        
+
         /// <summary>
         /// 兑换
         /// </summary>
@@ -311,11 +324,11 @@ namespace FJW.Wechat.Activity.Controllers
             total.Prizes = cards.Where(it => !it.Used).ToJson();
             activityRepository.Add(luckModel);
             activityRepository.Update(total);
-            return false;
+            return true;
 
         }
 
-        
+
         private void SetUsed(IEnumerable<CardPrize> cards)
         {
             foreach (var c in cards)
@@ -440,9 +453,12 @@ namespace FJW.Wechat.Activity.Controllers
         /// 抽卡
         /// </summary>
         /// <returns></returns>
-        private CardType LuckDraw()
+        private static CardType LuckDraw()
         {
-            var n = LuckRandom.Next(0, 100);
+            var n = RedisManager.GetIncrement("activity:" +GameKey);
+            var s = n%100;
+            return CardSqunce[s];
+            /*
             if (n < 30)
             {
                 return CardType.FeCard;
@@ -468,6 +484,7 @@ namespace FJW.Wechat.Activity.Controllers
                 return CardType.PtCard;
             }
             return CardType.FjCard;
+            */
         }
 
         /// <summary>
@@ -540,7 +557,7 @@ namespace FJW.Wechat.Activity.Controllers
             return config.RateCouponD;
 
         }
-        
+
         #endregion
 
         /// <summary>
@@ -561,7 +578,7 @@ namespace FJW.Wechat.Activity.Controllers
             };
             return Json(data);
         }
-        
+
         /// <summary>
         /// 首页数据
         /// </summary>
@@ -576,7 +593,7 @@ namespace FJW.Wechat.Activity.Controllers
             return Json(data);
         }
 
-       
+
     }
 
 
