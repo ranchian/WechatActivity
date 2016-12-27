@@ -252,7 +252,8 @@ CardType.AgCard,CardType.AuCard,CardType.FeCard,CardType.FeCard,CardType.AuCard,
             var money = 318 * count;
             //发送奖励
             var date = DateTime.Now;
-            var objId = 318 * 1000000 + date.Year * 10000 + date.Month * 100 + date.Day;
+            //var objId = 318 * 1000000 + date.Year * 10000 + date.Month * 100 + date.Day;
+            var objId = long.Parse(date.ToString("yyyyMMddHHmmssffff"));
             memberRepository.GiveMoney(userId, money, config.RewardId, objId);
             var luckModel = new LuckdrawModel
             {
@@ -307,7 +308,7 @@ CardType.AgCard,CardType.AuCard,CardType.FeCard,CardType.FeCard,CardType.AuCard,
 
             SetUsed(usedCards);
             var date = DateTime.Now;
-            var objId = 8 * 1000000 + date.Year * 10000 + date.Month * 100 + date.Day;
+            var objId = long.Parse(date.ToString("yyyyMMddHHmmssffff"));
             //发送奖励
             memberRepository.GiveMoney(userId, money, config.RewardId, objId);
             var luckModel = new LuckdrawModel
