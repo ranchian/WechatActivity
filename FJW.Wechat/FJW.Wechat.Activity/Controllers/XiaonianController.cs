@@ -398,41 +398,53 @@ namespace FJW.Wechat.Activity.Controllers
 
                 case 9:
                     prizeType = 2;
+                    money = 10;
                     type = "现金券";
                     prizeId = config.CashCouponA;
                     break;
 
                 case 10:
                     prizeType = 2;
+                    money = 20;
                     type = "现金券";
                     prizeId = config.CashCouponB;
                     break;
+
                 case 11:
                     prizeType = 2;
+                    money = 15;
                     type = "现金券";
                     prizeId = config.CashCouponC;
                     break;
+
                 case 12:
                     prizeType = 2;
+                    money = 30;
                     type = "现金券";
                     prizeId = config.CashCouponD;
                     break;
+
                 case 13:
                     prizeType = 2;
                     type = "现金券";
+                    money = 30;
                     prizeId = config.CashCouponE;
                     break;
 
                 case 14:
                     prizeType = 2;
+                    money = 60;
                     type = "现金券";
                     prizeId = config.CashCouponF;
                     break;
+
                 case 15:
                     prizeType = 2;
+                    money = 2;
+                    name = "%2";
                     type = "加息券";
                     prizeId = config.RateCouponA;
-                    break;
+                    return prizeId;
             }
             name = $"{money}元";
             return prizeId;
