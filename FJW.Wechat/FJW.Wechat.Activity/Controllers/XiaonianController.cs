@@ -308,7 +308,7 @@ namespace FJW.Wechat.Activity.Controllers
             };
             activeRepository.Add(luckdraw);
 
-            total.Used += 1;
+            total.Used += 3;
             total.NotUsed = total.Total - total.Used;
 
             total.LastUpdateTime = DateTime.Now;
