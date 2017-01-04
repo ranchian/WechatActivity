@@ -13,6 +13,8 @@ using FJW.Wechat.Data.Model.RDBS;
 
 namespace FJW.Wechat.Activity.Controllers
 {
+
+    [CrossDomainFilter]
     public class XiaonianController : ActivityController
     {
         private const string GameKey = "xiaonian";
