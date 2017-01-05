@@ -458,7 +458,7 @@ namespace FJW.Wechat.Activity.Controllers
                 case 15:
                     prizeType = 2;
                     money = 2;
-                    name = "%2";
+                    name = "2%";
                     type = "加息券";
                     prizeId = config.RateCouponA;
                     return prizeId;
