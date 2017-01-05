@@ -83,7 +83,15 @@ namespace FJW.Wechat.Activity.Controllers
                 var all = Data(userId, startTime, endTime);
                 //总次数
                 var chances = SumChance(all);
-
+                var channel = new SqlDataRepository(SqlConnectString).GetMemberChennel(userId);
+                if (chances > 0 && channel?.Channel != null && channel.Channel.Equals("WQWLCPS", StringComparison.CurrentCultureIgnoreCase) && channel.CreateTime > startTime)
+                {
+                    chances = 0;
+                }
+                if (chances > 0 && new MemberRepository(SqlConnectString).DisableMemberInvite(userId))
+                {
+                    chances = 0;
+                }
                 //create
                 total = new TotalChanceModel
                 {
@@ -107,6 +115,15 @@ namespace FJW.Wechat.Activity.Controllers
                     var all = Data(userId, startTime, endTime);
                     //总次数
                     var chances = SumChance(all);
+                    var channel = new SqlDataRepository(SqlConnectString).GetMemberChennel(userId);
+                    if (chances > 0 && channel?.Channel != null && channel.Channel.Equals("WQWLCPS", StringComparison.CurrentCultureIgnoreCase) && channel.CreateTime > startTime)
+                    {
+                        chances = 0;
+                    }
+                    if (chances > 0 && new MemberRepository(SqlConnectString).DisableMemberInvite(userId))
+                    {
+                        chances = 0;
+                    }
                     //if changed then save total
                     if (chances != total.Total)
                     {
