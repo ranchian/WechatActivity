@@ -88,6 +88,7 @@ CardType.AgCard,CardType.AuCard,CardType.FeCard,CardType.FeCard,CardType.AuCard,
         /// <returns></returns>
         private TotalChanceModel GetChances(long userId, DateTime startTime, DateTime endTime)
         {
+
             //
             var activeRepository = new ActivityRepository(DbName, MongoHost);
 
@@ -97,7 +98,15 @@ CardType.AgCard,CardType.AuCard,CardType.FeCard,CardType.FeCard,CardType.AuCard,
                 var all = Data(userId, startTime, endTime);
                 //总次数
                 var chances = SumChance(all);
-
+                var channel = new SqlDataRepository(SqlConnectString).GetMemberChennel(userId);
+                if (chances > 0 && channel?.Channel != null && channel.Channel.Equals("WQWLCPS", StringComparison.CurrentCultureIgnoreCase) && channel.CreateTime > startTime)
+                {
+                    chances = 0;
+                }
+                if (chances > 0 && new MemberRepository(SqlConnectString).DisableMemberInvite(userId))
+                {
+                    chances = 0;
+                }
                 //create
                 total = new TotalChanceModel
                 {
@@ -121,6 +130,15 @@ CardType.AgCard,CardType.AuCard,CardType.FeCard,CardType.FeCard,CardType.AuCard,
                     var all = Data(userId, startTime, endTime);
                     //总次数
                     var chances = SumChance(all);
+                    var channel = new SqlDataRepository(SqlConnectString).GetMemberChennel(userId);
+                    if (chances > 0 && channel?.Channel != null && channel.Channel.Equals("WQWLCPS", StringComparison.CurrentCultureIgnoreCase) && channel.CreateTime > startTime)
+                    {
+                        chances = 0;
+                    }
+                    if (chances > 0 && new MemberRepository(SqlConnectString).DisableMemberInvite(userId))
+                    {
+                        chances = 0;
+                    }
                     //if changed then save total
                     if (chances != total.Total)
                     {
