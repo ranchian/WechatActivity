@@ -94,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigModel\CollectCardModel.cs" />
+    <Compile Include="ConfigModel\XiaonianConfig.cs" />
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\CollectCardController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
@@ -108,6 +109,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Controllers\TurntableController.cs" />
+    <Compile Include="Controllers\XiaonianController.cs" />
     <Compile Include="Models\CardExchangeModel.cs" />
     <Compile Include="Models\ResultModel.cs" />
     <Compile Include="Models\ScoreModel.cs" />

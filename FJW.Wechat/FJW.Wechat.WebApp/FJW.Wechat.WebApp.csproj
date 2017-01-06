@@ -255,6 +255,7 @@
     <Content Include="config\activity.facevalue.json" />
     <Content Include="config\activity.splitloversvalue.json" />
     <Content Include="config\activity.collectcard.json" />
+    <Content Include="config\activity.xiaonian.json" />
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -351,6 +352,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
+      <UserProperties config_4activity_1xiaonian_1json__JSONSchema="http://json.schemastore.org/bootstraprc" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
