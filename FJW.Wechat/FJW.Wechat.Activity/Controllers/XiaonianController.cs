@@ -292,7 +292,7 @@ namespace FJW.Wechat.Activity.Controllers
         private bool ExchangeReward(XiaonianConfig config, long userId, out string msg)
         {
             var total = GetChances(userId, config.StartTime, config.EndTime);
-            if (total.Total <= total.Used + 3)
+            if (total.Total < total.Used + 3)
             {
                 msg = "您没有机会了";
                 return false;
