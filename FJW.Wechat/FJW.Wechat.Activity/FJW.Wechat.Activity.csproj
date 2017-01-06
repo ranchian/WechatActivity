@@ -102,12 +102,8 @@
     <Compile Include="Controllers\LuckCouponController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
     <Compile Include="Controllers\MinesweeperController.cs" />
-    <Compile Include="Controllers\RankingController.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Controllers\SplitloversController.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
+    <Compile Include="Controllers\RankingController.cs" />
+    <Compile Include="Controllers\SplitloversController.cs" />
     <Compile Include="Controllers\TurntableController.cs" />
     <Compile Include="Controllers\XiaonianController.cs" />
     <Compile Include="Models\CardExchangeModel.cs" />
