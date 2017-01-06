@@ -481,7 +481,7 @@ namespace FJW.Wechat.Activity.Controllers
             var s = (int)(n % 100);
             var prize = RewardSequnce[s];
             money = 0;
-            type = "现金红包";
+            type = "现金";
             switch (prize)
             {
                 case 1:
