@@ -141,6 +141,22 @@ group by ProductTypeID";
         }
 
         #endregion
+
+        #region 2017春节翻倍
+        /// <summary>
+        /// 获取 2017春节翻倍 的倍率
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        public decimal GetSpringFestivalMutiple(long orderId)
+        {
+            using (var conn = GetDbConnection())
+            {
+               return conn.ExecuteScalar<decimal>("select Multiple from Trading..TC_OrderMutiple where ID= @orderId", new {orderId});
+            }
+        }
+
+        #endregion
     }
 
  
