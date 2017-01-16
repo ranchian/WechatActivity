@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 
@@ -153,6 +154,21 @@ group by ProductTypeID";
             using (var conn = GetDbConnection())
             {
                return conn.ExecuteScalar<decimal>("select Multiple from Trading..TC_OrderMutiple where ID= @orderId", new {orderId});
+            }
+        }
+
+        /// <summary>
+        /// 春节翻倍记录
+        /// </summary>
+        /// <returns></returns>
+        public object GetSpringFestivalRows()
+        {
+            using (var conn = GetDbConnection())
+            {
+                return conn.Query(@"select top 10 O.Multiple as multiple , LEFT( M.Phone, 3) + '****' + RIGHT(M.Phone, 4) as phone
+from Trading..TC_OrderMutiple O
+left join Basic..BD_Member M on O.MemberId = M.ID
+order by O.ID desc");
             }
         }
 
