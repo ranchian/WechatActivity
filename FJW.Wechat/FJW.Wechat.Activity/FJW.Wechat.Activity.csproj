@@ -100,6 +100,7 @@
     <Compile Include="Controllers\CollectCardController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\FacevalueController.cs" />
+    <Compile Include="Controllers\LanternFestivalController.cs" />
     <Compile Include="Controllers\LuckCouponController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
     <Compile Include="Controllers\MinesweeperController.cs" />
