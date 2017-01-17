@@ -17,23 +17,13 @@ namespace FJW.Wechat.Activity.ConfigModel
         /// </summary>
         public long ActivityId { get; set; }
         /// <summary>
-        /// 活动Id
+        /// 活动key
         /// </summary>
         public string ActivityKey { get; set; }
         /// <summary>
-        /// 体验金Id
+        /// 活动名称
         /// </summary>
-        public long ExperienceId { get; set; }
-
-        /// <summary>
-        /// 现金Id
-        /// </summary>
-        public long RewardId { get; set; }
-
-        /// <summary>
-        /// 产品Id
-        /// </summary>
-        public long ProductId { get; set; }
+        public string ActivityName { get; set; }
         /// <summary>
         /// 限制次数
         /// </summary>
@@ -47,6 +37,7 @@ namespace FJW.Wechat.Activity.ConfigModel
 
             public long CouponNo { get; set; }
 
+            public decimal Amount { get; set; }
             public AwardType Type { get; set; }
 
         }

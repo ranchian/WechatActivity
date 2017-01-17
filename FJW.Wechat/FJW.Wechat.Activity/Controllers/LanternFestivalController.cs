@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using FJW.SDK2Api.CardCoupon;
 using FJW.Wechat.Activity.ConfigModel;
 using FJW.Wechat.Cache;
 using FJW.Wechat.Data;
@@ -14,7 +15,7 @@ namespace FJW.Wechat.Activity.Controllers
         {
             return JsonConfig.GetJson<LanternFestivalConfig>("config/activity.lanternfestival.json");
         }
-
+        
         /// <summary>
         /// 验证
         /// </summary>
@@ -55,8 +56,50 @@ namespace FJW.Wechat.Activity.Controllers
             if (rst.ErrorCode != ErrorCode.None)
                 return Json(rst);
 
-            var repository = new ActivityRepository(DbName, MongoHost);
-            return Json(new { });
+            var config = GetConfig();
+           
+            var subject = config.Subjects.FirstOrDefault(m => m.SubjectNo == subjectNo);
+            if(subject==null)
+                return Json(new ResponseModel { ErrorCode = ErrorCode.Exception, Message="答题编号不存在" });
+              
+            return Json(SendAward(config,subject));
+        }
+
+        /// <summary>
+        /// 发送奖励
+        /// </summary>
+        /// <returns></returns>
+        private ResponseModel SendAward(LanternFestivalConfig config, LanternFestivalConfig.Subject subject)
+        {
+            var memberRepository = new MemberRepository(SqlConnectString);
+            if (subject.Type == LanternFestivalConfig.AwardType.ExperienceGold)
+            {
+                memberRepository.Give(UserInfo.Id, subject.CouponNo, 2, subject.Amount, DateTime.Now.Ticks);
+            }
+            else if (subject.Type == LanternFestivalConfig.AwardType.RewardGold)
+            {
+                memberRepository.GiveMoney(UserInfo.Id, subject.Amount, subject.CouponNo, DateTime.Now.Ticks);
+            }
+            else
+            {
+                var response = CardCouponApi.UserGrant(UserInfo.Id, config.ActivityId, subject.CouponNo);
+                if (!response.IsOk)
+                    return new ResponseModel {ErrorCode = ErrorCode.Exception, Message = response.ExceptionMessage};
+            }
+
+            var luckdrawModel = new LuckdrawModel()
+            {
+                Key = config.ActivityKey,
+                MemberId = UserInfo.Id,
+                Name = config.ActivityName,
+                Type = ((int) subject.Type).ToString(),
+                Status = 0,
+                Money = subject.Amount,
+                Prize = (int) subject.CouponNo,
+                Phone = UserInfo.Phone
+            };
+            new ActivityRepository(DbName, MongoHost).Add(luckdrawModel);
+            return new ResponseModel {ErrorCode = ErrorCode.None};
         }
     }
 }

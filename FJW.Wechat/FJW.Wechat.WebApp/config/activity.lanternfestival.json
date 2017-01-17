@@ -3,6 +3,7 @@
   "EndTime": "2017-02-15 17:00:00",
   "ActivityId": 10027,
   "ActivityKey": "Activity.LanternFestival.2017.2.6",
+  "ActivityName": "喜逢花灯闹 答题赢现金",
   "LimitTimes": 3,
   "Subjects": [
     {
@@ -27,7 +28,8 @@
     },
     {
       "SubjectNo": 5,
-      "CouponNo": 0,
+      "CouponNo": 10008,
+      "Amount":  288,
       "Type": 3
     },
     {
@@ -52,7 +54,8 @@
     },
     {
       "SubjectNo": 10,
-      "CouponNo": 0,
+      "CouponNo": 30021,
+      "Amount":  2,
       "Type": 4
     }
   ]

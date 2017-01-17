@@ -43,9 +43,9 @@ namespace FJW.Wechat.Data
         /// </summary>
         /// <param name="memberId"></param>
         /// <param name="experienceId"></param>
-        /// <param name="productId"></param>
+        /// <param name="productId">2-体验金</param>
         /// <param name="amount"></param>
-        /// <param name="objectId"></param>
+        /// <param name="objectId">同一objectid限领一次</param>
         /// <returns></returns>
         public int Give(long memberId, long experienceId, long productId, decimal amount, long objectId)
         {
@@ -275,7 +275,7 @@ group by B.ProductTypeID;";
         /// <param name="memberId"></param>
         /// <param name="amount"></param>
         /// <param name="rewardId"></param>
-        /// <param name="objectId"></param>
+        /// <param name="objectId">同一objectid限领一次</param>
         /// <returns></returns>
         public void GiveMoney(long memberId, decimal amount, long rewardId, long objectId)
         {
