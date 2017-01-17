@@ -170,7 +170,9 @@ group by ProductTypeID";
         {
             using (var conn = GetDbConnection())
             {
-                return conn.Query(@"select top 10 O.Multiple as multiple , LEFT( M.Phone, 3) + '****' + RIGHT(M.Phone, 4) as phone
+                return conn.Query(@"select top 10  
+    O.Multiple as multiple , LEFT( M.Phone, 3) + '****' + RIGHT(M.Phone, 4) as phone, 
+	case O.ProductTypeID when 5 then '月宝' when 6 then '季宝' when 7 then '双季宝' when 8 then '年宝' else ''  end as title
 from Trading..TC_OrderMutiple O
 left join Basic..BD_Member M on O.MemberId = M.ID
 order by O.ID desc");
