@@ -244,6 +244,7 @@
     <Content Include="html\PM25\index.html" />
     <Content Include="html\PM25\liyue.html" />
     <Content Include="html\PM25\register.html" />
+    <Content Include="html\test.html" />
     <Content Include="html\w.html" />
     <Content Include="Scripts\activityconfig.js" />
     <Content Include="Scripts\bootstrap.js" />

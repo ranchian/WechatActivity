@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta charset="utf-8" />
+    <script src="/Scripts/jquery-1.10.2.min.js"></script>
+
+</head>
+<body>
+<input type="text" id="text"/>
+<input type="button" value="提交"  id="btn" />
+</body>
+</html>
+<script type="text/javascript">
+    $("#btn")
+        .on("click",
+            function () {
+                var data = { subjectNo: $("#text").val() };
+                $.ajax({
+                    type: "post",
+                    timeout: 18000,
+                    dataType: "json",
+                    url: "/activity/LanternFestival/SubmitAnswer",
+                    data: data,
+                    //请求成功时执行
+                    success: function (data) {
+                        if (data !== null && data !== "" && typeof (data) !== "undefined") {
+
+                            return;
+                        }
+
+                    }
+                });
+            });
+   
+</script>

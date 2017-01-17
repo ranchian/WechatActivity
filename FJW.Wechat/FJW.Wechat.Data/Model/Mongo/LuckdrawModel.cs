@@ -29,7 +29,7 @@ namespace FJW.Wechat.Data.Model.Mongo
         /// <summary>
         /// 奖品
         /// </summary>
-        public int Prize { get; set; }
+        public long Prize { get; set; }
 
         /// <summary>
         /// 钱

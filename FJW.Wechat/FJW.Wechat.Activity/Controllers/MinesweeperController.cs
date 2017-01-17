@@ -548,7 +548,7 @@ namespace FJW.Wechat.Activity.Controllers
             return RedisManager.GetIncrement("Increment:MineSweeper");
         }
 
-        private string PrizeType(int prize)
+        private string PrizeType(long prize)
         {
             if (prize < 1)
             {
@@ -573,7 +573,7 @@ namespace FJW.Wechat.Activity.Controllers
             return string.Empty;
         }
 
-        private string PrizeAmount(int prize)
+        private string PrizeAmount(long prize)
         {
             switch (prize)
             {

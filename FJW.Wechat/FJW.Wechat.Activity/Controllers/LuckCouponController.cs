@@ -237,7 +237,7 @@ namespace FJW.Wechat.Activity.Controllers
 
         #region  private
 
-        private static string SplitPrizeName(int prize)
+        private static string SplitPrizeName(long prize)
         {
             if (prize < 2000)
             {
@@ -252,7 +252,7 @@ namespace FJW.Wechat.Activity.Controllers
         }
 
 
-        private static string SplitePrizePrize(int prize)
+        private static string SplitePrizePrize(long prize)
         {
             var p = prize%1000;
             switch (p)
