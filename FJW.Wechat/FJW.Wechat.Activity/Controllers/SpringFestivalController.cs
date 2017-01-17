@@ -16,10 +16,14 @@ namespace FJW.Wechat.Activity.Controllers
     {
         public ActionResult Exchange(long orderId)
         {
-            var n = new SqlDataRepository(SqlConnectString).GetSpringFestivalMutiple(orderId);
-            if (n > 0)
+            if (orderId == 0)
             {
-                return Json(new ResponseModel {Data = n});
+                return Json(new ResponseModel(ErrorCode.Other) { Message = "该笔交易无法参与本次活动" });
+            }
+            var tuple = new SqlDataRepository(SqlConnectString).GetSpringFestivalMultiple(orderId);
+            if (tuple.Item1 > 0)
+            {
+                return Json(new ResponseModel {Data = new {multiple = tuple.Item1, productTypeId = tuple.Item2}});
             }
             return Json(new ResponseModel(ErrorCode.Other) {Message = "该笔交易无法参与本次活动"});
         }

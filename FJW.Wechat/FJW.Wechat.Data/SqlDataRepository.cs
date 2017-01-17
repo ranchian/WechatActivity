@@ -149,11 +149,16 @@ group by ProductTypeID";
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
-        public decimal GetSpringFestivalMutiple(long orderId)
+        public Tuple<decimal, long> GetSpringFestivalMultiple(long orderId)
         {
             using (var conn = GetDbConnection())
             {
-               return conn.ExecuteScalar<decimal>("select Multiple from Trading..TC_OrderMutiple where ID= @orderId", new {orderId});
+                var d = conn.QueryFirstOrDefault("select Multiple, ProductTypeId from Trading..TC_OrderMutiple where ID= @orderId", new {orderId});
+                if (d == null || d.Multiple == 0 || d.ProductTypeId == 0)
+                {
+                    return new Tuple<decimal, long>(0, 0);
+                }
+                return new Tuple<decimal, long>(d.Multiple, d.ProductTypeId);
             }
         }
 
