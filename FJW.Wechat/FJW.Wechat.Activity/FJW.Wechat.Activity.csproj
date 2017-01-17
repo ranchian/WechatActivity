@@ -95,6 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigModel\CollectCardModel.cs" />
+    <Compile Include="ConfigModel\LanternFestivalConfig.cs" />
     <Compile Include="ConfigModel\XiaonianConfig.cs" />
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\CollectCardController.cs" />

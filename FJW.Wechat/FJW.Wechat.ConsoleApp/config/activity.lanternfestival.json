@@ -1,0 +1,59 @@
+﻿{
+  "StartTime": "2017-02-06 10:00:00",
+  "EndTime": "2017-02-15 17:00:00",
+  "ActivityId": 10027,
+  "ActivityKey": "Activity.LanternFestival.2017.2.6",
+  "LimitTimes": 3,
+  "Subjects": [
+    {
+      "SubjectNo": 1,
+      "CouponNo": 20161219013,
+      "Type": 1 //1-现金券  2-加息券 3-体验金额  4-现金
+    },
+    {
+      "SubjectNo": 2,
+      "CouponNo": 20161219014,
+      "Type": 2
+    },
+    {
+      "SubjectNo": 3,
+      "CouponNo": 20161219015,
+      "Type": 1
+    },
+    {
+      "SubjectNo": 4,
+      "CouponNo": 20161219016,
+      "Type": 2
+    },
+    {
+      "SubjectNo": 5,
+      "CouponNo": 0,
+      "Type": 3
+    },
+    {
+      "SubjectNo": 6,
+      "CouponNo": 20161219017,
+      "Type": 1
+    },
+    {
+      "SubjectNo": 7,
+      "CouponNo": 20161219018,
+      "Type": 2
+    },
+    {
+      "SubjectNo": 8,
+      "CouponNo": 20161219019,
+      "Type": 1
+    },
+    {
+      "SubjectNo": 9,
+      "CouponNo": 20161219020,
+      "Type": 2
+    },
+    {
+      "SubjectNo": 10,
+      "CouponNo": 0,
+      "Type": 4
+    }
+  ]
+}

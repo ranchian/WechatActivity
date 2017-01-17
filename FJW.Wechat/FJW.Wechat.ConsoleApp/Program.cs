@@ -1,5 +1,7 @@
 ﻿using System;
 using FJW.Unit;
+using FJW.Wechat.Activity.ConfigModel;
+using FJW.Wechat.Cache;
 
 
 namespace FJW.Wechat.ConsoleApp
@@ -8,13 +10,15 @@ namespace FJW.Wechat.ConsoleApp
     {
         private static void Main(string[] args)
         {
-            Console.WriteLine("a".ToInt());
-           // new T1().Test();
-            DateTime t1;
-            DateTime.TryParse("a", out t1);
-            Console.WriteLine("{0:yyyy-MM-dd HH:mm:ss}, IsMinValue:{1} ", t1, DateTime.MinValue == t1);
-            Console.WriteLine("OVER");
-            Console.ReadLine();
+            // Console.WriteLine("a".ToInt());
+            //// new T1().Test();
+            // DateTime t1;
+            // DateTime.TryParse("a", out t1);
+            // Console.WriteLine("{0:yyyy-MM-dd HH:mm:ss}, IsMinValue:{1} ", t1, DateTime.MinValue == t1);
+            // Console.WriteLine("OVER");
+            // Console.ReadLine();
+
+            var a= JsonConfig.GetJson<LanternFestivalConfig>("config/activity.lanternfestival.json");
         }
     }
 }
