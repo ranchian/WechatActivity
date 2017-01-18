@@ -71,10 +71,11 @@ namespace FJW.Wechat.Activity.Controllers
         /// <returns></returns>
         private ResponseModel SendAward(LanternFestivalConfig config, LanternFestivalConfig.Subject subject)
         {
+            var remark=string.Empty;
             var memberRepository = new MemberRepository(SqlConnectString);
             if (subject.Type == LanternFestivalConfig.AwardType.ExperienceGold)
             {
-                memberRepository.Give(UserInfo.Id, subject.CouponNo, 2, subject.Amount, DateTime.Now.Ticks);
+                remark= memberRepository.Give(UserInfo.Id, subject.CouponNo, 2, subject.Amount, DateTime.Now.Ticks).ToString();
             }
             else if (subject.Type == LanternFestivalConfig.AwardType.RewardGold)
             {
@@ -85,6 +86,7 @@ namespace FJW.Wechat.Activity.Controllers
                 var response = CardCouponApi.UserGrant(UserInfo.Id, config.ActivityId, subject.CouponNo);
                 if (!response.IsOk)
                     return new ResponseModel {ErrorCode = ErrorCode.Exception, Message = response.ExceptionMessage};
+                remark = response.Data;
             }
 
             var luckdrawModel = new LuckdrawModel()
@@ -96,7 +98,8 @@ namespace FJW.Wechat.Activity.Controllers
                 Status = 0,
                 Money = subject.Amount,
                 Prize = subject.CouponNo,
-                Phone = UserInfo.Phone
+                Phone = UserInfo.Phone,
+                Remark= remark
             };
             new ActivityRepository(DbName, MongoHost).Add(luckdrawModel);
             return new ResponseModel {ErrorCode = ErrorCode.None};
