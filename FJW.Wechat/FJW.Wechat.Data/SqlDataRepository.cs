@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 
@@ -138,6 +139,44 @@ group by ProductTypeID";
                 return d;
             }
             
+        }
+
+        #endregion
+
+        #region 2017春节翻倍
+        /// <summary>
+        /// 获取 2017春节翻倍 的倍率
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        public Tuple<decimal, long> GetSpringFestivalMultiple(long orderId)
+        {
+            using (var conn = GetDbConnection())
+            {
+                var d = conn.QueryFirstOrDefault("select Multiple, ProductTypeId from Trading..TC_OrderMutiple where ID= @orderId", new {orderId});
+                if (d == null || d.Multiple == 0 || d.ProductTypeId == 0)
+                {
+                    return new Tuple<decimal, long>(0, 0);
+                }
+                return new Tuple<decimal, long>(d.Multiple, d.ProductTypeId);
+            }
+        }
+
+        /// <summary>
+        /// 春节翻倍记录
+        /// </summary>
+        /// <returns></returns>
+        public object GetSpringFestivalRows()
+        {
+            using (var conn = GetDbConnection())
+            {
+                return conn.Query(@"select top 10  
+    O.Multiple as multiple , LEFT( M.Phone, 3) + '****' + RIGHT(M.Phone, 4) as phone, 
+	case O.ProductTypeID when 5 then '月宝' when 6 then '季宝' when 7 then '双季宝' when 8 then '年宝' else ''  end as title
+from Trading..TC_OrderMutiple O
+left join Basic..BD_Member M on O.MemberId = M.ID
+order by O.ID desc");
+            }
         }
 
         #endregion
