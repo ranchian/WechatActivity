@@ -9,21 +9,25 @@
     {
       "SubjectNo": 1,
       "CouponNo": 20161219013,
+      "Amount":  2,
       "Type": 1 //1-现金券  2-加息券 3-体验金额  4-现金
     },
     {
       "SubjectNo": 2,
       "CouponNo": 20161219014,
+      "Amount":  1.5,
       "Type": 2
     },
     {
       "SubjectNo": 3,
       "CouponNo": 20161219015,
+      "Amount":  5,
       "Type": 1
     },
     {
       "SubjectNo": 4,
       "CouponNo": 20161219016,
+      "Amount":  2.5,
       "Type": 2
     },
     {
@@ -35,21 +39,25 @@
     {
       "SubjectNo": 6,
       "CouponNo": 20161219017,
+      "Amount":  8,
       "Type": 1
     },
     {
       "SubjectNo": 7,
       "CouponNo": 20161219018,
+      "Amount":  3.5,
       "Type": 2
     },
     {
       "SubjectNo": 8,
       "CouponNo": 20161219019,
+      "Amount":  10,
       "Type": 1
     },
     {
       "SubjectNo": 9,
       "CouponNo": 20161219020,
+      "Amount":  5,
       "Type": 2
     },
     {

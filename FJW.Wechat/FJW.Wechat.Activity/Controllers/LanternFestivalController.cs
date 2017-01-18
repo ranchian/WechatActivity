@@ -15,7 +15,22 @@ namespace FJW.Wechat.Activity.Controllers
         {
             return JsonConfig.GetJson<LanternFestivalConfig>("config/activity.lanternfestival.json");
         }
-        
+
+        private string GetMessage(string type,decimal money)
+        {
+            switch (type)
+            {
+                case "1":
+                    return money.ToString("F2") + "元现金券";
+                case "2":
+                    return money.ToString("F2") + "%加息全";
+                case "3":
+                    return money.ToString("F2") + "体验金额";
+                case "4":
+                    return money.ToString("F2") + "元现金奖励";
+            }
+            return string.Empty;
+        }
         /// <summary>
         /// 验证
         /// </summary>
@@ -33,11 +48,12 @@ namespace FJW.Wechat.Activity.Controllers
             if (now < config.StartTime || now > config.EndTime)
                 return new ResponseModel { ErrorCode = ErrorCode.Exception, Message = "活动未开始或已过期" };
 
-            var count = new ActivityRepository(DbName, MongoHost).Query<LuckdrawModel>(it => it.Key == config.ActivityKey && it.MemberId == userId).Count(); 
+            var list = new ActivityRepository(DbName, MongoHost).Query<LuckdrawModel>(it => it.Key == config.ActivityKey && it.MemberId == userId).ToList();
+            var count=list.Count; 
             if (count == config.LimitTimes)
-                return new ResponseModel { ErrorCode = ErrorCode.Exception, Message = "奖励次数已领取三次" };
+                return new ResponseModel { ErrorCode = ErrorCode.Exception, Message = "奖励次数已领取三次", Data = list.Select(m => GetMessage(m.Type, m.Money)) };
 
-            return new ResponseModel { ErrorCode = ErrorCode.None };
+            return new ResponseModel { ErrorCode = ErrorCode.None , Data= list.Select(m => GetMessage(m.Type, m.Money))};
         }
         [HttpGet]
         public ActionResult Chances()
