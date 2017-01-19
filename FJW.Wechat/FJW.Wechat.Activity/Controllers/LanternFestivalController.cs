@@ -21,13 +21,13 @@ namespace FJW.Wechat.Activity.Controllers
             switch (type)
             {
                 case "1":
-                    return money.ToString("F2") + "元现金券";
+                    return money.ToString("G0") + "元现金券";
                 case "2":
-                    return money.ToString("F2") + "%加息全";
+                    return money.ToString("G0") + "%加息券";
                 case "3":
-                    return money.ToString("F2") + "体验金额";
+                    return money.ToString("G0") + "元体验金";
                 case "4":
-                    return money.ToString("F2") + "元现金奖励";
+                    return money.ToString("G0") + "元现金奖励";
             }
             return string.Empty;
         }
