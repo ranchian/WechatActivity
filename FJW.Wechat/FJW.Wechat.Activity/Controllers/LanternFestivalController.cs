@@ -9,6 +9,7 @@ using FJW.Wechat.Data.Model.Mongo;
 
 namespace FJW.Wechat.Activity.Controllers
 {
+    [CrossDomainFilter]
     public class LanternFestivalController : ActivityController
     {
         private static LanternFestivalConfig GetConfig()
