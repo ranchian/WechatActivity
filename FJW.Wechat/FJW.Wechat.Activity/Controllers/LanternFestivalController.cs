@@ -50,7 +50,7 @@ namespace FJW.Wechat.Activity.Controllers
             if (now < config.StartTime || now > config.EndTime)
                 return new ResponseModel { ErrorCode = ErrorCode.Exception, Message = "活动未开始或已过期" };
 
-            var list = new ActivityRepository(DbName, MongoHost).Query<LuckdrawModel>(it => it.Key == config.ActivityKey && it.MemberId == userId).ToList();
+            var list = new ActivityRepository(DbName, MongoHost).Query<LuckdrawModel>(it => it.Key == config.ActivityKey && it.MemberId == userId).OrderBy(m=>m.CreateTime).ToList();
             var count=list.Count; 
             if (count == config.LimitTimes)
                 return new ResponseModel { ErrorCode = ErrorCode.Exception, Message = "奖励次数已领取三次", Data = list.Select(m => GetMessage(m.Type, m.Money)) };
