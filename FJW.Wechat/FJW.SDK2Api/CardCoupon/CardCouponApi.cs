@@ -34,20 +34,20 @@ namespace FJW.SDK2Api.CardCoupon
             };
 
             var conf = ApiConfig.Section.Value.Methods["CouponService"];
-#if DEBUG
+
             Logger.Dedug("url:{0}", conf.EntryPoint);
-#endif
 
-            var result = HttpUnit.Post(conf.EntryPoint, reqestData.ToJson(), Encoding.UTF8);
-#if DEBUG
-            Logger.Dedug("req over:{0}", result.ToJson());
-#endif
 
+            var result = HttpUnit.Post(conf.EntryPoint, reqestData.ToJson(), Encoding.UTF8); 
+
+            Logger.Dedug("req over:{0}", result.ToJson()); 
+
+            var response = result.Reponse.Deserialize<ApiResponse>();
             if (result.Code == HttpStatusCode.OK)
             {
-                return result.Reponse.Deserialize<ApiResponse>();
+                return response;
             }
-            return new ApiResponse { Status = ServiceResultStatus.Error };
+            return new ApiResponse {Status = ServiceResultStatus.Error, ExceptionMessage = response.ExceptionMessage};
 
         }
 

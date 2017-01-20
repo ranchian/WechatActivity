@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using FJW.SDK2Api.CardCoupon;
+using FJW.Unit;
 using FJW.Wechat.Activity.ConfigModel;
 using FJW.Wechat.Cache;
 using FJW.Wechat.Data;
@@ -41,7 +42,7 @@ namespace FJW.Wechat.Activity.Controllers
             var userId = UserInfo.Id;
             if (userId < 1)
             {
-                return new ResponseModel { ErrorCode = ErrorCode.NotLogged };
+                return new ResponseModel { ErrorCode = ErrorCode.NotLogged, Message = "用户未登录!" };
             }
             var config = GetConfig();
 
@@ -69,6 +70,7 @@ namespace FJW.Wechat.Activity.Controllers
         [HttpPost]
         public ActionResult SubmitAnswer(int subjectNo)
         {
+            Logger.Dedug("subjectNo:{0}", subjectNo);
             var rst = Verify();
             if (rst.ErrorCode != ErrorCode.None)
                 return Json(rst);
