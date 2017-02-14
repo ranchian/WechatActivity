@@ -54,17 +54,6 @@ where  T.ID in (5, 6, 7, 8)";
             }
         }
 
-        /// <summary>
-        /// Select getdate()
-        /// </summary>
-        /// <returns></returns>
-        public DateTime GetDate()
-        {
-            using (var conn = GetDbConnection())
-            {
-                return conn.ExecuteScalar<DateTime>("select GETDATE()");
-            }
-        }
 
         public IEnumerable<RankingRow> TotalRanking()
         {
@@ -94,6 +83,42 @@ where  T.ID in (6, 7, 8)";
                 return conn.Query<RankingRow>(sql, new { startDate = new DateTime(2016, 10, 12), endDate = new DateTime(2016, 10, 26) });
             }
 
+        }
+
+        /// <summary>
+        /// 定期产品购买排行榜
+        /// </summary>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        public IEnumerable<RankingRow> ProductBuyRanking(DateTime startTime, DateTime endTime)
+        {
+           const string sql = @"with T1 as (
+	select 
+		MemberID, ProductTypeID, Shares
+	from (
+		select 
+			MemberID, ProductTypeID, Shares, ROW_NUMBER() OVER( partition by T.ProductTypeID ORDER BY Shares desc ) _RN
+		from (
+			select 
+				B.MemberID , B.ProductTypeID  , SUM(B.BuyShares) Shares
+			from Trading..TC_ProductBuy B 
+			where B.IsDelete = 0 and B.Status = 1 and B.ProductTypeID < 9 and B.ProductTypeParentID = 2 and  B.BuyTime >= @startTime and  B.BuyTime <= @endTime
+			group by B.MemberID , B.ProductTypeID  
+		) T 
+	) Temp  where _RN = 1
+)
+
+select 
+	M.Phone, T.Title, T1.Shares 
+from T1 
+left join Basic..BD_ProductType T on T.ID = T1.ProductTypeID
+left join Basic..BD_Member M on T1.MemberID = M.ID;";
+
+            using (var conn = GetDbConnection())
+            {
+                return conn.Query<RankingRow>(sql, new { startTime, endTime });
+            }
         }
 
         #endregion

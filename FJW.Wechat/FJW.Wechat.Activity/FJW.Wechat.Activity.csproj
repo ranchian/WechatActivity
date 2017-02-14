@@ -95,12 +95,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigModel\CollectCardModel.cs" />
+    <Compile Include="ConfigModel\FebruaryConfig.cs" />
     <Compile Include="ConfigModel\LanternFestivalConfig.cs" />
     <Compile Include="ConfigModel\XiaonianConfig.cs" />
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\CollectCardController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\FacevalueController.cs" />
+    <Compile Include="Controllers\FebruaryController.cs" />
     <Compile Include="Controllers\LanternFestivalController.cs" />
     <Compile Include="Controllers\LuckCouponController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
