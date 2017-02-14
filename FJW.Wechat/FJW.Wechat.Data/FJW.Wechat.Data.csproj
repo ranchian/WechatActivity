@@ -73,6 +73,7 @@
     <Compile Include="MemberRepository.cs" />
     <Compile Include="Model\Mongo\RecordModel.cs" />
     <Compile Include="ActivityRepository.cs" />
+    <Compile Include="Model\RDBS\SpringDragonRanking.cs" />
     <Compile Include="Model\RDBS\RankingRow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\Mongo\LuckdrawModel.cs" />
