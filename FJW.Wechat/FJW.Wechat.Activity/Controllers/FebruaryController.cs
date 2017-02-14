@@ -30,9 +30,14 @@ namespace FJW.Wechat.Activity.Controllers
         public ActionResult Rank()
         {
             var config = GetConfig();
-            return Json(new ResponseModel()
+            var data = new SqlDataRepository(SqlConnectString).ProductBuyRanking(config.StartTime, config.EndTime);
+            foreach (var d in data)
             {
-                Data = new SqlDataRepository(SqlConnectString).ProductBuyRanking(config.StartTime, config.EndTime)
+                d.Phone = StringHelper.CoverPhone(d.Phone);
+            }
+            return Json(new ResponseModel
+            {
+                Data = data
             });
         }
 
