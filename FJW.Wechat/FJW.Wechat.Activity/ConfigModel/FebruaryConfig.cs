@@ -9,11 +9,9 @@ namespace FJW.Wechat.Activity.ConfigModel
     public class FebruaryConfig
     {
         public DateTime StartTime { get; set; }
-
-
+        
         public DateTime EndTime { get; set; }
-
-
+        
         public long ActivityId { get; set; }
 
         public long RateCouponA { get; set; }
@@ -21,5 +19,7 @@ namespace FJW.Wechat.Activity.ConfigModel
         public long RateCouponB { get; set; }
 
         public long RateCouponC { get; set; }
+
+        public long RateCouponD { get; set; }
     }
 }

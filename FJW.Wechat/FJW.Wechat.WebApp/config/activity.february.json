@@ -1,4 +1,9 @@
 {
   "startTime": "2017-01-01 10:00:00",
-  "endTime": "2017-02-28 17:00:00" 
+  "endTime": "2017-02-28 17:00:00",
+  "activityId": 10029,
+  "rateCouponA": 20170118011,
+  "rateCouponB": 20170118012,
+  "rateCouponC": 20170118013,
+  "rateCouponD": 20170118014
 }
