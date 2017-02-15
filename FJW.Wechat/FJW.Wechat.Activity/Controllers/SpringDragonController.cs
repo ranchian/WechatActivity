@@ -23,7 +23,7 @@ namespace FJW.Wechat.Activity.Controllers
         public ActionResult Ranking()
         {
             var repository = new SqlDataRepository(SqlConnectString);
-            var rankingDatas = repository.GetSpringDragonRanking(GetConfig().ProductId);
+            var rankingDatas = repository.GetSpringDragonRanking(GetConfig().ProductId,100);
             return Json(rankingDatas);
         } 
     }

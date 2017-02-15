@@ -185,17 +185,17 @@ order by O.ID desc");
         /// 获取春龙天天赚排名
         /// </summary>
         /// <returns></returns>
-        public List<SpringDragonRanking> GetSpringDragonRanking(long productId)
+        public List<SpringDragonRanking> GetSpringDragonRanking(long productId,int topN)
         { 
             using (var conn = GetDbConnection())
             {
                 return conn.Query<SpringDragonRanking>(
-                @"SELECT top 100 T.*,STUFF(m.Phone, 4, 4, '****') AS Phone FROM 
+                @"SELECT top "+ topN + @" T.*,STUFF(m.Phone, 4, 4, '****') AS Phone FROM 
                     (SELECT A.MemberID,(A.BuyShares - (CASE  WHEN B.RedeemShares IS NULL THEN 0 ELSE B.RedeemShares END) ) TotalBuyShares,A.LastBuyTime FROM (SELECT MemberID,SUM(BuyShares) AS  BuyShares,MAX(BuyTime) as LastBuyTime FROM Trading..TC_ProductBuy   WHERE ProductID=@productId group by MemberID) A
                     LEFT JOIN (SELECT MemberID,SUM(RedeemShares) AS  RedeemShares   FROM Trading..TC_ProductRedeem  WHERE ProductID=@productId group by MemberID) B
                     ON A.MemberID=B.MemberID) T 
                 JOIN Basic..BD_Member m ON T.MemberID = m.ID
-                ORDER BY TotalBuyShares DESC,LastBuyTime ASC", new { productId }).ToList();
+                ORDER BY TotalBuyShares DESC,LastBuyTime ASC", new { productId  }).ToList();
             }
         }
     }
