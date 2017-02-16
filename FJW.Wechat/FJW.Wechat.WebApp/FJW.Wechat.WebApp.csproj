@@ -258,6 +258,7 @@
     <Content Include="config\activity.xiaonian.json" />
     <Content Include="config\activity.lanternfestival.json" />
     <Content Include="config\activity.springdragon.json" />
+    <Content Include="config\activity.february.json" />
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
