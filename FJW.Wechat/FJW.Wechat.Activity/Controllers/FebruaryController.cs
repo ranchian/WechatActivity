@@ -141,13 +141,13 @@ namespace FJW.Wechat.Activity.Controllers
             total.NotUsed = total.Total - total.Used;
 
             total.LastUpdateTime = DateTime.Now;
-            if (isNew)
+            if (!isNew)
             {
                 activeRepository.Update(total);
             }
             else
             {
-                activeRepository.Update(total);
+                activeRepository.Add(total);
             }
             return Json(new ResponseModel());
         }
