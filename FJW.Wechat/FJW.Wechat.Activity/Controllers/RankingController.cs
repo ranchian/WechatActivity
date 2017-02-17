@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using FJW.Unit;
+
 using FJW.Wechat.Data;
 using FJW.Wechat.Data.Model.RDBS;
 
@@ -10,33 +11,7 @@ namespace FJW.Wechat.Activity.Controllers
 {
     public class RankingController : ActivityController
     {
-
-        [OutputCache(Duration = 2)]
-        public ActionResult Current()
-        {
-
-            var repository = new SqlDataRepository(SqlConnectString);
-            var rows = repository.TodayRanking().ToArray();
-            foreach (var it in rows)
-            {
-                if (it.Sequnce == 0)
-                {
-                    it.Sequnce = 1;
-                }
-                it.Phone = StringHelper.CoverPhone(it.Phone);
-            }
-            var t = repository.GetDate().ToString("yyyy-MM-dd HH:mm:ss");
-            return Json(new {t, rows});
-
-        }
-
-        public ActionResult Time()
-        {
-            var repository = new SqlDataRepository(SqlConnectString);
-            var t = repository.GetDate().ToString("yyyy-MM-dd HH:mm:ss.fff");
-            return Json(new { t});
-        }
-
+       
         [OutputCache(Duration = 5)]
         public ActionResult Today()
         {

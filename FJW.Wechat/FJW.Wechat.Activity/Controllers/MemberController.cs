@@ -80,6 +80,26 @@ namespace FJW.Wechat.Activity.Controllers
             return Json(result);
         }
 
+        [HttpPost]
+        public ActionResult ValidateToken(string token)
+        {
+            //根据token读取ID
+            var mberRepository = new MemberRepository(SqlConnectString);
+            var memberInfo = mberRepository.GetMemberInfo(token);
+             
+            if (memberInfo == null)
+            {
+                return Json(new ResponseModel(ErrorCode.Other) { Message = "无效的登录凭证"});
+            }
+
+            UserInfo.Phone = memberInfo.Phone;
+            UserInfo.Id = memberInfo.MemberId;
+            UserInfo.Token = memberInfo.Token;
+            SetLoginInfo(UserInfo);
+
+            return Json(new ResponseModel());
+        }
+
         /// <summary>
         /// 注册
         /// </summary>
