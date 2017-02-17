@@ -194,7 +194,7 @@ order by O.ID desc");
                     (SELECT A.MemberID,(A.BuyShares - (CASE  WHEN B.RedeemShares IS NULL THEN 0 ELSE B.RedeemShares END) ) TotalBuyShares,A.LastBuyTime FROM (SELECT MemberID,SUM(BuyShares) AS  BuyShares,MAX(BuyTime) as LastBuyTime FROM Trading..TC_ProductBuy   WHERE ProductID=@productId group by MemberID) A
                     LEFT JOIN (SELECT MemberID,SUM(RedeemShares) AS  RedeemShares   FROM Trading..TC_ProductRedeem  WHERE ProductID=@productId group by MemberID) B
                     ON A.MemberID=B.MemberID) T 
-                JOIN Basic..BD_Member m ON T.MemberID = m.ID
+                JOIN Basic..BD_Member m ON T.MemberID = m.ID WHERE T.TotalBuyShares>=2000
                 ORDER BY TotalBuyShares DESC,LastBuyTime ASC", new { productId  }).ToList();
             }
         }
