@@ -69,7 +69,8 @@ namespace FJW.Wechat.Activity.Controllers
             {
                 return Json(new ResponseModel(ErrorCode.Other) { Message = "您无法参与这次活动：WQWLCPS" });
             }
-            if (new MemberRepository(SqlConnectString).DisableMemberInvite(userId))
+
+            if (new MemberRepository(SqlConnectString).DisableMemberInvite(userId, config.StartTime ))
             {
                 return Json(new ResponseModel(ErrorCode.Other) { Message = "您无法参与这次活动：特殊的邀请人" });
             }
