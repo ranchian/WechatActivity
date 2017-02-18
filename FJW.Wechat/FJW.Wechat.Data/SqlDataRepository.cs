@@ -95,25 +95,24 @@ where  T.ID in (6, 7, 8)";
         {
            const string sql = @"with T1 as (
 	select 
-		MemberID, ProductTypeID, Shares
+		MemberID, ProductTypeID, BuyShares
 	from (
 		select 
-			MemberID, ProductTypeID, Shares, ROW_NUMBER() OVER( partition by T.ProductTypeID ORDER BY Shares desc ) _RN
+			MemberID, ProductTypeID, BuyShares, ROW_NUMBER() OVER( partition by T.ProductTypeID ORDER BY BuyShares desc ) _RN
 		from (
 			select 
-				B.MemberID , B.ProductTypeID  , SUM(B.BuyShares) Shares
+				B.MemberID , B.ProductTypeID , B.BuyShares
 			from Trading..TC_ProductBuy B 
             left join Basic..BD_MemberInviteFriends F on F.FriendID = B.MemberID 
 			where B.IsDelete = 0 and B.Status = 1 and B.ProductTypeID < 9 and B.ProductTypeParentID = 2 and  B.BuyTime >= @startTime and  B.BuyTime <= @endTime
             and not exists ( select ID from Trading..TC_DisableMember D where D.MemberID = F.MemberID )
             and not exists ( select ID from [Report].[dbo].[Data_MemberChannel] C where C.MemberID = B.MemberId and C.Channel = 'WQWLCPS' )
-			group by B.MemberID , B.ProductTypeID  
 		) T 
 	) Temp  where _RN = 1
 )
 
 select 
-	M.Phone, T1.ProductTypeId as Id, T1.Shares 
+	M.Phone, T1.ProductTypeId as Id, T1.BuyShares 
 from T1 
 left join Basic..BD_Member M on T1.MemberID = M.ID;";
 
