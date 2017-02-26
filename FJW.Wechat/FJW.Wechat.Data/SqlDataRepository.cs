@@ -98,10 +98,10 @@ where  T.ID in (6, 7, 8)";
 		MemberID, ProductTypeID, Shares
 	from (
 		select 
-			MemberID, ProductTypeID, Shares, ROW_NUMBER() OVER( partition by T.ProductTypeID ORDER BY Shares desc ) _RN
+			MemberID, ProductTypeID, Shares, ROW_NUMBER() OVER( partition by T.ProductTypeID ORDER BY Shares desc, BuyID ) _RN
 		from (
 			select 
-				B.MemberID , B.ProductTypeID  , Max(B.BuyShares) Shares
+				B.MemberID , B.ProductTypeID  , Max(B.BuyShares) Shares, MIN(B.ID) BuyID
 			from Trading..TC_ProductBuy B 
             left join Basic..BD_MemberInviteFriends F on F.FriendID = B.MemberID 
 			where B.IsDelete = 0 and B.Status = 1 and B.ProductTypeID < 9 and B.ProductTypeParentID = 2 and  B.BuyTime >= @startTime and  B.BuyTime <= @endTime
