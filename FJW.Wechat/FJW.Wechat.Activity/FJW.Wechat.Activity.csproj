@@ -98,6 +98,7 @@
     <Compile Include="ConfigModel\SpringDragonConfig.cs" />
     <Compile Include="ConfigModel\FebruaryConfig.cs" />
     <Compile Include="ConfigModel\LanternFestivalConfig.cs" />
+    <Compile Include="ConfigModel\WomanDayConfig.cs" />
     <Compile Include="ConfigModel\XiaonianConfig.cs" />
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\CollectCardController.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="Controllers\SplitloversController.cs" />
     <Compile Include="Controllers\SpringFestivalController.cs" />
     <Compile Include="Controllers\TurntableController.cs" />
+    <Compile Include="Controllers\WomanDayController.cs" />
     <Compile Include="Controllers\XiaonianController.cs" />
     <Compile Include="Models\CardExchangeModel.cs" />
     <Compile Include="Models\ResultModel.cs" />

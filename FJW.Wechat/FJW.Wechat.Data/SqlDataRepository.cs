@@ -125,6 +125,24 @@ left join Basic..BD_Member M on T1.MemberID = M.ID;";
 
         #endregion
 
+        /// <summary>
+        /// 用户购买次数
+        /// </summary>
+        /// <param name="memberId"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        public int ProductBuyCount(long memberId, DateTime startTime, DateTime endTime)
+        {
+            using (var conn = GetDbConnection())
+            {
+                return conn.ExecuteScalar<int>(
+                    @"select COUNT(ID) from Trading..TC_ProductBuy 
+where MemberID = @memberId and BuyTime >= @startTime and BuyTime < @endTime and Status = 1 and IsDelete = 0", 
+                    new { memberId, startTime, endTime });
+            }
+        }
+
         #region 红包雨 拆卡券
 
         /// <summary>
