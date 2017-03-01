@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace FJW.Wechat.Activity.ConfigModel
 {
+    /// <summary>
+    /// 妇女节 配置
+    /// </summary>
     public class WomanDayConfig
     {
         public DateTime StartTime { get; set; }

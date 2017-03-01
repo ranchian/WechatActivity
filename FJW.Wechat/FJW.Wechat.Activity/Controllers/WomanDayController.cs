@@ -11,6 +11,7 @@ using FJW.Unit;
 
 namespace FJW.Wechat.Activity.Controllers
 {
+    [CrossDomainFilter]
     public class WomanDayController : ActivityController
     {
         private const string GameKey = "womanday";
@@ -25,7 +26,7 @@ namespace FJW.Wechat.Activity.Controllers
             return JsonConfig.GetJson<WomanDayConfig>("config/activity.womanday.json");
         }
 
-        public ActionResult Exchange()
+        public ActionResult Accept()
         {
             if (UserInfo.Id < 1)
             {
@@ -104,6 +105,25 @@ namespace FJW.Wechat.Activity.Controllers
                 activeRepository.Add(total);
             }
             return Json(new ResponseModel());
+        }
+
+        /// <summary>
+        /// 游戏结果
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Result()
+        {
+            var userId = UserInfo.Id;
+            if (userId < 1)
+            {
+                return Json(new ResponseModel { ErrorCode = ErrorCode.NotLogged });
+            }
+            var rows = new ActivityRepository(DbName, MongoHost).Query<LuckdrawModel>(it => it.Key == GameKey && it.MemberId == userId).ToList();
+            var data = new ResponseModel
+            {
+                Data = rows.Select(it => new {name = it.Name }).ToArray()
+            };
+            return Json(data);
         }
 
         /// <summary>
