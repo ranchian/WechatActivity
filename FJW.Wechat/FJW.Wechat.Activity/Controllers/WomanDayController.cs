@@ -37,11 +37,11 @@ namespace FJW.Wechat.Activity.Controllers
             var channel = new SqlDataRepository(SqlConnectString).GetMemberChennel(userId);
             if (channel?.Channel != null && channel.Channel.Equals("WQWLCPS", StringComparison.CurrentCultureIgnoreCase) && channel.CreateTime > config.StartTime)
             {
-                return Json(new ResponseModel(ErrorCode.Other) { Message = "您无法参与这次活动：WQWLCPS" });
+                return Json(new ResponseModel(ErrorCode.Other) { Message = "您属特殊渠道注册用户,无法参与此活动！" });
             }
             if (new MemberRepository(SqlConnectString).DisableMemberInvite(userId, config.StartTime))
             {
-                return Json(new ResponseModel(ErrorCode.Other) { Message = "您无法参与这次活动：特殊的邀请人" });
+                return Json(new ResponseModel(ErrorCode.Other) { Message = "您属特殊渠道注册用户,无法参与此活动！" });
             }
             
             var activeRepository = new ActivityRepository(DbName, MongoHost);
@@ -72,7 +72,7 @@ namespace FJW.Wechat.Activity.Controllers
             
             if (total.NotUsed < 1)
             {
-                return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Message = "你没有机会了" });
+                return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Message = "机会已用完，快快去投资，每投资一笔，可再摇一次哟~" });
             }
             string name;
             long prize;
@@ -104,7 +104,7 @@ namespace FJW.Wechat.Activity.Controllers
             {
                 activeRepository.Add(total);
             }
-            return Json(new ResponseModel());
+            return Json(new ResponseModel{ Data = name});
         }
 
         /// <summary>
@@ -153,92 +153,92 @@ namespace FJW.Wechat.Activity.Controllers
             switch (c)
             {
                 case 'A':
-                    name = "1.80%";
+                    name = "1.80";
                     couponId = config.A;
                     break;
 
                 case 'B':
-                    name = "2%";
+                    name = "2";
                     couponId = config.B;
                     break;
 
                 case 'C':
-                    name = "2.80%";
+                    name = "2.80";
                     couponId = config.C;
                     break;
 
                 case 'D':
-                    name = "3.80%";
+                    name = "3.80";
                     couponId = config.D;
                     break;
 
                 case 'E':
-                    name = "3.80%";
+                    name = "3.80";
                     couponId = config.E;
                     break;
 
                 case 'F':
-                    name = "3.80%";
+                    name = "3.80";
                     couponId = config.F;
                     break;
 
                 case 'G':
-                    name = "5.80%";
+                    name = "5.80";
                     couponId = config.G;
                     break;
 
                 case 'H':
-                    name = "5.80%";
+                    name = "5.80";
                     couponId = config.H;
                     break;
 
                 case 'I':
-                    name = "5.80%";
+                    name = "5.80";
                     couponId = config.I;
                     break;
 
                 case 'J':
-                    name = "8.80%";
+                    name = "8.80";
                     couponId = config.J;
                     break;
 
                 case 'K':
-                    name = "8.80%";
+                    name = "8.80";
                     couponId = config.K;
                     break;
 
                 case 'L':
-                    name = "8.80%";
+                    name = "8.80";
                     couponId = config.L;
                     break;
 
                 case 'M':
-                    name = "10.00%";
+                    name = "10.00";
                     couponId = config.M;
                     break;
 
                 case 'N':
-                    name = "10.00%";
+                    name = "10.00";
                     couponId = config.N;
                     break;
 
                 case 'O':
-                    name = "10.00%";
+                    name = "10.00";
                     couponId = config.O;
                     break;
 
                 case 'P':
-                    name = "38.00%";
+                    name = "38.00";
                     couponId = config.P;
                     break;
 
                 case 'Q':
-                    name = "38.00%";
+                    name = "38.00";
                     couponId = config.Q;
                     break;
 
                 case 'R':
-                    name = "38.00%";
+                    name = "38.00";
                     couponId = config.R;
                     break;
 
