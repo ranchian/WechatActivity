@@ -34,7 +34,8 @@ namespace FJW.Wechat.Activity.Controllers
             }
             var userId = UserInfo.Id;
             var config = GetConfig();
-            var channel = new SqlDataRepository(SqlConnectString).GetMemberChennel(userId);
+            var sqlRepository = new SqlDataRepository(SqlConnectString);
+            var channel = sqlRepository.GetMemberChennel(userId);
             if (channel?.Channel != null && channel.Channel.Equals("WQWLCPS", StringComparison.CurrentCultureIgnoreCase) && channel.CreateTime > config.StartTime)
             {
                 return Json(new ResponseModel(ErrorCode.Other) { Message = "您属特殊渠道注册用户,无法参与此活动！" });
@@ -64,10 +65,10 @@ namespace FJW.Wechat.Activity.Controllers
 
             if ((DateTime.Now - total.LastStatisticsTime).TotalSeconds > 30)
             {
-                var cunt = new SqlDataRepository(SqlConnectString).ProductBuyCount(userId, config.StartTime, config.EndTime);
+                var cunt = sqlRepository.ProductBuyCount(userId, config.StartTime, config.EndTime);
                 total.Total = cunt + 3;
                 total.NotUsed = total.Total - total.Used;
-                total.LastUpdateTime = DateTime.Now;
+                total.LastStatisticsTime = DateTime.Now;
             }
             
             if (total.NotUsed < 1)
