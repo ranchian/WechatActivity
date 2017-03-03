@@ -49,7 +49,7 @@ namespace FJW.Wechat.Activity.Controllers
 
                         //根据token读取ID
                         var mberRepository = new MemberRepository(SqlConnectString);
-                        var memberInfo = mberRepository.GetMemberInfo(resp.Token);
+                        var memberInfo = mberRepository.GetMemberInfoByWx(resp.Token);
 
                         result.Success = 1;
                         result.Result = "操作成功";
