@@ -86,7 +86,7 @@ namespace FJW.Wechat.Activity.Controllers
             
             if (total.NotUsed < 1)
             {
-                return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Message = "机会已用完，快快去投资，每投资一笔，可再摇一次哟~" });
+                return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Message = "机会已用完，快快去投资，每投资一笔定期产品，可再摇一次哟~" });
             }
             string name;
             long prize;
