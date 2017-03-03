@@ -63,11 +63,24 @@ namespace FJW.Wechat.Activity.Controllers
                 isNew = true;
             }
 
-            if ((DateTime.Now - total.LastStatisticsTime).TotalSeconds > 30)
+            if ((DateTime.Now - total.LastStatisticsTime).TotalSeconds > 10)
             {
                 var cunt = sqlRepository.ProductBuyCount(userId, config.StartTime, config.EndTime);
-                total.Total = cunt + 3;
-                total.NotUsed = total.Total - total.Used;
+                var totalCnt = cunt + 3;
+                var notUsed = totalCnt - total.Used;
+                if (notUsed < 0)
+                {
+                    total.Remark = $"total:{total.Total} used:{total.Used} notused:{total.NotUsed}";
+                    total.Total = totalCnt;
+                    total.Used = totalCnt;
+                    total.NotUsed = 0;
+                }
+                else
+                {
+                    total.Total = totalCnt;
+                    total.NotUsed = notUsed;
+                }
+
                 total.LastStatisticsTime = DateTime.Now;
             }
             

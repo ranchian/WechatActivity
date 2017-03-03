@@ -138,7 +138,7 @@ left join Basic..BD_Member M on T1.MemberID = M.ID;";
             {
                 return conn.ExecuteScalar<int>(
                     @"select COUNT(ID) from Trading..TC_ProductBuy 
-where MemberID = @memberId and BuyTime >= @startTime and BuyTime < @endTime and Status = 1 and IsDelete = 0", 
+where MemberID = @memberId and BuyTime >= @startTime and BuyTime < @endTime and ProductTypeParentID = 2 and Status = 1 and IsDelete = 0", 
                     new { memberId, startTime, endTime });
             }
         }
