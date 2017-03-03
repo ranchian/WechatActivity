@@ -33,7 +33,7 @@ namespace FJW.Wechat.Data
             using (var conn = GetDbConnection())
             {
                 return conn.Query<MemberModel>(
-                    "select top 1 MemberID, Phone, Token from dbo.BD_MemberLoginLog where IsDelete = 0 and Token = @token order by LoginTime desc;",
+                    "select top 1 MemberID, Phone, Token from dbo.BD_MemberLoginLog where IsDelete = 0 and WxToken = @token order by LoginTime desc;",
                     new {token}).FirstOrDefault();
             }
         }
