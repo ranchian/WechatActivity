@@ -90,14 +90,15 @@ namespace FJW.Wechat.Activity.Controllers
             }
             string name;
             long prize;
-            var result = GiveCoupon( total.Used, userId, config, out name, out prize);
+            int sequnce;
+            var result = GiveCoupon( total.Used, userId, config, out name, out prize, out sequnce);
             var luckdraw = new LuckdrawModel
             {
                 MemberId = userId,
                 Key = GameKey,
                 Remark = result,
                 Name = name,
-                Sequnce = 0,
+                Sequnce = sequnce,
                 Prize = prize,
                 Phone = UserInfo.Phone,
                 CreateTime = DateTime.Now,
@@ -149,15 +150,15 @@ namespace FJW.Wechat.Activity.Controllers
         /// <param name="name"></param>
         /// <param name="prize"></param>
         /// <returns></returns>
-        private string GiveCoupon(int usedCount, long userId, WomanDayConfig config, out string name, out long prize)
+        private string GiveCoupon(int usedCount, long userId, WomanDayConfig config, out string name, out long prize, out int sequnce)
         {
             //
             //Squence
             var n = RedisManager.GetIncrement("activity:" + GameKey);
             var s = n % 100;
             var c = Squence[s];
-
-            if (usedCount < 3 && c =='P' || c == 'Q' || c == 'R')
+            sequnce = (int)s;
+            if (usedCount < 3 &&( c =='P' || c == 'Q' || c == 'R'))
             {
                 c = 'A';
             }
