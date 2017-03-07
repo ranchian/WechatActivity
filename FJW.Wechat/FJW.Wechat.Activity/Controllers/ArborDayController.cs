@@ -67,13 +67,7 @@ namespace FJW.Wechat.Activity.Controllers
 
                 return Json(new ResponseModel { ErrorCode = ErrorCode.NotLogged, Message = "未登录" });
             }
-            bool isPlay;
-            RecordModel rec;
-            var res = Game(userId, out isPlay, out rec);
-            if (isPlay)
-            {
-                return Json(res);
-            }
+            
             return Json(new ResponseModel(ErrorCode.None));
         }
 
@@ -120,7 +114,7 @@ namespace FJW.Wechat.Activity.Controllers
         [HttpPost]
         public ActionResult Over(ArbordayModel result)
         {
-            Logger.Dedug("result:{0}", result.Score);
+
             var config = GetConfig();
             var uid = UserInfo.Id;
 
@@ -155,6 +149,12 @@ namespace FJW.Wechat.Activity.Controllers
                 });
             }
 
+            if (UserInfo.Id < 1)
+            {
+
+                return Json(new ResponseModel { ErrorCode = ErrorCode.NotLogged, Message = "未登录" });
+            }
+
             if (result.Score < 0)
             {
                 return Json(new ResponseModel
@@ -163,10 +163,7 @@ namespace FJW.Wechat.Activity.Controllers
                     Message = "游戏数据不正确"
                 });
             }
-
-            //未登录
-            if (uid < 1)
-                return Json(NotUser(result.Score));
+            
             //已登录
             if (uid > 0)
                 return Json(HasUser(uid, result.Score));
@@ -218,19 +215,13 @@ namespace FJW.Wechat.Activity.Controllers
             bool isPlay;
             RecordModel data = null;
             var res = Game(uid, out isPlay, out data);
+
             if (isPlay)
             {
                 maxScore(data, score);
-                SetSelfGameRecordId(null);
                 return new ResponseModel { ErrorCode = ErrorCode.None, Message = "游戏数据已更新" };
             }
-            //登陆后获取临时成绩
-            var recordId = GetSelfGameRecordId();
 
-            //该记录是否有用户
-            data = _repsitory.Query<RecordModel>(it =>
-                it.Key == Key && it.RecordId == recordId).FirstOrDefault();
-            Logger.Dedug("临时记录 Phone:{0}  Data{1}", UserInfo.Phone, data.ToJson());
             if (data == null)
             {
                 if (score > 0)
@@ -247,26 +238,14 @@ namespace FJW.Wechat.Activity.Controllers
                         Total = 1,
                         CreateTime = DateTime.Now
                     };
-                    SetSelfGameRecordId(gameData.RecordId);
                     _repsitory.Add(gameData);
                     Logger.Dedug("Phone:{0} Message:游戏数据已更新 ", UserInfo.Phone, score);
                     return new ResponseModel { ErrorCode = ErrorCode.None, Message = "游戏数据已更新" };
                 }
-                Logger.Dedug("Phone:{0} Message:没有用户数据 ", UserInfo.Phone, score);
-                return new ResponseModel { ErrorCode = ErrorCode.NotVerified, Message = "没有用户数据" };
+
+                return new ResponseModel { ErrorCode = ErrorCode.Exception, Message = "没有用户数据" };
             }
 
-            if (data.MemberId != 0)
-                return new ResponseModel { ErrorCode = ErrorCode.None, Message = "成绩已提交" };
-
-            data.MemberId = uid;
-            data.Phone = UserInfo.Phone;
-            data.LastUpdateTime = DateTime.Now;
-
-            maxScore(data, score);
-            _repsitory.Update(data);
-
-            Logger.Dedug("同步数据 Phone:{0} Score:{1} DATA:{2}", UserInfo.Phone, score, data.ToJson());
             return new ResponseModel { ErrorCode = ErrorCode.None };
         }
 
@@ -348,7 +327,7 @@ namespace FJW.Wechat.Activity.Controllers
             return Json(data);
         }
 
-        //校验领取次数
+        //校验游戏次数
         public bool HasCount(long memberId)
         {
             var config = GetConfig();
@@ -368,9 +347,9 @@ namespace FJW.Wechat.Activity.Controllers
         public ActionResult TotalScore()
         {
             int num = 0;
-            var totalList = _repsitory.Query<LuckdrawModel>(it => it.Key == Key).GroupBy(it => it.Phone)
-                                    .Select(it => new { Phone = StringHelper.CoverPhone(it.Key), TotalScore = it.Sum(item => item.Score), Num = ++num })
-                                    .OrderByDescending(it => it.TotalScore);
+            var totalList = _repsitory.Query<RecordModel>(it => it.Key == Key).GroupBy(it => it.Phone)
+                                    .Select(it => new { Phone = StringHelper.CoverPhone(it.Key), TotalScore = it.Sum(item => item.Score) })
+                                    .OrderByDescending(it => it.TotalScore).Select(it=>new { it.Phone,it.TotalScore, Num = ++num }).ToList();
             return Json(totalList);
         }
 

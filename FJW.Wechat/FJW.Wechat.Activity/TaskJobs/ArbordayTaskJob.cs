@@ -57,7 +57,7 @@ namespace FJW.Wechat.Activity.TaskJobs
                         Key = Key,
                         MemberId = memberId,
                         Phone = data[i].Phone,
-                        Sequnce = i,
+                        Sequnce = i+1,
                         Prize = counponId,
 
                         Name = name,
