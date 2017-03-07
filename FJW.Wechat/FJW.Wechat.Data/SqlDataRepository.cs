@@ -243,6 +243,24 @@ order by O.ID desc");
                 ORDER BY TotalBuyShares DESC,LastBuyTime ASC", new { productId  }).ToList();
             }
         }
+
+        /// <summary>
+        /// 用户购买次数（不含新手专享）
+        /// </summary>
+        /// <param name="memberId"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        public int BuyCount(long memberId, DateTime startTime, DateTime endTime)
+        {
+            using (var conn = GetDbConnection())
+            {
+                return conn.ExecuteScalar<int>(
+                    @"select COUNT(ID) from Trading..TC_ProductBuy 
+where MemberID = @memberId and ProductTypeParentID = 2 and ProductTypeID!=9 and Status = 1 and IsDelete = 0 and BuyTime >= @startTime and BuyTime < @endTime",
+                    new { memberId, startTime, endTime });
+            }
+        }
     }
 
  

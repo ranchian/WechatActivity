@@ -75,5 +75,10 @@ namespace FJW.Wechat.Data.Model.Mongo
         /// </summary>
         public string Phone { get; set; }
 
+        /// <summary>
+        /// 总分数
+        /// </summary>
+        public int TotalScore { get; set; }
+
     }
 }
