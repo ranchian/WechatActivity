@@ -67,7 +67,11 @@ namespace FJW.Wechat.Activity.Controllers
 
                 return Json(new ResponseModel { ErrorCode = ErrorCode.NotLogged, Message = "未登录" });
             }
-            
+            if (!HasCount(userId))
+            {
+                return Json(new ResponseModel { ErrorCode = ErrorCode.Exception, Message = "没有游戏机会咯。" });
+            }
+
             return Json(new ResponseModel(ErrorCode.None));
         }
 
@@ -159,11 +163,11 @@ namespace FJW.Wechat.Activity.Controllers
             {
                 return Json(new ResponseModel
                 {
-                    ErrorCode = ErrorCode.NotVerified,
+                    ErrorCode = ErrorCode.Exception,
                     Message = "游戏数据不正确"
                 });
             }
-            
+
             //已登录
             if (uid > 0)
                 return Json(HasUser(uid, result.Score));
@@ -260,6 +264,12 @@ namespace FJW.Wechat.Activity.Controllers
                 data.Total = data.Total + 1;
                 _repsitory.Update(data);
             }
+            else
+            {
+                data.LastUpdateTime = DateTime.Now;
+                data.Total = data.Total + 1;
+                _repsitory.Update(data);
+            }
         }
 
         //获取配置
@@ -282,15 +292,16 @@ namespace FJW.Wechat.Activity.Controllers
                 var date = DateTime.Now.Date;
                 data = new ActivityRepository(Config.ActivityConfig.DbName, Config.ActivityConfig.MongoHost).QueryDesc<RecordModel, int>(it => it.Key == Key
                 && it.MemberId != 0 && it.Phone != "" && it.Result != 0 && it.CreateTime >= date && it.CreateTime < date.AddDays(1)
-                , it => it.Result, 20, 0, out cnt).OrderBy(it => it.CreateTime).ToList();
+                , it => it.Result, 20, 0, out cnt).OrderByDescending(it => it.Result).ThenBy(it => it.CreateTime).ToList();
 
                 object resData = data.Select(it => new
                 {
-                    Sequnce = ++num,
-                    Phone = StringHelper.CoverPhone(it.Phone)
+                    Num = ++num,
+                    Phone = StringHelper.CoverPhone(it.Phone),
+                    Record = it.Score
                 }).ToList();
 
-                return Json(resData);
+                return Json(new ResponseModel { Data = resData });
             }
             catch (Exception ex)
             {
@@ -310,6 +321,9 @@ namespace FJW.Wechat.Activity.Controllers
             var userId = UserInfo.Id;
             if (userId <= 0)
                 return Json(new ResponseModel { ErrorCode = ErrorCode.NotLogged, Message = "未登录" });
+            if (!HasCount(userId))
+                return Json(new ResponseModel { ErrorCode = ErrorCode.Exception, Message = "没有游戏机会咯。" });
+
             int cnt;
             int num = 0;
             var date = DateTime.Now.Date;
@@ -324,7 +338,7 @@ namespace FJW.Wechat.Activity.Controllers
             if (data == null)
                 return Json(new ResponseModel { ErrorCode = ErrorCode.NotVerified, Message = "未进排名" });
 
-            return Json(data);
+            return Json(new ResponseModel { Data = data });
         }
 
         //校验游戏次数
@@ -336,11 +350,40 @@ namespace FJW.Wechat.Activity.Controllers
                 _repsitory.Query<LuckdrawModel>(it => it.Key == Key && it.MemberId == memberId && it.Status == 1).Count();
 
             //购买产品获得次数
-            var buyCount = new SqlDataRepository(SqlConnectString).BuyCount(memberId, config.StartTime,config.EndTime);
+            var buyCount = new SqlDataRepository(SqlConnectString).BuyCount(memberId, config.StartTime, config.EndTime);
 
 
             return receiveCount < (buyCount + 2);
 
+        }
+
+        //获取昨日排行榜
+        public ActionResult YesterDayTotal()
+        {
+            try
+            {
+                List<LuckdrawModel> data = new List<LuckdrawModel>();
+                var num = 0;
+                int cnt;
+                var date = DateTime.Now.Date.AddDays(-1);
+                data = new ActivityRepository(Config.ActivityConfig.DbName, Config.ActivityConfig.MongoHost).QueryDesc<LuckdrawModel, int>(it => it.Key == Key
+                && it.MemberId != 0 && it.Phone != "" && it.Score != 0 && it.CreateTime >= date && it.CreateTime < date.AddDays(1)
+                , it => it.Score, 20, 0, out cnt).OrderBy(it => it.Sequnce).ThenBy(it => it.CreateTime).ToList();
+
+                object resData = data.Select(it => new
+                {
+                    Num = it.Sequnce,
+                    Phone = StringHelper.CoverPhone(it.Phone),
+                    Record = it.Score
+                }).ToList();
+
+                return Json(new ResponseModel { Data = resData });
+            }
+            catch (Exception ex)
+            {
+                Logger.Dedug("YesterDayTotal:{0}", ex.ToString());
+                return Json(new ResponseModel { ErrorCode = ErrorCode.Other });
+            }
         }
 
         //活动总排名
@@ -348,9 +391,9 @@ namespace FJW.Wechat.Activity.Controllers
         {
             int num = 0;
             var totalList = _repsitory.Query<RecordModel>(it => it.Key == Key).GroupBy(it => it.Phone)
-                                    .Select(it => new { Phone = StringHelper.CoverPhone(it.Key), TotalScore = it.Sum(item => item.Score) })
-                                    .OrderByDescending(it => it.TotalScore).Select(it=>new { it.Phone,it.TotalScore, Num = ++num }).ToList();
-            return Json(totalList);
+                                    .Select(it => new { Phone = StringHelper.CoverPhone(it.Key), TotalScore = it.Sum(item => item.Score), CreateTime = it.Min(item => item.CreateTime) })
+                                    .OrderByDescending(it => it.TotalScore).ThenBy(it => it.CreateTime).Select(it => new { it.Phone, it.TotalScore, Num = ++num }).ToList();
+            return Json(new ResponseModel { Data = totalList });
         }
 
 

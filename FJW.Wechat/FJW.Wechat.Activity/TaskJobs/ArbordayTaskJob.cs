@@ -57,10 +57,10 @@ namespace FJW.Wechat.Activity.TaskJobs
                         Key = Key,
                         MemberId = memberId,
                         Phone = data[i].Phone,
-                        Sequnce = i+1,
+                        Sequnce = i + 1,
                         Prize = counponId,
-
                         Name = name,
+                        Score = data[i].Score,
                         Status = isReceive ? 1 : 0,//上榜用户是否发送奖励
                         Remark = data[i].LastUpdateTime.ToString()
                     });
