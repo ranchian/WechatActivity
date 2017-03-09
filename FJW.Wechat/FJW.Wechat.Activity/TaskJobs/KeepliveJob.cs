@@ -19,6 +19,7 @@ namespace FJW.Wechat.Activity.TaskJobs
             {
                 string url = WebConfigurationManager.AppSettings["ArborDayUrl"];
                 HttpUnit.GetString(url);
+                Logger.Info("KeepliveJob: OK");
             }
             catch (Exception ex)
             {

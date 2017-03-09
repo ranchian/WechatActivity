@@ -158,7 +158,9 @@ namespace FJW.Wechat.Activity.Controllers
 
                 return Json(new ResponseModel { ErrorCode = ErrorCode.NotLogged, Message = "未登录" });
             }
-
+            if (!HasCount(UserInfo.Id))
+                return Json(new ResponseModel { ErrorCode = ErrorCode.Exception, Message = "没有游戏机会咯。" });
+              
             if (result.Score < 0)
             {
                 return Json(new ResponseModel
@@ -292,7 +294,7 @@ namespace FJW.Wechat.Activity.Controllers
                 var date = DateTime.Now.Date;
                 data = new ActivityRepository(Config.ActivityConfig.DbName, Config.ActivityConfig.MongoHost).QueryDesc<RecordModel, int>(it => it.Key == Key
                 && it.MemberId != 0 && it.Phone != "" && it.Result != 0 && it.CreateTime >= date && it.CreateTime < date.AddDays(1)
-                , it => it.Result, 20, 0, out cnt).OrderByDescending(it => it.Result).ThenBy(it => it.CreateTime).ToList();
+                , it => it.Result, 20, 1, out cnt).OrderByDescending(it => it.Result).ThenBy(it => it.CreateTime).ToList();
 
                 object resData = data.Select(it => new
                 {
@@ -336,9 +338,9 @@ namespace FJW.Wechat.Activity.Controllers
                     Id = it.MemberId
                 }).FirstOrDefault(it => it.Id == userId);
             if (data == null)
-                return Json(new ResponseModel { ErrorCode = ErrorCode.NotVerified, Message = "未进排名" });
+                return Json(new ResponseModel { ErrorCode = ErrorCode.None, Message = "无游戏数据。" });
 
-            return Json(new ResponseModel { Data = data });
+            return Json(new ResponseModel { ErrorCode = ErrorCode.None, Data = data });
         }
 
         //校验游戏次数
@@ -368,7 +370,7 @@ namespace FJW.Wechat.Activity.Controllers
                 var date = DateTime.Now.Date.AddDays(-1);
                 data = new ActivityRepository(Config.ActivityConfig.DbName, Config.ActivityConfig.MongoHost).QueryDesc<LuckdrawModel, int>(it => it.Key == Key
                 && it.MemberId != 0 && it.Phone != "" && it.Score != 0 && it.CreateTime >= date && it.CreateTime < date.AddDays(1)
-                , it => it.Score, 20, 0, out cnt).OrderBy(it => it.Sequnce).ThenBy(it => it.CreateTime).ToList();
+                , it => it.Score, 20, 1, out cnt).OrderByDescending(it=>it.Score).ThenBy(it => it.Sequnce).ThenBy(it => it.CreateTime).ToList();
 
                 object resData = data.Select(it => new
                 {
@@ -389,11 +391,15 @@ namespace FJW.Wechat.Activity.Controllers
         //活动总排名
         public ActionResult TotalScore()
         {
-            int num = 0;
-            var totalList = _repsitory.Query<RecordModel>(it => it.Key == Key).GroupBy(it => it.Phone)
-                                    .Select(it => new { Phone = StringHelper.CoverPhone(it.Key), TotalScore = it.Sum(item => item.Score), CreateTime = it.Min(item => item.CreateTime) })
-                                    .OrderByDescending(it => it.TotalScore).ThenBy(it => it.CreateTime).Select(it => new { it.Phone, it.TotalScore, Num = ++num }).ToList();
-            return Json(new ResponseModel { Data = totalList });
+            if (UserInfo.Id == 55 || UserInfo.Id == 1 || UserInfo.Id == 4)
+            {
+                int num = 0;
+                var totalList = _repsitory.Query<RecordModel>(it => it.Key == Key).GroupBy(it => it.Phone)
+                                        .Select(it => new { Phone = it.Key, TotalScore = it.Sum(item => item.Score), CreateTime = it.Min(item => item.CreateTime) })
+                                        .OrderByDescending(it => it.TotalScore).ThenBy(it => it.CreateTime).Select(it => new { it.Phone, it.TotalScore, Num = ++num }).Take(10).ToList();
+                return Json(new ResponseModel { Data = totalList });
+            }
+            return Json(new ResponseModel());
         }
 
 

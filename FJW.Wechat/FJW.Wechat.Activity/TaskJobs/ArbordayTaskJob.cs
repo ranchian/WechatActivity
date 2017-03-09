@@ -30,7 +30,7 @@ namespace FJW.Wechat.Activity.TaskJobs
                 int cnt;
                 var data = new ActivityRepository(Config.ActivityConfig.DbName, Config.ActivityConfig.MongoHost).
                     QueryDesc<RecordModel, int>(it => it.Key == Key && it.MemberId != 0 && it.Phone != "" && it.Result != 0 && it.CreateTime >= date && it.CreateTime < date.AddDays(1)
-                    , it => it.Result, 20, 0, out cnt).OrderByDescending(it => it.Result).ThenBy(it => it.CreateTime).ToList();
+                    , it => it.Result, 20, 1, out cnt).OrderByDescending(it => it.Result).ThenBy(it => it.CreateTime).ToList();
 
                 //给上榜用户数 发放奖励 /更新每日排行榜
                 List<LuckdrawModel> luckModels = new List<LuckdrawModel>();
@@ -62,7 +62,7 @@ namespace FJW.Wechat.Activity.TaskJobs
                         Name = name,
                         Score = data[i].Score,
                         Status = isReceive ? 1 : 0,//上榜用户是否发送奖励
-                        Remark = data[i].LastUpdateTime.ToString()
+                        Remark = data[i].CreateTime.ToString()
                     });
                 }
                 if (luckModels.Count > 0)
