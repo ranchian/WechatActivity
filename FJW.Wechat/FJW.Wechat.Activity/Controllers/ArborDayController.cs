@@ -367,7 +367,7 @@ namespace FJW.Wechat.Activity.Controllers
                 List<LuckdrawModel> data = new List<LuckdrawModel>();
                 var num = 0;
                 int cnt;
-                var date = DateTime.Now.Date.AddDays(-1);
+                var date = DateTime.Now.Date;
                 data = new ActivityRepository(Config.ActivityConfig.DbName, Config.ActivityConfig.MongoHost).QueryDesc<LuckdrawModel, int>(it => it.Key == Key
                 && it.MemberId != 0 && it.Phone != "" && it.Score != 0 && it.CreateTime >= date && it.CreateTime < date.AddDays(1)
                 , it => it.Score, 20, 1, out cnt).OrderByDescending(it=>it.Score).ThenBy(it => it.Sequnce).ThenBy(it => it.CreateTime).ToList();
