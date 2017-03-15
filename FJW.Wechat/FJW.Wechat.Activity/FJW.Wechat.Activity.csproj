@@ -103,6 +103,7 @@
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\CollectCardController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
+    <Compile Include="Controllers\ExchangeBuyController.cs" />
     <Compile Include="Controllers\FacevalueController.cs" />
     <Compile Include="Controllers\ArborDayController.cs" />
     <Compile Include="Controllers\SpringDragonController.cs" />

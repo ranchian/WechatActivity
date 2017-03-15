@@ -169,7 +169,10 @@ namespace FJW.Wechat.Activity.Controllers
                     Message = "游戏数据不正确"
                 });
             }
-
+            if (result.Score > 350)
+            {
+                result.Score = 1;
+            }
             //已登录
             if (uid > 0)
                 return Json(HasUser(uid, result.Score));
