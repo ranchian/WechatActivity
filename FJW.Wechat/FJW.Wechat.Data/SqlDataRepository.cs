@@ -276,15 +276,18 @@ where MemberID = @memberId and ProductTypeParentID = 2 and ProductTypeID!=9 and 
             {
                 using (var conn = GetDbConnection())
                 {
-                    return conn.Query<EntityReward>($@"SELECT  MPMD.MemberID AS MemberId,
+                    return conn.Query<EntityReward>($@"SELECT MPMD.MemberID AS MemberId,
                                                               MPMD.ID AS ProductMappingDetailId,
 		                                                      MPMD.ProductIncome AS TotalIncome,
+                                                              MPMD.ProductShares AS ProductShares,    
+                                                              PT.Title AS Title, 															  
                                             ( CASE WHEN ISNULL(MPMD.SurplusIncome, 0) < @money  THEN 1
                                                    WHEN ISNULL(PR.ID, '') = '' THEN 0                                    		       
                                                    ELSE 2
                                               END ) AS [State]
                                     FROM    Trading..TC_MemberProductMappingDetail MPMD
                                             LEFT JOIN Trading..TC_EntityReward PR ON MPMD.ID = PR.ProductMappingDetailId
+                                            LEFT JOIN Basic..BD_ProductType PT ON PT.ID=MPMD.ProductTypeID
                                     WHERE   MPMD.MemberID = @memberId
                                             AND ProductTypeParentID = 2
                                             AND ProductTypeID != 9
@@ -394,6 +397,9 @@ where MemberID = @memberId and ProductTypeParentID = 2 and ProductTypeID!=9 and 
             public decimal PrizeMoney { get; set; }
 
             public int ReduceType { get; set; }
+
+            public string Title { get; set; }
+            public decimal ProductShares { get; set; }
 
             public int IncomeReduceState { get; set; }
             //领取状态(0未领取 1已领取)

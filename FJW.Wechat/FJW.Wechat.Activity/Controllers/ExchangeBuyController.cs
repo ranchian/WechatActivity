@@ -96,7 +96,9 @@ namespace FJW.Wechat.Activity.Controllers
             if (productMappingDetailId == 0)
             {
                 var resultData =
-                    _respoRepository.MemberBuyRecord(UserInfo.Id, config.StartTime, config.EndTime, realThingEnt.ExchangeMoney).Select(it => new { it.ProductMappingDetailId, it.TotalIncome, it.State }).ToJson();
+                    _respoRepository.MemberBuyRecord(UserInfo.Id, config.StartTime, config.EndTime, realThingEnt.ExchangeMoney).Select(it => new { it.ProductMappingDetailId, it.TotalIncome, it.State, it.ProductShares, it.Title, Phone = StringHelper.CoverPhone(UserInfo.Phone) }).OrderBy(it=>it.State);
+                if(resultData.Count()<=0)
+                    return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Data = StringHelper.CoverPhone(UserInfo.Phone) ,Message = "暂无购买记录。"});
                 return Json(new ResponseModel { ErrorCode = ErrorCode.None, Data = resultData });
             }
 
