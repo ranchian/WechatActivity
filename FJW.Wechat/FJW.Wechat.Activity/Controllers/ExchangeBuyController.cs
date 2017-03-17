@@ -7,8 +7,6 @@ using FJW.Unit;
 using FJW.Wechat.Cache;
 using FJW.Wechat.Data;
 
-using static FJW.Wechat.Data.SqlDataRepository;
-
 namespace FJW.Wechat.Activity.Controllers
 {
     /// <summary>
@@ -96,9 +94,9 @@ namespace FJW.Wechat.Activity.Controllers
             if (productMappingDetailId == 0)
             {
                 var resultData =
-                    _respoRepository.MemberBuyRecord(UserInfo.Id, config.StartTime, config.EndTime, realThingEnt.ExchangeMoney).Select(it => new { it.ProductMappingDetailId, it.TotalIncome, it.State, it.ProductShares, it.Title, Phone = StringHelper.CoverPhone(UserInfo.Phone) }).OrderBy(it=>it.State);
-                if(resultData.Count()<=0)
-                    return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Data = StringHelper.CoverPhone(UserInfo.Phone) ,Message = "暂无购买记录。"});
+                    _respoRepository.MemberBuyRecord(UserInfo.Id, config.StartTime, config.EndTime, realThingEnt.ExchangeMoney).OrderBy(it => it.State).ThenByDescending(it => it.ExChangeTime).Select(it => new { it.ProductMappingDetailId, it.TotalIncome, it.State, it.ProductShares, it.Title, Phone = StringHelper.CoverPhone(UserInfo.Phone) });
+                if (resultData.Count() <= 0)
+                    return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Data = StringHelper.CoverPhone(UserInfo.Phone), Message = "暂无购买记录。" });
                 return Json(new ResponseModel { ErrorCode = ErrorCode.None, Data = resultData });
             }
 
@@ -120,8 +118,17 @@ namespace FJW.Wechat.Activity.Controllers
             Logger.Info($"AddEntityReward :{buyRecord.ToJson()}");
             var addRes = _respoRepository.Add(buyRecord);
             if (addRes > 0)
+            {
+                var smsRes = _respoRepository.AddSms(new Sms
+                {
+                    Phone = long.Parse(buyRecord.Phone),
+                    Msg = $@"尊敬的用户，感谢您参与换购活动，您已成功兑换了【{realThingEnt.Name}】，请登陆房金网APP“个人中心”填写收货地址，退订回复TD",
+                    sign = 1
+                });
+                if (smsRes <= 0)
+                    Logger.Info($"短信发送失败：Phone:{buyRecord.Phone},ActivityName:{buyRecord.ActivityName}");
                 return Json(new ResponseModel { ErrorCode = ErrorCode.None, Message = "OK" });
-
+            }
             Logger.Error("AddEntityReward :插入奖励实体失败");
             return Json(new ResponseModel { ErrorCode = ErrorCode.Exception, Message = "兑换失败" });
         }

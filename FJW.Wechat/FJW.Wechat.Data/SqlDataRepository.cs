@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
@@ -280,19 +281,21 @@ where MemberID = @memberId and ProductTypeParentID = 2 and ProductTypeID!=9 and 
                                                               MPMD.ID AS ProductMappingDetailId,
 		                                                      MPMD.ProductIncome AS TotalIncome,
                                                               MPMD.ProductShares AS ProductShares,    
+                                                              PR.CreateTime AS ExChangeTime,
                                                               PT.Title AS Title, 															  
-                                            ( CASE WHEN ISNULL(MPMD.SurplusIncome, 0) < @money  THEN 1
-                                                   WHEN ISNULL(PR.ID, '') = '' THEN 0                                    		       
-                                                   ELSE 2
+                                            ( CASE WHEN ISNULL(PR.ID, '') != '' THEN 2											       
+                                                   WHEN ISNULL(MPMD.SurplusIncome, 0) < @money  THEN 1                                                                                       		       
+                                                   ELSE 0
                                               END ) AS [State]
                                     FROM    Trading..TC_MemberProductMappingDetail MPMD
-                                            LEFT JOIN Trading..TC_EntityReward PR ON MPMD.ID = PR.ProductMappingDetailId
+                                            LEFT JOIN Trading..TC_EntityReward PR ON MPMD.ID = PR.ProductMappingDetailId                                              
+                                            AND PR.IsDelete = MPMD.IsDelete
                                             LEFT JOIN Basic..BD_ProductType PT ON PT.ID=MPMD.ProductTypeID
                                     WHERE   MPMD.MemberID = @memberId
                                             AND ProductTypeParentID = 2
                                             AND ProductTypeID != 9
                                             AND MPMD.Status = 1
-                                            AND MPMD.IsDelete = 0
+                                            AND MPMD.IsDelete = 0                                            
                                             AND MPMD.BuyTime >= @startTime
                                             AND MPMD.BuyTime < @endTime
                                             {(productMappingDetailId == 0 ? "" : "AND MPMD.Id = @productMappingDetailId")} ", new { memberId, startTime, endTime, money, productMappingDetailId }).ToList();
@@ -338,7 +341,6 @@ where MemberID = @memberId and ProductTypeParentID = 2 and ProductTypeID!=9 and 
                     param.Add("@PrizeName", er.PrizeName, DbType.String);
                     param.Add("@TotalIncome", er.TotalIncome, DbType.Decimal);
                     param.Add("@PrizeMoney", er.PrizeMoney, DbType.Decimal);
-                    param.Add("@ReduceType", er.ReduceType, DbType.Int32);
                     param.Add("@IncomeReduceState", er.IncomeReduceState, DbType.Int32);
                     param.Add("@ReceiveState", er.ReceiveState, DbType.Int32);
                     param.Add("@Remark", er.Remark, DbType.String);
@@ -352,8 +354,7 @@ where MemberID = @memberId and ProductTypeParentID = 2 and ProductTypeID!=9 and 
                                                     ,[PrizeId]
                                                     ,[PrizeName]
                                                     ,[TotalIncome]
-                                                    ,[PrizeMoney]
-                                                    ,[ReduceType]
+                                                    ,[PrizeMoney]                                                    
                                                     ,[IncomeReduceState]
                                                     ,[ReceiveState]
                                                     ,[Remark])
@@ -367,8 +368,7 @@ where MemberID = @memberId and ProductTypeParentID = 2 and ProductTypeID!=9 and 
                                                     ,@PrizeId
                                                     ,@PrizeName
                                                     ,@TotalIncome
-                                                    ,@PrizeMoney
-                                                    ,@ReduceType
+                                                    ,@PrizeMoney                                                    
                                                     ,@IncomeReduceState
                                                     ,@ReceiveState
                                                     ,@Remark)", param);
@@ -377,55 +377,84 @@ where MemberID = @memberId and ProductTypeParentID = 2 and ProductTypeID!=9 and 
             catch (Exception ex)
             {
 
-                throw;
+                Logger.Error($"ADD Error:{ex}  Data:{er}");
+                return -1;
             }
         }
 
-        public class EntityReward
+        //发送短信
+        public int AddSms(Sms sms)
         {
-            public long ActivityId { get; set; }
-            public string ActivityName { get; set; }
-            public long MemberId { get; set; }
-            public string Phone { get; set; }
-            public long ProductMappingDetailId { get; set; }
-            public long PrizeId { get; set; }
-            //奖品名称
-            public string PrizeName { get; set; }
-            //总收益
-            public decimal TotalIncome { get; set; }
-            //奖品价格
-            public decimal PrizeMoney { get; set; }
 
-            public int ReduceType { get; set; }
-
-            public string Title { get; set; }
-            public decimal ProductShares { get; set; }
-
-            public int IncomeReduceState { get; set; }
-            //领取状态(0未领取 1已领取)
-            public int ReceiveState { get; set; }
-
-            public string Remark { get; set; }
-            //0未兑换 1无法兑换 2兑换
-            public int State { get; set; }
-
-        }
-
-        public class RealThing
-        {
-            //实物名称
-            public int PrizeId { get; set; }
-            //实物名称
-            public string Name { get; set; }
-            //实物价格
-            public decimal Money { get; set; }
-            //兑换价格
-            public decimal ExchangeMoney { get; set; }
-
+            using (var conn = GetDbConnection())
+            {
+                var param = new DynamicParameters();
+                param.Add("@Phone", sms.Phone, DbType.Int64);
+                param.Add("@Msg", sms.Msg, DbType.String);
+                param.Add("@SIGN", sms.sign, DbType.Int16);
+                param.Add("@CreateTime", sms.CreateTime, DbType.DateTime);
+                param.Add("@Channel", sms.Channel, DbType.String);
+                return conn.Execute(@"INSERT  INTO SMS..SMS_Message([Phone], [Msg], [Sign],[CreateTime],Channel )
+                                VALUES  ( @Phone, @Msg, @SIGN ,@CreateTime,@Channel );
+           ", param);
+            }
         }
     }
 
+    public class EntityReward
+    {
+        public long ActivityId { get; set; }
+        public string ActivityName { get; set; }
+        public long MemberId { get; set; }
+        public string Phone { get; set; }
+        public long ProductMappingDetailId { get; set; }
+        public long PrizeId { get; set; }
+        //奖品名称
+        public string PrizeName { get; set; }
+        //总收益
+        public decimal TotalIncome { get; set; }
+        //奖品价格
+        public decimal PrizeMoney { get; set; }
 
+        public int ReduceType { get; set; }
 
+        public string Title { get; set; }
+        public decimal ProductShares { get; set; }
 
+        public int IncomeReduceState { get; set; }
+        //领取状态(0未领取 1已领取)
+        public int ReceiveState { get; set; }
+
+        public string Remark { get; set; }
+        //0未兑换 1无法兑换 2兑换
+        public int State { get; set; }
+        //兑换时间
+        public DateTime ExChangeTime { get; set; }
+    }
+
+    public class RealThing
+    {
+        //实物名称
+        public int PrizeId { get; set; }
+        //实物名称
+        public string Name { get; set; }
+        //实物价格
+        public decimal Money { get; set; }
+        //兑换价格
+        public decimal ExchangeMoney { get; set; }
+
+    }
+
+    public class Sms
+    {
+        public long Phone { get; set; }
+
+        public string Msg { get; set; }
+
+        public int sign { get; set; }
+
+        public DateTime CreateTime => DateTime.Now;
+
+        public string Channel=>"changlan";
+    }
 }
