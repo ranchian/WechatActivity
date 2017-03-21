@@ -55,5 +55,10 @@ namespace FJW.Wechat.Data.Model.Mongo
         /// 备注
         /// </summary>
         public string Remark { get; set; }
+
+        /// <summary>
+        /// 分数
+        /// </summary>
+        public int Score { get; set; }
     }
 }

@@ -103,7 +103,9 @@
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\CollectCardController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
+    <Compile Include="Controllers\ExchangeBuyController.cs" />
     <Compile Include="Controllers\FacevalueController.cs" />
+    <Compile Include="Controllers\ArborDayController.cs" />
     <Compile Include="Controllers\SpringDragonController.cs" />
     <Compile Include="Controllers\FebruaryController.cs" />
     <Compile Include="Controllers\LanternFestivalController.cs" />
@@ -121,7 +123,7 @@
     <Compile Include="Models\ScoreModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TaskJobs\KeepliveJob.cs" />
-    <Compile Include="TaskJobs\SplitloversTaskJob.cs" />
+    <Compile Include="TaskJobs\ArbordayTaskJob.cs" />
     <Compile Include="Unit\QiniuHelper.cs" />
   </ItemGroup>
   <ItemGroup>

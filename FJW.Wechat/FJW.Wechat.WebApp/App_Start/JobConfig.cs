@@ -25,7 +25,7 @@ namespace FJW.Wechat.WebApp
             var config = GetConfig();
 
 
-            IJobDetail updateJob = JobBuilder.Create<SplitloversTaskJob>().WithIdentity("UpdateJob", "MinuteGroup").Build();
+            IJobDetail updateJob = JobBuilder.Create<ArbordayTaskJob>().WithIdentity("UpdateJob", "MinuteGroup").Build();
 
             ITrigger upDateTrigger = TriggerBuilder.Create()
                     .WithIdentity("UpdateJob", "MinuteGroup")
@@ -35,9 +35,9 @@ namespace FJW.Wechat.WebApp
 
             _scheduler.ScheduleJob(updateJob, upDateTrigger);
 
-            IJobDetail keepliveJob = JobBuilder.Create<KeepliveJob>().WithIdentity("KeepliveJobJob", "KeepliveGroup").Build();
+            IJobDetail keepliveJob = JobBuilder.Create<KeepliveJob>().WithIdentity("KeepliveJob", "KeepliveGroup").Build();
             ITrigger keepliveTrigger = TriggerBuilder.Create()
-                    .WithIdentity("KeepliveJobJob", "KeepliveGroup")
+                    .WithIdentity("KeepliveJob", "KeepliveGroup")
                     .StartNow()
                     .WithSimpleSchedule(x => x.WithIntervalInSeconds(600).RepeatForever()).ForJob(keepliveJob)
                     .Build();
@@ -54,9 +54,9 @@ namespace FJW.Wechat.WebApp
         }
 
         //获取奖励配置
-        private static SplitloversConfig GetConfig()
+        private static ArbordayConfig GetConfig()
         {
-            return JsonConfig.GetJson<SplitloversConfig>("Config/activity.splitloversvalue.json");
+            return JsonConfig.GetJson<ArbordayConfig>("Config/activity.arbordayvalue.json");
         }
 
 

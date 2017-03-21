@@ -1,15 +1,8 @@
 ﻿using Quartz;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using FJW.Unit;
-using FJW.Wechat.Activity.Controllers;
-using FJW.Wechat.Data;
-using Quartz.Util;
-using FJW.SDK2Api.CardCoupon;
-using FJW.Wechat.Cache;
+
 using System.Web.Configuration;
 
 namespace FJW.Wechat.Activity.TaskJobs
@@ -24,9 +17,9 @@ namespace FJW.Wechat.Activity.TaskJobs
         {
             try
             {
-                string url = WebConfigurationManager.AppSettings["SplitloversUrl"];
+                string url = WebConfigurationManager.AppSettings["ArborDayUrl"];
                 HttpUnit.GetString(url);
-                Logger.Info("KeepliveJob");
+                Logger.Info("KeepliveJob: OK");
             }
             catch (Exception ex)
             {

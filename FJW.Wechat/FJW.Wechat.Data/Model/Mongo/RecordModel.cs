@@ -74,6 +74,6 @@ namespace FJW.Wechat.Data.Model.Mongo
         /// 手机号
         /// </summary>
         public string Phone { get; set; }
-
+        
     }
 }
