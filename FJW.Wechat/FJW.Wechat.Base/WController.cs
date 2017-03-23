@@ -69,7 +69,7 @@ namespace FJW.Wechat
                 }
                 else
                 {
-                    filterContext.Result = RedirectToAction("Error", "Index");
+                    filterContext.Result = RedirectToAction("Index", "Error");
                 }
             }
             else

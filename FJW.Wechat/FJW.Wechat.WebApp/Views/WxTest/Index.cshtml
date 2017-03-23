@@ -1,0 +1,44 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>WecahtShare</title>
+    <meta charset="utf-8" />
+
+    <link rel="stylesheet" href="//res.wx.qq.com/open/libs/weui/1.0.2/weui.min.css" />
+</head>
+<body>
+    <div style="padding: 5px">
+        <div>
+            <img src="@Html.Raw(ViewBag.HeadimgUrl)" alt="头像" />
+            <span>@Html.Raw(ViewBag.NickName)</span>
+        </div>
+      
+        <div>
+            <h3>已支持的朋友</h3>
+            @foreach (var r in ViewBag.Rows)
+            {
+                <div>
+                    <img src="@Html.Raw(r.HeadimgUlr)"/><span>@Html.Raw(ViewBag.NickName)</span>
+                </div>
+            }
+        </div>
+    </div>
+
+    <script src="/Scripts/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>
+<script src="/Scripts/fjwx.js"></script>
+<script>
+    $(function() {
+        $.fjwx({
+            url:"/wxtest/support?r=@Html.Raw(ViewBag.RowId)"
+        });
+    })
+</script>
+</body>
+</html>

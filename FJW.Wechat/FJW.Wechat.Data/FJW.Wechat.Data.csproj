@@ -67,6 +67,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Mongo\ActivityModel.cs" />
+    <Compile Include="Model\Mongo\WxShareModel.cs" />
+    <Compile Include="Model\Mongo\WxShareSupportModel.cs" />
     <Compile Include="Model\RDBS\MemberChannel.cs" />
     <Compile Include="Model\RDBS\ProductTypeSumShare.cs" />
     <Compile Include="Model\RDBS\MemberModel.cs" />

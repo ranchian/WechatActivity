@@ -172,6 +172,7 @@
     <Compile Include="Controllers\WAuthorizeController.cs" />
     <Compile Include="Controllers\WechatController.cs" />
     <Compile Include="Controllers\WechatFunctionController.cs" />
+    <Compile Include="Controllers\WxTestController.cs" />
     <Compile Include="CustomMessageContext.cs" />
     <Compile Include="CustomMessageHandler.cs" />
     <Compile Include="Global.asax.cs">
@@ -298,6 +299,8 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\WxTest\Index.cshtml" />
+    <Content Include="Views\WxTest\Support.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FJW.SDK2Api\FJW.SDK2Api.csproj">
