@@ -1,9 +1,13 @@
-﻿using FJW.Unit;
+﻿using System;
+using System.Web;
+using FJW.Unit;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Autofac;
 using Autofac.Integration.Mvc;
+using FJW.Wechat.Activity.Rules;
+using FJW.Wechat.Rules;
 using FJW.Wechat.WebApp.Providers;
 using FJW.Wechat.Wx;
 using Senparc.Weixin.MP.Containers;
@@ -35,19 +39,23 @@ namespace FJW.Wechat.WebApp
 
             builder.RegisterType<WxMediaApi>().As<IWxMediaApi>();
             builder.RegisterType<MongoWxAuthenRepository>().As<IWxAuthenRepository>();
+            builder.RegisterType<BoxWordRule>().As<ITextRule>();
 
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
 
-            JobConfig.Start();
+            //JobConfig.Start();
 
 
         }
 
+
+        
+
         protected void Application_End()
         {
             RedisManager.Disponse();
-            JobConfig.Stop();
+            //JobConfig.Stop();
         }
     }
 }

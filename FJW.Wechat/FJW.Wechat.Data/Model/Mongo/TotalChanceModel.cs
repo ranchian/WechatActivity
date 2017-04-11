@@ -41,6 +41,11 @@ namespace FJW.Wechat.Data.Model.Mongo
         public string Prizes { get; set; }
 
         /// <summary>
+        /// 日期
+        /// </summary>
+        public long Date { get; set; }
+
+        /// <summary>
         /// 最后统计时间
         /// </summary>
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]

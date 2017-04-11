@@ -21,6 +21,11 @@ namespace FJW.Wechat.Activity.Controllers
             SqlConnectString = WebConfigurationManager.ConnectionStrings["Default"].ConnectionString;
         }
 
+        protected ActivityRepository GetRepository()
+        {
+            return new ActivityRepository(DbName, MongoHost);
+        }
+
         private const string SelfGameKey = "WAC_SELF";
 
         protected Activity ActivityModel { get; set; }

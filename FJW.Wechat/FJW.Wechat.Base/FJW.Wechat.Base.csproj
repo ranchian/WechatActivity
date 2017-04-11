@@ -91,6 +91,11 @@
     <Compile Include="Cache\JsonConfig.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="CrossDomainFilterAttribute.cs" />
+    <Compile Include="Rules\IRule.cs" />
+    <Compile Include="Rules\IRuleMessage.cs" />
+    <Compile Include="Rules\ITextRule.cs" />
+    <Compile Include="Rules\ResultMessage.cs" />
+    <Compile Include="Rules\RuleMessage.cs" />
     <Compile Include="Wx\IWxAuthenRepository.cs" />
     <Compile Include="Wx\IWxMediaApi.cs" />
     <Compile Include="Wx\WxUserInfo.cs" />

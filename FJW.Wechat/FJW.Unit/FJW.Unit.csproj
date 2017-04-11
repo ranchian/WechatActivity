@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="HttpResult.cs" />
     <Compile Include="HttpUnit.cs" />
+    <Compile Include="IdWorker.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Log\ILogger.cs" />
     <Compile Include="Log\NLogger.cs" />

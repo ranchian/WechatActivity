@@ -41,7 +41,7 @@ namespace FJW.Wechat.WebApp.Controllers
             {
                 return Content("参数错误！");
             }
-
+            
             postModel.Token = Config.WechatConfig.Token; //根据自己后台的设置保持一致
             postModel.EncodingAESKey = Config.WechatConfig.EncodingAesKey; //根据自己后台的设置保持一致
             postModel.AppId = Config.WechatConfig.AppId; //根据自己后台的设置保持一致
