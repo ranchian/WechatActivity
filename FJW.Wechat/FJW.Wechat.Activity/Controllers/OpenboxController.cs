@@ -15,6 +15,7 @@ namespace FJW.Wechat.Activity.Controllers
     /// <summary>
     /// 开宝箱
     /// </summary>
+    [CrossDomainFilter]
     public class OpenboxController: ActivityController
     {
         private const string GameKey = "openbox";
@@ -255,7 +256,7 @@ namespace FJW.Wechat.Activity.Controllers
         {
             var n = RedisManager.GetIncrement("activity:" + GameKey + "2");
             s = n % 100;
-            var c = Squence1[s];
+            var c = Squence2[s];
 
             switch (c)
             {
