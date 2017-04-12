@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FJW.Unit;
 using FJW.Wechat.Activity.ConfigModel;
-using FJW.Wechat.Cache;
 using FJW.Wechat.Rules;
 
 namespace FJW.Wechat.Activity.Rules
@@ -13,17 +7,19 @@ namespace FJW.Wechat.Activity.Rules
     /// <summary>
     /// 开宝箱口令规则
     /// </summary>
-    public class BoxWordRule: ITextRule
+    public class BoxWordRule : ITextRule
     {
         public ResultMessage Handle(RuleMessage msg)
         {
             var config = BoxWordConfig.GetConfig();
-            if (msg.Content!= null && msg.Content.Equals("开宝箱") && config.StartTime <= DateTime.Now && DateTime.Now  > config.EndTime )
+            if (msg.Content != null && msg.Content.Equals("开宝箱") && config.StartTime <= DateTime.Now && DateTime.Now < config.EndTime)
             {
                 msg.IsHandled = true;
                 var days = (int)(DateTime.Now.Date - config.StartTime.Date).TotalDays;
                 var word = GetWord(days);
-                return new ResultMessage { Type = RuleMessageType.Text, Content = word };
+                var result = new ResultMessage { Type = RuleMessageType.Text, Content = word };
+                //Logger.Dedug("BoxWordRule Handled:"+ result.ToJson());
+                return result;
             }
             return null;
         }
@@ -32,7 +28,7 @@ namespace FJW.Wechat.Activity.Rules
         {
             switch (days)
             {
-                  case 0:
+                case 0:
                     return "房金网实缴注册1个亿";
                 case 1:
                     return "专业风控";
@@ -55,7 +51,7 @@ namespace FJW.Wechat.Activity.Rules
                 default:
                     return "";
             }
-            
+
         }
     }
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Web.Mvc;
 using FJW.Unit;
 using FJW.Wechat.Rules;
@@ -20,15 +19,7 @@ namespace FJW.Wechat.WebApp
             //WeixinContext.ExpireMinutes = 3;
 
         }
-
-
-        public override void OnExecuted()
-        {
-            base.OnExecuted();
-            CurrentMessageContext.StorageData = ((int)CurrentMessageContext.StorageData) + 1;
-        }
-
-       
+        
 
         /// <summary>
         /// 处理文字请求
@@ -56,6 +47,7 @@ namespace FJW.Wechat.WebApp
                 var msg = new RuleMessage {Content = requestMessage.Content, Type = RuleMessageType.Text};
                 foreach (var r in textRules)
                 {
+                    Logger.Dedug("rule "+ r.GetType().FullName);
                     var t = r as ITextRule;
                     if (t != null)
                     {
@@ -69,21 +61,22 @@ namespace FJW.Wechat.WebApp
             }
             if (result != null)
             {
+                Logger.Dedug("ResultMessage: " + result.ToJson());
                 if (result.Type == RuleMessageType.Text)
                 {
-                    var response  = base.CreateResponseMessage<ResponseMessageText>();
+                    var response  = CreateResponseMessage<ResponseMessageText>();
                     response.Content = result.Content;
                     return response;
                 }
                 if (result.Type == RuleMessageType.Image)
                 {
-                    var response = base.CreateResponseMessage<ResponseMessageImage>();
+                    var response = CreateResponseMessage<ResponseMessageImage>();
                     response.Image = new Image {MediaId = result.Content};
                     return response;
                 }
             }
 
-            var responseMessage = base.CreateResponseMessage<ResponseMessageText>();
+            var responseMessage = CreateResponseMessage<ResponseMessageText>();
             Logger.Dedug("OnTextRequest: " + requestMessage.ToJson());
             return responseMessage;
         }
@@ -92,9 +85,9 @@ namespace FJW.Wechat.WebApp
         public override IResponseMessageBase DefaultResponseMessage(IRequestMessageBase requestMessage)
         {
             //所有没有被处理的消息会默认返回这里的结果
-            var responseMessage = this.CreateResponseMessage<ResponseMessageText>();
+            var responseMessage = CreateResponseMessage<ResponseMessageText>();
             responseMessage.Content = "";
-            Logger.Dedug("DefaultResponseMessage requestMessage:" +responseMessage.ToJson());
+            Logger.Dedug("DefaultResponseMessage requestMessage:" + requestMessage.ToJson());
             return responseMessage;
         }
     }
