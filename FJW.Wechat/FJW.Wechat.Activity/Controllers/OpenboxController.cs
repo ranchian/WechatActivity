@@ -133,7 +133,7 @@ namespace FJW.Wechat.Activity.Controllers
                 }
                 name = Open1(config, total, out couponId, out sequnce);
                 times.Total = total.Used / 20;
-                times.NotUsed = total.Total - times.Used;
+                times.NotUsed = times.Total - times.Used;
                 if (times.NotUsed < 0)
                 {
                     times.NotUsed = 0;
@@ -193,8 +193,25 @@ namespace FJW.Wechat.Activity.Controllers
             var sqlRepository = new SqlDataRepository(SqlConnectString);
             if ((DateTime.Now - total.LastStatisticsTime).TotalSeconds > 30)
             {
-                var cunt = sqlRepository.BuyCount(userId, config.StartTime, config.EndTime);
-                var totalCnt = cunt;
+                var shares = sqlRepository.GetProductTypeShares(userId, config.StartTime, config.EndTime);
+                int count = 0;
+                foreach (var r in shares)
+                {
+                    switch (r.ProductTypeId)
+                    {
+                        case 8:
+                            count += (int) r.BuyShares/300;
+                            break;
+                        case 7:
+                            count += (int)r.BuyShares / 600;
+                            break;
+                        case 6:
+                            count += (int)r.BuyShares / 1200;
+                            break;
+                    }
+                }
+                
+                var totalCnt = count;
                 var notUsed = totalCnt - total.Used;
                 if (notUsed < 0)
                 {
