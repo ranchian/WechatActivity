@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using FJW.SDK2Api.CardCoupon;
 using FJW.Unit;
@@ -45,7 +42,6 @@ namespace FJW.Wechat.Activity.Controllers
             var userId = UserInfo.Id;
             var config = OpenboxConfig.GetConfig();
             var activeRepository = GetRepository();
-            var sqlRepository = new SqlDataRepository(SqlConnectString);
             var total = activeRepository.Query<TotalChanceModel>(it => it.Key == GameKey && it.MemberId == userId).FirstOrDefault();
             var isNew = false;
             if (total == null)
@@ -56,13 +52,146 @@ namespace FJW.Wechat.Activity.Controllers
                     Key = GameKey,
                     MemberId = userId,
                     NotUsed = 0,
-                    Total = 0
+                    Total = 0,
+                    Prizes = string.Empty
                 };
 
                 isNew = true;
             }
+            Summary(total, userId, config);
+            var times = total.Prizes.Deserialize<OverTimes>()?? new OverTimes();
+            if (!isNew)
+            {
+                activeRepository.Update(total);
+            }
+            else
+            {
+                activeRepository.Add(total);
+            }
+            var shortage = 0;
+            if (times.NotUsed < 1)
+            {
+                shortage = 20 - (total.Used%20);
+            }
+            return Json(new ResponseModel
+            {
+                Data = new { notUsedA = total.NotUsed, notUsedB = times.NotUsed , shortage }
+            });
+        }
 
-            if ((DateTime.Now - total.LastStatisticsTime).TotalSeconds > 10)
+        /// <summary>
+        /// 开箱
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Open(int type = 1)
+        {
+            if (UserInfo.Id < 1)
+            {
+                return Json(new ResponseModel { ErrorCode = ErrorCode.NotLogged });
+            }
+            if (1 > type || type > 2 )
+            {
+                return Json(new ResponseModel { ErrorCode = ErrorCode.NotVerified, Message = "无效的请求"});
+            }
+
+            var userId = UserInfo.Id;
+            var config = OpenboxConfig.GetConfig();
+            
+
+            var activeRepository = GetRepository();
+
+            var total = activeRepository.Query<TotalChanceModel>(it => it.Key == GameKey && it.MemberId == userId).FirstOrDefault();
+            var isNew = false;
+            if (total == null)
+            {
+                total = new TotalChanceModel
+                {
+                    Used = 0,
+                    Key = GameKey,
+                    MemberId = userId,
+                    NotUsed = 0,
+                    Total = 0,
+                    Prizes = string.Empty
+                };
+                isNew = true;
+            }
+
+            Summary(total, userId, config);
+
+            long couponId = 0;
+            long sequnce = 0;
+
+            var name = "";
+            var times = total.Prizes.Deserialize<OverTimes>()?? new OverTimes();
+            if (type == 1)
+            {
+                if (total.NotUsed < 1)
+                {
+                    return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Message = "机会已用完，快快去投资" });
+                }
+                name = Open1(config, total, out couponId, out sequnce);
+                times.Total = total.Used / 20;
+                times.NotUsed = total.Total - times.Used;
+                if (times.NotUsed < 0)
+                {
+                    times.NotUsed = 0;
+                }
+            }
+            if (type == 2)
+            {
+                if (total.NotUsed < 1)
+                {
+                    return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Message = "机会已用完，快快去投资" });
+                }
+                name = Open2(config, times, out couponId, out sequnce);
+            }
+
+            total.Prizes = times.ToJson();
+            var result = CardCouponApi.UserGrant(userId, config.ActivityId, couponId).Data;
+            var luckdraw = new LuckdrawModel
+            {
+                MemberId = userId,
+                Key = GameKey,
+                Remark = result,
+                Name = name,
+                Type = type.ToString(),
+                Sequnce = sequnce,
+                Prize = couponId,
+                Phone = UserInfo.Phone,
+                CreateTime = DateTime.Now,
+                LastUpdateTime = DateTime.Now
+            };
+            activeRepository.Add(luckdraw);
+            
+            total.LastUpdateTime = DateTime.Now;
+            var shortage = 0;
+            if (times.NotUsed < 1)
+            {
+                shortage = 20 - (total.Used % 20);
+            }
+            if (!isNew)
+            {
+                activeRepository.Update(total);
+            }
+            else
+            {
+                activeRepository.Add(total);
+            }
+            return Json(new ResponseModel { Data = new { name, notUsedA = total.NotUsed, notUsedB = times.NotUsed, shortage } });
+        }
+
+        /// <summary>
+        /// 计算数量
+        /// </summary>
+        /// <param name="total"></param>
+        /// <param name="userId"></param>
+        /// <param name="config"></param>
+        private void Summary(TotalChanceModel total, long userId, OpenboxConfig config)
+        {
+            var sqlRepository = new SqlDataRepository(SqlConnectString);
+            if ((DateTime.Now - total.LastStatisticsTime).TotalSeconds > 30)
             {
                 var cunt = sqlRepository.BuyCount(userId, config.StartTime, config.EndTime);
                 var totalCnt = cunt;
@@ -82,125 +211,49 @@ namespace FJW.Wechat.Activity.Controllers
 
                 total.LastStatisticsTime = DateTime.Now;
             }
-            if (!isNew)
-            {
-                activeRepository.Update(total);
-            }
-            else
-            {
-                activeRepository.Add(total);
-            }
-            return Json(new ResponseModel
-            {
-                Data = new { total = total.Total, used = total.Used, notUsed = total.NotUsed}
-            });
         }
 
         /// <summary>
-        /// 开箱
+        /// 开银箱
         /// </summary>
-        /// <param name="type"></param>
+        /// <param name="config"></param>
+        /// <param name="total"></param>
+        /// <param name="couponId"></param>
+        /// <param name="sequnce"></param>
         /// <returns></returns>
-        [HttpPost]
-        public ActionResult Open(int type = 1)
+        private string Open1(OpenboxConfig config, TotalChanceModel total, out long couponId, out long sequnce)
         {
-            if (UserInfo.Id < 1)
-            {
-                return Json(new ResponseModel { ErrorCode = ErrorCode.NotLogged });
-            }
-            var userId = UserInfo.Id;
-            var config = OpenboxConfig.GetConfig();
-            var sqlRepository = new SqlDataRepository(SqlConnectString);
-            /*
-            var channel = sqlRepository.GetMemberChennel(userId);
-            if (channel?.Channel != null && channel.Channel.Equals("WQWLCPS", StringComparison.CurrentCultureIgnoreCase) && channel.CreateTime > config.StartTime)
-            {
-                return Json(new ResponseModel(ErrorCode.Other) { Message = "您属特殊渠道注册用户,无法参与此活动！" });
-            }
-            if (new MemberRepository(SqlConnectString).DisableMemberInvite(userId, config.StartTime))
-            {
-                return Json(new ResponseModel(ErrorCode.Other) { Message = "您属特殊渠道注册用户,无法参与此活动！" });
-            }
-            */
-            var activeRepository = GetRepository();
-
-            var total = activeRepository.Query<TotalChanceModel>(it => it.Key == GameKey && it.MemberId == userId).FirstOrDefault();
-            var isNew = false;
-            if (total == null)
-            {
-                total = new TotalChanceModel
-                {
-                    Used = 0,
-                    Key = GameKey,
-                    MemberId = userId,
-                    NotUsed = 0,
-                    Total = 0
-                };
-
-                isNew = true;
-            }
-
-            if ((DateTime.Now - total.LastStatisticsTime).TotalSeconds > 10)
-            {
-                var cunt = sqlRepository.BuyCount(userId, config.StartTime, config.EndTime);
-                var totalCnt = cunt ;
-                var notUsed = totalCnt - total.Used;
-                if (notUsed < 0)
-                {
-                    total.Remark = $"total:{total.Total} used:{total.Used} notused:{total.NotUsed}";
-                    total.Total = totalCnt;
-                    total.Used = totalCnt;
-                    total.NotUsed = 0;
-                }
-                else
-                {
-                    total.Total = totalCnt;
-                    total.NotUsed = notUsed;
-                }
-
-                total.LastStatisticsTime = DateTime.Now;
-            }
-            var take = type == 1 ? 1 : 20;
-            if (total.NotUsed < take)
-            {
-                return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Message = "机会已用完，快快去投资" });
-            }
-            long couponId;
-            long sequnce;
-            var name = type == 1 ? LuckRaw1(config, out couponId, out sequnce): LuckRaw2(config, out couponId, out sequnce);
-            //var result = GiveCoupon(total.Used, userId, config, out name, out prize, out sequnce);
-            var result = CardCouponApi.UserGrant(userId, config.ActivityId, couponId).Data;
-            var luckdraw = new LuckdrawModel
-            {
-                MemberId = userId,
-                Key = GameKey,
-                Remark = result,
-                Name = name,
-                Sequnce = sequnce,
-                Prize = couponId,
-                Phone = UserInfo.Phone,
-                CreateTime = DateTime.Now,
-                LastUpdateTime = DateTime.Now
-            };
-            activeRepository.Add(luckdraw);
-
-            total.Used += take;
-            total.NotUsed = total.Total - total.Used;
-
-            total.LastUpdateTime = DateTime.Now;
-
-            if (!isNew)
-            {
-                activeRepository.Update(total);
-            }
-            else
-            {
-                activeRepository.Add(total);
-            }
-            return Json(new ResponseModel { Data = name });
+            var name = LuckRaw1(config, out couponId, out sequnce);
+            total.NotUsed--;
+            total.Used++;
+            return name;
         }
 
-        public ActionResult Records()
+        /// <summary>
+        /// 开金箱
+        /// </summary>
+        /// <param name="config"></param>
+        /// <param name="times"></param>
+        /// <param name="couponId"></param>
+        /// <param name="sequnce"></param>
+        /// <returns></returns>
+        private string Open2(OpenboxConfig config, OverTimes times, out long couponId, out long sequnce)
+        {
+            var name = LuckRaw2(config, out couponId, out sequnce);
+            times.Used++;
+            times.NotUsed = times.Total - times.Used;
+            if (times.NotUsed < 0)
+            {
+                times.NotUsed = 0;
+            }
+            return name;
+        }
+
+        /// <summary>
+        /// 游戏结果
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Result()
         {
             var uid = UserInfo.Id;
             if (uid < 1)
@@ -214,6 +267,23 @@ namespace FJW.Wechat.Activity.Controllers
             var records = activityRepository.Query<LuckdrawModel>(it => it.MemberId == uid && it.Key == GameKey)
                 .Select(it => new {
                     name = it.Name,
+                    time = it.CreateTime.ToString("yyyy-MM-dd HH:mm:ss")
+                }).ToArray();
+            return Json(new ResponseModel { Data = records });
+        }
+
+        /// <summary>
+        /// 排行榜
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Record()
+        {
+            int count;
+            var activityRepository = GetRepository();
+            var records = activityRepository.QueryDesc<LuckdrawModel, DateTime>(it => it.Key == GameKey, it=>it.CreateTime, 20, 1,  out count)
+                .Select(it => new {
+                    name = it.Name,
+                    phone = StringHelper.CoverPhone(it.Phone),
                     time = it.CreateTime.ToString("yyyy-MM-dd HH:mm:ss")
                 }).ToArray();
             return Json(new ResponseModel { Data = records });
@@ -283,5 +353,14 @@ namespace FJW.Wechat.Activity.Controllers
             couponId = -1;
             return "";
         }
+    }
+
+    public class OverTimes
+    {
+        public int Total { get; set; }
+
+        public int Used { get; set; }
+
+        public int NotUsed { get; set; }
     }
 }
