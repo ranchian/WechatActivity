@@ -141,7 +141,7 @@ namespace FJW.Wechat.Activity.Controllers
             }
             if (type == 2)
             {
-                if (total.NotUsed < 1)
+                if (times.NotUsed < 1)
                 {
                     return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Message = "机会已用完，快快去投资" });
                 }
@@ -213,11 +213,9 @@ namespace FJW.Wechat.Activity.Controllers
                 
                 var totalCnt = count;
                 var notUsed = totalCnt - total.Used;
+                total.Remark = shares.ToJson();
                 if (notUsed < 0)
                 {
-                    total.Remark = $"total:{total.Total} used:{total.Used} notused:{total.NotUsed}";
-                    total.Total = totalCnt;
-                    total.Used = totalCnt;
                     total.NotUsed = 0;
                 }
                 else
