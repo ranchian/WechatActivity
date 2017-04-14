@@ -308,6 +308,17 @@ where MemberID = @memberId and ProductTypeParentID = 2 and ProductTypeID!=9 and 
             }
         }
 
+        public long GetLasted(long productType)
+        {
+            using (var conn = GetDbConnection())
+            {
+                return
+                    conn.ExecuteScalar<long>(
+                        "select top 1 ID from Trading..TC_Product T where T.Isdelete = 0 and T.ProductTypeId = @productType and T.SalesStatus < 3;",
+                        new {productType});
+            }
+        }
+
         /// <summary>
         /// 奖品列表
         /// </summary>

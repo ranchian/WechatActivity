@@ -110,6 +110,7 @@
     <Compile Include="Controllers\FacevalueController.cs" />
     <Compile Include="Controllers\ArborDayController.cs" />
     <Compile Include="Controllers\OpenboxController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\SpringDragonController.cs" />
     <Compile Include="Controllers\FebruaryController.cs" />
     <Compile Include="Controllers\LanternFestivalController.cs" />
