@@ -295,7 +295,7 @@ namespace FJW.Wechat.Activity.Controllers
         {
             int count;
             var activityRepository = GetRepository();
-            var records = activityRepository.QueryDesc<LuckdrawModel, DateTime>(it => it.Key == GameKey, it=>it.CreateTime, 20, 1,  out count)
+            var records = activityRepository.QueryDesc<LuckdrawModel, DateTime>(it => (it.Key == GameKey || it.Key == "boxword"), it=>it.CreateTime, 20, 1,  out count)
                 .Select(it => new {
                     name = it.Name,
                     phone = StringHelper.CoverPhone(it.Phone),
