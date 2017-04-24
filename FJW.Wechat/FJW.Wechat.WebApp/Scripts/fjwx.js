@@ -15,7 +15,10 @@
                 title: "房金网",
                 desc: "房金网",
                 url: location.href,
-                img: "#"
+                img: "#",
+                shareCallback: function() {
+                    
+                }
             }
             this.golabwx = wx;
             var settings = $.extend({}, de, options);
@@ -88,9 +91,9 @@
                             link: settings.url, // 分享链接
                             desc: settings.desc,
                             imgUrl: settings.img, // 分享图标
-                            success: function () {
-                                // 用户确认分享后执行的回调函数
-                            },
+                            success: function() {
+                                // 用户确认分享后执行的回调函数,
+                            }, 
                             cancel: function () {
                                 // 用户取消分享后执行的回调函数
                             }
@@ -106,9 +109,15 @@
                         if (settings.shareAppMessage) {
                             wx.onMenuShareAppMessage(d);
                         }
-
                         if (settings.shareTimeline) {
-                            wx.onMenuShareTimeline(d);
+                            var cfg = {
+                                title: settings.title, // 分享标题
+                                link: settings.url, // 分享链接
+                                desc: settings.desc,
+                                imgUrl: settings.img // 分享图标
+                            };
+                            cfg.success = settings.shareCallback;
+                            wx.onMenuShareTimeline(cfg);
                         }
 
                         if (settings.shareQQ) {
