@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using FJW.Unit;
 using FJW.Wechat.Activity.ConfigModel;
@@ -126,7 +123,56 @@ namespace FJW.Wechat.Activity.Controllers
         /// <returns></returns>
         public ActionResult ShareResult(string d, string t)
         {
-            return new EmptyResult();
+            if (UserInfo.Id < 1)
+            {
+                return Json(new ResponseModel { ErrorCode = ErrorCode.NotLogged });
+            }
+            var userId = UserInfo.Id;
+            var activeRepository = GetRepository();
+            var total = activeRepository.Query<TotalChanceModel>(it => it.Key == GameKey && it.MemberId == userId).FirstOrDefault();
+            var isNew = false;
+            if (total == null)
+            {
+                total = new TotalChanceModel
+                {
+                    Used = 0,
+                    Key = GameKey,
+                    MemberId = userId,
+                    NotUsed = 0,
+                    Total = 0,
+                    Prizes = string.Empty
+                };
+                isNew = true;
+            }
+            bool success;
+            var state = total.Prizes.Deserialize<State>() ?? new State();
+            if (state.Shared)
+            {
+                success = false;
+            }
+            else
+            {
+                success = true;
+                state.Shared = true;
+                total.Total++;
+                total.NotUsed++;
+            }
+
+            total.LastUpdateTime = DateTime.Now;
+
+            if (!isNew)
+            {
+                activeRepository.Update(total);
+            }
+            else
+            {
+                activeRepository.Add(total);
+            }
+            if (success)
+            {
+                return Json(new ResponseModel());
+            }
+            return Json(new ResponseModel(ErrorCode.Other) { Message = "分享朋友圈只可以获得一次免费的机会"});
         }
 
 
@@ -185,6 +231,8 @@ namespace FJW.Wechat.Activity.Controllers
             {
                 //再来一次
                 state.Cycle++;
+                total.Total++;
+                total.NotUsed++;
             }
             total.NotUsed--;
             total.Used++;
@@ -244,14 +292,14 @@ namespace FJW.Wechat.Activity.Controllers
                         next = 3;
                     }
                 }
-                couponId = Prize(config, current, out name, out type);
+                couponId = Prize(config, next, out name, out type);
                 return name;
             }
             //not 9
             if (current + 6 < 9) //  1, 2
             {
                 next = current + n;
-                couponId = Prize(config, current, out name, out type);
+                couponId = Prize(config, next, out name, out type);
                 return name;
             }
 
@@ -270,7 +318,7 @@ namespace FJW.Wechat.Activity.Controllers
                     {
                         next = 8;
                     }
-                    couponId = Prize(config, current, out name, out type);
+                    couponId = Prize(config, next, out name, out type);
                     return name;
                 }
             }
@@ -289,7 +337,7 @@ namespace FJW.Wechat.Activity.Controllers
                     {
                         next = 11;
                     }
-                    couponId = Prize(config, current, out name, out type);
+                    couponId = Prize(config, next, out name, out type);
                     return name;
                 }
             }
@@ -309,7 +357,7 @@ namespace FJW.Wechat.Activity.Controllers
                     {
                         next = 21;
                     }
-                    couponId = Prize(config, current, out name, out type);
+                    couponId = Prize(config, next, out name, out type);
                     return name;
                 }
             }
@@ -330,7 +378,7 @@ namespace FJW.Wechat.Activity.Controllers
                         next = 21;
                     }
                 }
-                couponId = Prize(config, current, out name, out type);
+                couponId = Prize(config, next, out name, out type);
                 return name;
             }
             //27
@@ -355,7 +403,7 @@ namespace FJW.Wechat.Activity.Controllers
                         next = 30;
                     }
                 }
-                couponId = Prize(config, current, out name, out type);
+                couponId = Prize(config, next, out name, out type);
                 return name;
             }
             next = current + n;
@@ -363,7 +411,7 @@ namespace FJW.Wechat.Activity.Controllers
             {
                 next = 30;
             }
-            couponId = Prize(config, current, out name, out type);
+            couponId = Prize(config, next, out name, out type);
             return name;
         }
 
