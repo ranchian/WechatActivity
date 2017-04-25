@@ -247,7 +247,7 @@ namespace FJW.Wechat.Activity.Controllers
             if (type == 2 || type == 4)
             {
                 sequnce = IdWorker.NextId();
-                new MemberRepository(SqlConnectString).GiveMoney(userId, momey, couponId, IdWorker.NextId());
+                new MemberRepository(SqlConnectString).GiveMoney(userId, momey, couponId, sequnce);
                 result = string.Empty;
             }
             if (type == 3)
