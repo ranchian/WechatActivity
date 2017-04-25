@@ -215,7 +215,7 @@ namespace FJW.Wechat.Activity.Controllers
             long couponId;
             int next;
             int type;
-            
+            decimal momey;
             if (total.NotUsed < 1)
             {
                 return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Message = "机会已用完，快快去投资" });
@@ -226,7 +226,7 @@ namespace FJW.Wechat.Activity.Controllers
                 state.Sequnce = 0;
             }
 
-            var name = LuckRaw(config, state.Sequnce, out couponId, out next, out type);
+            var name = LuckRaw(config, state.Sequnce, out couponId, out next, out type, out momey);
             if (next >= 30)
             {
                 //再来一次
@@ -238,8 +238,22 @@ namespace FJW.Wechat.Activity.Controllers
             total.Used++;
             state.Sequnce = next;
             total.Prizes = state.ToJson();
-
-            var result = couponId > 0 ? CardCouponApi.UserGrant(userId, config.ActivityId, couponId).Data : string.Empty;
+            long sequnce = 0;
+            string result = string.Empty;
+            if (type == 1)
+            {
+                result = CardCouponApi.UserGrant(userId, config.ActivityId, couponId).Data;
+            }
+            if (type == 2 || type == 4)
+            {
+                sequnce = IdWorker.NextId();
+                new MemberRepository(SqlConnectString).GiveMoney(userId, momey, couponId, IdWorker.NextId());
+                result = string.Empty;
+            }
+            if (type == 3)
+            {
+                result = string.Empty;
+            }
             var luckdraw = new LuckdrawModel
             {
                 MemberId = userId,
@@ -247,7 +261,8 @@ namespace FJW.Wechat.Activity.Controllers
                 Remark = result,
                 Name = name,
                 Type = type.ToString(),
-                Sequnce = next,
+                Score = next,
+                Sequnce = sequnce,
                 Prize = couponId,
                 Phone = UserInfo.Phone,
                 CreateTime = DateTime.Now,
@@ -294,7 +309,7 @@ namespace FJW.Wechat.Activity.Controllers
         }
 
 
-        private static string LuckRaw(CheckersConfig config, int current, out long couponId, out int next, out int type )
+        private static string LuckRaw(CheckersConfig config, int current, out long couponId, out int next, out int type, out decimal money)
         {
             next = 0;
             var n = Random.Next(1, 7);
@@ -316,14 +331,14 @@ namespace FJW.Wechat.Activity.Controllers
                         next = 3;
                     }
                 }
-                couponId = Prize(config, next, out name, out type);
+                couponId = Prize(config, next, out name, out type, out money);
                 return name;
             }
             //not 9
             if (current + 6 < 9) //  1, 2
             {
                 next = current + n;
-                couponId = Prize(config, next, out name, out type);
+                couponId = Prize(config, next, out name, out type, out money);
                 return name;
             }
 
@@ -342,7 +357,7 @@ namespace FJW.Wechat.Activity.Controllers
                     {
                         next = 8;
                     }
-                    couponId = Prize(config, next, out name, out type);
+                    couponId = Prize(config, next, out name, out type, out money);
                     return name;
                 }
             }
@@ -361,7 +376,7 @@ namespace FJW.Wechat.Activity.Controllers
                     {
                         next = 11;
                     }
-                    couponId = Prize(config, next, out name, out type);
+                    couponId = Prize(config, next, out name, out type, out money);
                     return name;
                 }
             }
@@ -381,7 +396,7 @@ namespace FJW.Wechat.Activity.Controllers
                     {
                         next = 21;
                     }
-                    couponId = Prize(config, next, out name, out type);
+                    couponId = Prize(config, next, out name, out type, out money);
                     return name;
                 }
             }
@@ -402,7 +417,7 @@ namespace FJW.Wechat.Activity.Controllers
                         next = 21;
                     }
                 }
-                couponId = Prize(config, next, out name, out type);
+                couponId = Prize(config, next, out name, out type, out money);
                 return name;
             }
             //27
@@ -427,7 +442,7 @@ namespace FJW.Wechat.Activity.Controllers
                         next = 30;
                     }
                 }
-                couponId = Prize(config, next, out name, out type);
+                couponId = Prize(config, next, out name, out type, out money);
                 return name;
             }
             next = current + n;
@@ -435,14 +450,15 @@ namespace FJW.Wechat.Activity.Controllers
             {
                 next = 30;
             }
-            couponId = Prize(config, next, out name, out type);
+            couponId = Prize(config, next, out name, out type, out money);
             return name;
         }
 
-        private static long Prize(CheckersConfig config, long sequnce , out string name, out int type)
+        private static long Prize(CheckersConfig config, long sequnce , out string name, out int type, out decimal money)
         {
             type = 1;
             long prize;
+            money = 0;
             switch (sequnce)
             {
                 case 1:
@@ -451,9 +467,11 @@ namespace FJW.Wechat.Activity.Controllers
                     break;
 
                 case 2:
-                    prize = 0;
+                    prize = config.RewardId;
+                    money = 10;
                     type = 2;
                     name = "10现金";
+                   
                     break;
 
                 case 3:
@@ -502,7 +520,8 @@ namespace FJW.Wechat.Activity.Controllers
                     break;
 
                 case 12:
-                    prize =  0;
+                    prize = config.RewardId;
+                    money = 20;
                     name = "20元现";
                     type = 2;
                     break;
@@ -595,9 +614,10 @@ namespace FJW.Wechat.Activity.Controllers
                     break;
 
                 case 30:
-                    prize = 0;
+                    prize = config.RewardId;
+                    money = 50;
                     type = 4;
-                    name = "一次掷骰子机会";
+                    name = "恭喜您通关成功，获得50元现金奖励和一次掷骰子机会";
                     break;
 
                 default:
