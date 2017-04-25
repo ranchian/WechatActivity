@@ -5,32 +5,32 @@
     <title></title>
     <meta charset="utf-8" />
     <script src="/Scripts/jquery-1.10.2.min.js"></script>
-
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>
+    <script src="/Scripts/fjwx.js"></script>
 </head>
 <body>
-<input type="text" id="text"/>
-<input type="button" value="提交"  id="btn" />
+    <script>
+        $(function () {
+            $.fjwx.config({
+                debug: true, //正式要改为false
+                title: "房金网",
+                desc: "房金网",
+                url: location.href,
+                img: "#",
+                shareCallback: function () {
+                    $.post('/activity/checkers/shareresult',
+                        {},
+                        function (r) {
+                            if (r.code === 0) {
+                                console.log('分享回调成功');
+                            } else {
+                                console.log('分享回调失败：' + r.msg);
+                            }
+                        });
+                }
+            }, wx);
+        });
+    </script>
 </body>
-</html>
-<script type="text/javascript">
-    $("#btn")
-        .on("click",
-            function () {
-                var data = { subjectNo: $("#text").val() };
-                $.ajax({
-                    type: "post",
-                    timeout: 18000,
-                    dataType: "json",
-                    url: "/activity/LanternFestival/SubmitAnswer",
-                    data: data,
-                    //请求成功时执行
-                    success: function (data) {
-                        if (data !== null && data !== "" && typeof (data) !== "undefined") {
-                            return;
-                        }
 
-                    }
-                });
-            });
-   
-</script>
+</html>

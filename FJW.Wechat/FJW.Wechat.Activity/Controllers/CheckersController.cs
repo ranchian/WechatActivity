@@ -266,7 +266,31 @@ namespace FJW.Wechat.Activity.Controllers
                 activeRepository.Add(total);
             }
 
-            return Json(new ResponseModel { Data = new { name, notUsed = total.NotUsed, next} });
+            return Json(new ResponseModel { Data = new { name, notUsed = total.NotUsed, next, type} });
+        }
+
+
+        /// <summary>
+        /// 游戏结果
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Result()
+        {
+            var uid = UserInfo.Id;
+            if (uid < 1)
+            {
+                return Json(new ResponseModel
+                {
+                    ErrorCode = ErrorCode.NotLogged
+                });
+            }
+            var activityRepository = GetRepository();
+            var records = activityRepository.Query<LuckdrawModel>(it => it.MemberId == uid && it.Key == GameKey)
+                .Select(it => new {
+                    name = it.Name,
+                    type = it.Type
+                }).ToArray();
+            return Json(new ResponseModel { Data = records });
         }
 
 
