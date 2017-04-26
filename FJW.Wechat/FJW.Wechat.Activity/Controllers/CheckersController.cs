@@ -118,10 +118,8 @@ namespace FJW.Wechat.Activity.Controllers
         /// <summary>
         /// 分享结果
         /// </summary>
-        /// <param name="d"></param>
-        /// <param name="t"></param>
         /// <returns></returns>
-        public ActionResult ShareResult(string d, string t)
+        public ActionResult ShareResult()
         {
             if (UserInfo.Id < 1)
             {
@@ -157,7 +155,24 @@ namespace FJW.Wechat.Activity.Controllers
                 total.Total++;
                 total.NotUsed++;
             }
-
+            if (success)
+            {
+                var luckdraw1 = new LuckdrawModel
+                {
+                    MemberId = userId,
+                    Key = GameKey,
+                    Remark = "",
+                    Name = "获得一次掷骰机会",
+                    Type = "5",
+                    Score = -1,
+                    Sequnce = -1,
+                    Prize = -1,
+                    Phone = UserInfo.Phone,
+                    CreateTime = DateTime.Now,
+                    LastUpdateTime = DateTime.Now
+                };
+                activeRepository.Add(luckdraw1);
+            }
             total.LastUpdateTime = DateTime.Now;
 
             if (!isNew)
@@ -269,7 +284,24 @@ namespace FJW.Wechat.Activity.Controllers
                 LastUpdateTime = DateTime.Now
             };
             activeRepository.Add(luckdraw);
-
+            if (type == 4)
+            {
+                var luckdraw1 = new LuckdrawModel
+                {
+                    MemberId = userId,
+                    Key = GameKey,
+                    Remark = "",
+                    Name = "获得1次掷骰机会",
+                    Type = "4",
+                    Score = next,
+                    Sequnce = sequnce,
+                    Prize = couponId,
+                    Phone = UserInfo.Phone,
+                    CreateTime = DateTime.Now,
+                    LastUpdateTime = DateTime.Now
+                };
+                activeRepository.Add(luckdraw1);
+            }
             total.LastUpdateTime = DateTime.Now;
        
             if (!isNew)
@@ -516,13 +548,13 @@ namespace FJW.Wechat.Activity.Controllers
 
                 case 11:
                     prize = config.Card11;
-                    name = "3%加息券";
+                    name = "2%加息券";
                     break;
 
                 case 12:
                     prize = config.RewardId;
                     money = 20;
-                    name = "20元现";
+                    name = "20元现金";
                     type = 2;
                     break;
 
@@ -617,7 +649,7 @@ namespace FJW.Wechat.Activity.Controllers
                     prize = config.RewardId;
                     money = 50;
                     type = 4;
-                    name = "恭喜您通关成功，获得50元现金奖励和一次掷骰子机会";
+                    name = "50元现金奖励";
                     break;
 
                 default:
