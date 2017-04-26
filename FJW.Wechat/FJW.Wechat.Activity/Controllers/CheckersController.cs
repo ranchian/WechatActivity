@@ -55,7 +55,7 @@ namespace FJW.Wechat.Activity.Controllers
   
             return Json(new ResponseModel
             {
-                Data = new { notUsed = total.NotUsed,  current = state.Sequnce }
+                Data = new { notUsed = total.NotUsed,  current = state.Sequnce, shared = state.Shared }
             });
         }
 
