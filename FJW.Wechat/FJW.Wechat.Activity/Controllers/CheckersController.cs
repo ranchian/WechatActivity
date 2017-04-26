@@ -649,7 +649,7 @@ namespace FJW.Wechat.Activity.Controllers
                     prize = config.RewardId;
                     money = 50;
                     type = 4;
-                    name = "50元现金奖励";
+                    name = "50元现金（通关）";
                     break;
 
                 default:
