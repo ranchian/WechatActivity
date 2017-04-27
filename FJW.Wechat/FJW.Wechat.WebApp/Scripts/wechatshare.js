@@ -11,7 +11,7 @@
             shareWeibo: true,
             title: "房金网",
             desc: "房金网",
-            url: "#",
+            url: location.href,
             img: "#"
         }
 

@@ -10,6 +10,7 @@ using Senparc.Weixin.MP.Helpers;
 
 namespace FJW.Wechat.WebApp.Controllers
 {
+    [CrossDomainFilter]
     public class WechatController : WController
     {
         #region 认证

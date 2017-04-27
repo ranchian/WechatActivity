@@ -25,7 +25,26 @@ namespace FJW.Wechat.Data
             return new SqlConnection(_connectionString);
         }
 
+        /// <summary>
+        /// 按照产品类型分的购买记录
+        /// </summary>
+        /// <param name="memberId"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        public IEnumerable<ProductTypeSumShare> ProductTypeBuyRecrods(long memberId, DateTime startTime, DateTime endTime)
+        {
+            const string sql = @"select ProductTypeID, BuyShares from Trading..TC_ProductBuy 
+where IsDelete = 0 and MemberID = @memberId and BuyTime >= @startTime and BuyTime < @endTime and Status = 1";
+
+            using (var conn = GetDbConnection())
+            {
+                return conn.Query<ProductTypeSumShare>(sql, new { memberId, startTime, endTime });
+            }
+        }
+
         #region  投资排行榜
+
 
         public IEnumerable<RankingRow> TodayRanking()
         {

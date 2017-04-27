@@ -265,6 +265,7 @@
     <Content Include="config\activity.exchangebuyvalue.json" />
     <Content Include="config\activity.boxword.json" />
     <Content Include="config\activity.openbox.json" />
+    <Content Include="config\activity.checkers.json" />
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
