@@ -154,6 +154,7 @@ namespace FJW.Wechat.Activity.Controllers
                 state.Shared = true;
                 total.Total++;
                 total.NotUsed++;
+                total.Prizes = state.ToJson();
             }
             if (success)
             {
