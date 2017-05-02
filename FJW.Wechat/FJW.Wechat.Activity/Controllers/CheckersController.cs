@@ -467,7 +467,7 @@ namespace FJW.Wechat.Activity.Controllers
 
                     if (next == 27)
                     {
-                        next = 26;
+                        next = 28;
                     }
 
                     if (next > 30)
