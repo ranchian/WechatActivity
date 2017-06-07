@@ -467,7 +467,7 @@ namespace FJW.Wechat.Activity.Controllers
 
                     if (next == 27)
                     {
-                        next = 26;
+                        next = 28;
                     }
 
                     if (next > 30)
@@ -705,7 +705,8 @@ namespace FJW.Wechat.Activity.Controllers
         private static bool CanBe27()
         {
             var n = RedisManager.GetIncrement("activity:" + GameKey + "27") % 100;
-            return n % 99 == 0;
+            
+            return n == 99;
         }
         
     }
