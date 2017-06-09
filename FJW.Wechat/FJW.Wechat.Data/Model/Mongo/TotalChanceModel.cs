@@ -9,7 +9,8 @@ namespace FJW.Wechat.Data.Model.Mongo
     /// 总次数统计（mongo）
     /// </summary>
     [Table("TotalChance")]
-    public class TotalChanceModel: BaseModel
+    [BsonIgnoreExtraElements]
+    public class TotalChanceModel : BaseModel
     {
         public long MemberId { get; set; }
 
@@ -19,7 +20,7 @@ namespace FJW.Wechat.Data.Model.Mongo
         /// 总次数
         /// </summary>
         public int Total { get; set; }
-        
+
         /// <summary>
         /// 已使用次数
         /// </summary>
@@ -52,5 +53,30 @@ namespace FJW.Wechat.Data.Model.Mongo
         public DateTime LastStatisticsTime { get; set; }
 
 
+        /// <summary>
+        /// 好友编号
+        /// </summary>
+        public long FriendId { get; set; }
+
+        /// <summary>
+        /// 绑定时间
+        /// </summary>
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
+        public DateTime? BindDate { get; set; }
+
+        /// <summary>
+        /// 微信标识
+        /// </summary>
+        public string WechatId { get; set; }
+
+        ///<summary>
+        /// 微信用户昵称
+        /// </summary>
+        public string NickName { get; set; }
+
+        /// <summary>
+        /// 头像
+        /// </summary>
+        public string HeadimgUrl { get; set; }
     }
 }

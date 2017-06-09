@@ -184,6 +184,22 @@ group by ProductTypeID";
             }
         }
 
+        /// <summary>
+        /// 各类型产品单笔购买金额
+        /// </summary>
+        /// <param name="memberId">用户Id</param>
+        /// <param name="startTime">开始时间（包含）</param>
+        /// <param name="endTime">结束时间（不包含）</param>
+        /// <returns></returns>
+        public IEnumerable<ProductTypeSumShare> GetProductTypeSingle(long memberId, DateTime startTime, DateTime endTime)
+        {
+            const string sql = @"select ProductTypeID,BuyShares,BuyTime from Trading..TC_ProductBuy 
+                            where IsDelete = 0 and MemberID =  @memberId and BuyTime >= @startTime and BuyTime < @endTime and Status = 1 Order By ID Desc";
+            using (var conn = GetDbConnection())
+            {
+                return conn.Query<ProductTypeSumShare>(sql, new { memberId, startTime, endTime });
+            }
+        }
         #endregion
 
         #region Other
@@ -334,7 +350,7 @@ where MemberID = @memberId and ProductTypeParentID = 2 and ProductTypeID!=9 and 
                 return
                     conn.ExecuteScalar<long>(
                         "select top 1 ID from Trading..TC_Product T where T.Isdelete = 0 and T.ProductTypeId = @productType and T.SalesStatus < 3;",
-                        new {productType});
+                        new { productType });
             }
         }
 
@@ -429,6 +445,42 @@ where MemberID = @memberId and ProductTypeParentID = 2 and ProductTypeID!=9 and 
            ", param);
             }
         }
+
+        /// <summary>
+        /// 获取真实姓名
+        /// </summary>
+        /// <param name="memberId"></param>
+        /// <returns></returns>
+        public string GetMemberRealName(long memberId)
+        {
+            using (var conn = GetDbConnection())
+            {
+                return conn.ExecuteScalar(
+                    "SELECT TOP 1 RealName from Basic..BD_MemberAuthen  where IsDelete = 0 AND MemberID = @memberId ",
+                    new { memberId }).ToString();
+            }
+        }
+
+
+        public string GetMember(long memberId)
+        {
+            using (var conn = GetDbConnection())
+            {
+                return conn.ExecuteScalar(
+                    "SELECT TOP 1 RealName from Basic..BD_MemberAuthen  where IsDelete = 0 AND MemberID = @memberId ",
+                    new { memberId }).ToString();
+            }
+        }
+        public MemberModel GetMemberId(long phone)
+        {
+            using (var conn = GetDbConnection())
+            {
+                return conn.Query<MemberModel>(
+                    "select top 1 ID as MemberId, Phone from Basic..BD_Member Where IsDelete = 0 and Phone = @phone ",
+                    new { phone }).FirstOrDefault();
+            }
+        }
+
     }
 
     public class EntityReward
@@ -485,6 +537,6 @@ where MemberID = @memberId and ProductTypeParentID = 2 and ProductTypeID!=9 and 
 
         public DateTime CreateTime => DateTime.Now;
 
-        public string Channel=>"changlan";
+        public string Channel => "changlan";
     }
 }

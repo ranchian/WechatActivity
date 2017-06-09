@@ -97,6 +97,7 @@
     <Compile Include="ConfigModel\BoxWordConfig.cs" />
     <Compile Include="ConfigModel\CheckersConfig.cs" />
     <Compile Include="ConfigModel\CollectCardModel.cs" />
+    <Compile Include="ConfigModel\DuanWuConfig.cs" />
     <Compile Include="ConfigModel\OpenboxConfig.cs" />
     <Compile Include="ConfigModel\SpringDragonConfig.cs" />
     <Compile Include="ConfigModel\FebruaryConfig.cs" />
@@ -108,9 +109,11 @@
     <Compile Include="Controllers\CheckersController.cs" />
     <Compile Include="Controllers\CollectCardController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
+    <Compile Include="Controllers\DuanWuController.cs" />
     <Compile Include="Controllers\ExchangeBuyController.cs" />
     <Compile Include="Controllers\FacevalueController.cs" />
     <Compile Include="Controllers\ArborDayController.cs" />
+    <Compile Include="Controllers\MothersDayController.cs" />
     <Compile Include="Controllers\OpenboxController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\SpringDragonController.cs" />

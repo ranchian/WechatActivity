@@ -1,4 +1,6 @@
-﻿namespace FJW.Wechat.Data.Model.RDBS
+﻿using System;
+
+namespace FJW.Wechat.Data.Model.RDBS
 {
     /// <summary>
     /// 产品购买信息
@@ -14,5 +16,10 @@
         /// 产品份额
         /// </summary>
         public decimal BuyShares { get; set; }
+
+        /// <summary>
+        /// 购买时间
+        /// </summary>
+        public DateTime BuyTime { get; set; }
     }
 }

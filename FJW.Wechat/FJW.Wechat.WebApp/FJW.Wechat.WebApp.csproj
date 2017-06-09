@@ -186,8 +186,8 @@
     <Compile Include="Providers\WxMediaApi.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="config\Content\bootstrap.css" />
+    <Content Include="config\Content\bootstrap.min.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="html\account\account.js" />
@@ -266,6 +266,8 @@
     <Content Include="config\activity.boxword.json" />
     <Content Include="config\activity.openbox.json" />
     <Content Include="config\activity.checkers.json" />
+    <Content Include="config\activity.duanwu.json" />
+    <Content Include="config\activity.mothersday.json" />
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -295,7 +297,7 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Content\Site.css" />
+    <Content Include="config\Content\Site.css" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
