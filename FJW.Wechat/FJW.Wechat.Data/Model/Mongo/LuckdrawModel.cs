@@ -60,5 +60,10 @@ namespace FJW.Wechat.Data.Model.Mongo
         /// 分数
         /// </summary>
         public int Score { get; set; }
+
+        /// <summary>
+        /// 卡券发放信息存储
+        /// </summary>
+        public string CouponRes { get; set; }
     }
 }

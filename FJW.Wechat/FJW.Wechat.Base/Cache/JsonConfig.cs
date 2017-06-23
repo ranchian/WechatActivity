@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using System.Web;
 using System.Web.Caching;
 using Newtonsoft.Json;
@@ -26,7 +27,7 @@ namespace FJW.Wechat.Cache
         private static T ReadJson<T>(string path) where T : class
         {
             using (var steam = new FileStream(path, FileMode.Open))
-            using (var reader = new StreamReader(steam))
+            using (var reader = new StreamReader(steam,Encoding.Default))
             {
                 var str = reader.ReadToEnd();
                 if (!string.IsNullOrEmpty(str))

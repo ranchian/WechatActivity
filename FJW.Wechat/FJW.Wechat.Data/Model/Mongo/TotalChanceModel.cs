@@ -78,5 +78,10 @@ namespace FJW.Wechat.Data.Model.Mongo
         /// 头像
         /// </summary>
         public string HeadimgUrl { get; set; }
+
+        /// <summary>
+        /// 成绩
+        /// </summary>
+        public int Score { get; set; }
     }
 }

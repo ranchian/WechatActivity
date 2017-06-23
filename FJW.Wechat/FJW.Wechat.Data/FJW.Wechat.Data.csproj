@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Mongo\FriendModel.cs" />
     <Compile Include="Model\Mongo\ActivityModel.cs" />
     <Compile Include="Model\Mongo\WxShareModel.cs" />
     <Compile Include="Model\Mongo\WxShareSupportModel.cs" />

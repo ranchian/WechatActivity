@@ -1,0 +1,289 @@
+{
+  "StartTime": "2017-04-12 10:00:00",
+  "EndTime": "2017-06-24 17:00:00",
+  "ActivityId": 40,
+  "OneTakeOneRecordList": [
+    {
+      "Score": "1000",
+      "Address": "哈萨克斯坦-阿拉木图",
+      "Reward": "100元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118151,
+        "RateCoupon2": 170118152,
+        "RateCoupon3": 170118153,
+        "RateCoupon4": 170118154
+      }
+    },
+    {
+      "Score": "3000",
+      "Address": "吉尔吉斯斯坦-比什凯克",
+      "Reward": "500元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118155,
+        "RateCoupon2": 170118156,
+        "RateCoupon3": 170118157,
+        "RateCoupon4": 170118158
+      }
+    },
+    {
+      "Score": "8000",
+      "Address": "乌兹别克斯坦-撒马尔罕",
+      "Reward": "800元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118159,
+        "RateCoupon2": 170118160,
+        "RateCoupon3": 170118161
+      }
+    },
+    {
+      "Score": "12000",
+      "Address": "塔吉克斯坦-杜尚别",
+      "Reward": "1000元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118162,
+        "RateCoupon2": 170118163,
+        "RateCoupon3": 170118164
+      }
+    },
+    {
+      "Score": "20000",
+      "Address": "伊朗-德黑兰",
+      "Reward": "2000元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118165,
+        "RateCoupon2": 170118166,
+        "RateCoupon3": 170118167
+      }
+    },
+    {
+      "Score": "30000",
+      "Address": "土耳其-伊斯坦布尔",
+      "Reward": "4000元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118168,
+        "RateCoupon2": 170118169,
+        "RateCoupon3": 170118170
+      }
+    },
+    {
+      "Score": "46000",
+      "Address": "罗马尼亚",
+      "Reward": "6000元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118171,
+        "RateCoupon2": 170118172,
+        "RateCoupon3": 170118173
+      }
+    },
+    {
+      "Score": "60000",
+      "Address": "乌克兰",
+      "Reward": "8000元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118174,
+        "RateCoupon2": 170118175,
+        "RateCoupon3": 170118176
+      }
+    },
+    {
+      "Score": "80000",
+      "Address": "俄罗斯-莫斯科",
+      "Reward": "9000元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118177,
+        "RateCoupon2": 170118178,
+        "RateCoupon3": 170118179
+      }
+    },
+    {
+      "Score": "100000",
+      "Address": "波兰-华沙",
+      "Reward": "10000元现金红包",
+      "Coupon": {
+        "RateCoupon1":170118183,
+        "RateCoupon2":170118184,
+        "RateCoupon3":170118185
+      }
+    },
+    {
+      "Score": "130000",
+      "Address": "德国-杜伊斯堡",
+      "Reward": "13000元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118186,
+        "RateCoupon2": 170118187
+      }
+    },
+    {
+      "Score": "160000",
+      "Address": "荷兰-鹿特丹",
+      "Reward": "16000元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118188,
+        "RateCoupon2": 170118189
+      }
+    },{
+      "Score": "200000",
+      "Address": "比利时-布鲁塞尔",
+      "Reward": "20000元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118190,
+        "RateCoupon2": 170118191
+      }
+    },
+    {
+      "Score": "250000",
+      "Address": "瑞士-伯尔尼",
+      "Reward": "25000元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118192,
+        "RateCoupon2": 170118193
+      }
+    },
+    {
+      "Score": "300000",
+      "Address": "意大利-威尼斯",
+      "Reward": "30000元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118194,
+        "RateCoupon2": 170118195
+      }
+    },
+    {
+      "Score": "380000",
+      "Address": "希腊-雅典",
+      "Reward": "40000元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118196,
+        "RateCoupon2": 170118197,
+        "RateCoupon3": 170118198
+      }
+    },
+    {
+      "Score": "420000",
+      "Address": "埃及",
+      "Reward": "45000元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118199,
+        "RateCoupon2": 170118200
+      }
+    },
+    {
+      "Score": "460000",
+      "Address": "苏丹",
+      "Reward": "48000元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118201,
+        "RateCoupon2": 170118202
+      }
+    },
+    {
+      "Score": "490000",
+      "Address": "也门",
+      "Reward": "50000元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118203,
+        "RateCoupon2": 170118204
+      }
+    },
+    {
+      "Score": "530000",
+      "Address": "埃塞俄比亚",
+      "Reward": "55000元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118205,
+        "RateCoupon2": 170118206
+      }
+    },
+    {
+      "Score": "560000",
+      "Address": "索马里",
+      "Reward": "58000元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118207,
+        "RateCoupon2": 170118208
+      }
+    },
+    {
+      "Score": "600000",
+      "Address": "肯尼亚-内罗毕",
+      "Reward": "60000元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118209,
+        "RateCoupon2": 170118210
+      }
+    },
+    {
+      "Score": "650000",
+      "Address": "马尔代夫",
+      "Reward": "65000元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118211,
+        "RateCoupon2": 170118212
+      }
+    },
+    {
+      "Score": "700000",
+      "Address": "斯里兰卡-科伦坡",
+      "Reward": "70000元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118213,
+        "RateCoupon2": 170118214
+      }
+    },
+    {
+      "Score": "750000",
+      "Address": "印度-加尔各答",
+      "Reward": "75000元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118215,
+        "RateCoupon2": 170118216
+      }
+    },
+    {
+      "Score": "800000",
+      "Address": "马来西亚-吉隆坡",
+      "Reward": "80000元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118217,
+        "RateCoupon2": 170118218
+      }
+    },
+    {
+      "Score": "850000",
+      "Address": "新加坡",
+      "Reward": "85000元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118219,
+        "RateCoupon2": 170118220
+      }
+    },
+    {
+      "Score": "900000",
+      "Address": "印度尼西亚-雅加达",
+      "Reward": "90000元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118221,
+        "RateCoupon2": 170118222
+      }
+    },
+    {
+      "Score": "950000",
+      "Address": "越南-河内",
+      "Reward": "95000元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118223,
+        "RateCoupon2": 170118224
+      }
+    },
+    {
+      "Score": "1000000",
+      "Address": "中国-上海",
+      "Reward": "100000元现金红包",
+      "Coupon": {
+        "RateCoupon1": 170118225,
+        "RateCoupon2": 170118226
+      }
+    }
+  ]
+}
