@@ -123,7 +123,7 @@ namespace FJW.SDK2Api.CardCoupon
                 var conf = ApiConfig.Section.Value.Methods["GiveCouponListService"];
 
                 var result = HttpUnit.Post(conf.EntryPoint + "/" + method, dict.ToJson(), Encoding.UTF8, "application/json");
-                Logger.Dedug("req over:{0}", result.ToJson());
+                Logger.Dedug("CouponGive req over:{0}", result.ToJson());
 
                 var response = result.Reponse.Deserialize<CouponGive>();
                 if (result.Code == HttpStatusCode.OK)

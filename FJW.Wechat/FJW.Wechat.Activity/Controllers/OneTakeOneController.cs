@@ -73,30 +73,30 @@ namespace FJW.Wechat.Activity.Controllers
             if (notFirst)
                 shares.FirstOrDefault().BuyShares = 0;
 
-            int count = 0;
-            int add = 0;
+            long count = 0;
+            long add = 0;
             foreach (var r in shares)
             {
                 add = 0;
                 switch (r.ProductTypeId)
                 {
                     case 8:
-                        add = (int)r.BuyShares * 12 / 12 / 1000;
+                        add = (int)r.BuyShares * 12 ;
                         break;
                     case 7:
-                        add = (int)r.BuyShares * 6 / 12 / 1000;
+                        add = (int)r.BuyShares * 6 ;
                         break;
                     case 6:
-                        add = (int)r.BuyShares * 3 / 12 / 1000;
+                        add = (int)r.BuyShares * 3 ;
                         break;
                     case 5:
-                        add = (int)r.BuyShares * 1 / 12 / 1000;
+                        add = (int)r.BuyShares * 1 ;
                         break;
                 }
-                count += add >= 1 ? add * 1000 : 0;
+                count += add > 0 ? add : 0;
             }
 
-            var totalCnt = count;
+            var totalCnt = ((int)count / 12 / 1000) * 1000;
 
             //好友帮助次数
             var helpCount = GetRepository().Query<FriendTotalChanceModel>(it => it.Key == Key && it.FriendId == userId).Sum(it => it.HelpCount);
@@ -146,7 +146,6 @@ namespace FJW.Wechat.Activity.Controllers
             //自己使用 Used   为好友使用 NotUsed
             if (userChance != null)
                 canUse = userChance.Total - userChance.Used - userChance.NotUsed;
-
             return userChance;
         }
 
@@ -200,8 +199,11 @@ namespace FJW.Wechat.Activity.Controllers
                     break;
                 }
             }
+            var nextLength = nextDraw - nowDistance - useCount;
             if (useCount <= 0)
-                return Json(new ResponseModel { ErrorCode = ErrorCode.None, Data = new { CanUseCount = canUse, Score = futureLength, hasFriend = userChance.FriendId > 0, nextLength = nextDraw - nowDistance - useCount } });
+            {
+                return Json(new ResponseModel { ErrorCode = ErrorCode.None, Data = new { CanUseCount = canUse, Score = futureLength, hasFriend = userChance.FriendId > 0, nextLength = nextLength < 0 ? 0 : nextLength } });
+            }
 
             OneTakeOneRecord record;
             for (int i = 1; i <= useCount; i++)
@@ -293,7 +295,7 @@ namespace FJW.Wechat.Activity.Controllers
                     CanUseCount = userChance.Total - userChance.Used - userChance.NotUsed,
                     HelpCount = userChance.NotUsed,
                     Score = futureLength,
-                    nextLength = nextDraw - nowDistance - useCount,
+                    nextLength = nextLength < 0 ? 0 : nextLength,
                     Reward = type == 1 ? responStrLis : new List<long>()
                 }
             });
@@ -318,18 +320,22 @@ namespace FJW.Wechat.Activity.Controllers
         /// 绑定好友
         /// </summary>
         /// <param name="friendOpenId"></param>
+        /// <param name="phone"></param>
+        /// <param name="t"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult BindFriend(long phone)
+        public ActionResult BindFriend(long phone, string t)
         {
             var validateRes = Validate();
             if (validateRes.ErrorCode != ErrorCode.None)
             {
                 return Json(validateRes);
             }
-            var memberInfo = new SqlDataRepository(SqlConnectString).GetMemberId(phone);
-            if (memberInfo == null || memberInfo.MemberId <= 0)
-                return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Data = "", Message = "邀请用户未注册~" });
+            var memberInfo =new Data.Model.RDBS.MemberModel();
+            memberInfo = phone > 0 ? new SqlDataRepository(SqlConnectString).GetMemberId(phone) : new MemberRepository(SqlConnectString).GetMemberInfo(t);
+
+            if (string.IsNullOrEmpty(memberInfo.Phone))
+                return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Data = "", Message = "好友已生成新的邀请链接~" });
             if (memberInfo.MemberId == UserInfo.Id)
                 return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Data = "", Message = "不能为自己助力哦O(∩_∩)O~~" });
 
@@ -340,7 +346,7 @@ namespace FJW.Wechat.Activity.Controllers
                 userChance = SelectCount(out canUse);
             }
             //添加好友助力记录
-            var friendHelpData = GetRepository().Query<FriendTotalChanceModel>(it => it.Key == Key && it.FriendPhone == phone && it.MemberId == UserInfo.Id).FirstOrDefault();
+            var friendHelpData = GetRepository().Query<FriendTotalChanceModel>(it => it.Key == Key && it.FriendPhone == long.Parse(memberInfo.Phone) && it.MemberId == UserInfo.Id).FirstOrDefault();
             if (friendHelpData == null)
             {
                 GetRepository().Add(new FriendTotalChanceModel
@@ -385,6 +391,25 @@ namespace FJW.Wechat.Activity.Controllers
             return Json(new ResponseModel { ErrorCode = ErrorCode.None, Data = "OK" });
         }
 
+        [HttpPost]
+        public ActionResult GetMemberInfo(string t)
+        {
+            try
+            {
+                var memberInfo = new Data.Model.RDBS.MemberModel();
+                memberInfo = new MemberRepository(SqlConnectString).GetMemberInfo(t);
+
+                if (string.IsNullOrEmpty(memberInfo?.Phone))
+                    return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Data = "", Message = "好友已生成新的邀请链接~" });
+                return Json(new ResponseModel { ErrorCode = ErrorCode.None, Data = new { Phone = memberInfo.Phone.Substring(0, 3) + "****" + memberInfo.Phone.Substring(7, 4) } });
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.ToString());
+                return null;
+            }
+        }
+
         /// <summary>
         /// 好友游戏当前距离
         /// </summary>
@@ -415,14 +440,14 @@ namespace FJW.Wechat.Activity.Controllers
             var nextLength = nowCount;
             for (int i = 0; i <= 100; i++)
             {
-                if (drawArray[i] > nextLength)
+                if (drawArray[i] > nextLength || i == 29)
                 {
                     nextLength = drawArray[i];
                     break;
                 }
             }
             var friendPhone = friendChance.Remark;
-            return Json(new ResponseModel { ErrorCode = ErrorCode.None, Data = new { FriendPhone = friendPhone.Substring(0, 3) + "****" + friendPhone.Substring(7, 4), Score = nowCount, nextLength = nextLength - nowCount } });
+            return Json(new ResponseModel { ErrorCode = ErrorCode.None, Data = new { FriendPhone = friendPhone.Substring(0, 3) + "****" + friendPhone.Substring(7, 4), Score = nowCount, nextLength = nextLength - nowCount < 0 ? 0 : nextLength - nowCount } });
         }
 
         /// <summary>
@@ -453,7 +478,7 @@ namespace FJW.Wechat.Activity.Controllers
             SelectCount(out canUse);
 
             //好友帮我
-            var friendHelpMe = GetRepository().Query<FriendTotalChanceModel>(it => it.Key == Key && it.FriendId == UserInfo.Id).Select(it => new { it.Phone, it.HelpCount }).ToList().ToJson();
+            var friendHelpMe = GetRepository().Query<FriendTotalChanceModel>(it => it.Key == Key && it.FriendId == UserInfo.Id && it.HelpCount != 0).Select(it => new { Phone=  it.Phone.ToString().Substring(0, 3) + "****" + it.Phone.ToString().Substring(7, 4), it.HelpCount }).ToList().ToJson();
 
             Logger.Info($"userChance {meHelpfriend.ToJson()} userHelp : {friendHelpMe.ToJson()} helpData :{friendHelpMe}");
 
