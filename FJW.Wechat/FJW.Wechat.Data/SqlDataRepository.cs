@@ -175,7 +175,7 @@ where MemberID = @memberId and BuyTime >= @startTime and BuyTime < @endTime and 
         /// <returns></returns>
         public IEnumerable<ProductTypeSumShare> GetProductTypeShares(long memberId, DateTime startTime, DateTime endTime)
         {
-            const string sql = @"select ProductTypeID, SUM(BuyShares) as BuyShares from Trading..TC_ProductBuy 
+            const string sql = @"select ProductTypeID, SUM(BuyShares) as BuyShares ,Min(BuyTime) as BuyTime  from Trading..TC_ProductBuy 
 where IsDelete = 0 and MemberID =  @memberId and BuyTime >= @startTime and BuyTime < @endTime and Status = 1
 group by ProductTypeID";
             using (var conn = GetDbConnection())
@@ -221,6 +221,22 @@ group by ProductTypeID";
                 return d;
             }
 
+        }
+
+        /// <summary>
+        /// 渠道用户之前是否有首投
+        /// </summary>
+        /// <param name="memberId"></param>
+        /// <param name="startTime"></param>
+        /// <returns></returns>
+        public IEnumerable<ProductTypeSumShare> GetChannelShares(long memberId, DateTime startTime)
+        {
+            const string sql = @"select ProductTypeID, SUM(BuyShares) as BuyShares ,Min(BuyTime) as BuyTime  from Trading..TC_ProductBuy 
+where IsDelete = 0 and MemberID =  @memberId and BuyTime < @startTime and Status = 1 group by ProductTypeID";
+            using (var conn = GetDbConnection())
+            {
+                return conn.Query<ProductTypeSumShare>(sql, new { memberId, startTime });
+            }
         }
 
         #endregion
