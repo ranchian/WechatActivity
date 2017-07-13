@@ -48,7 +48,7 @@ namespace FJW.Wechat.Activity.Controllers
             var now = DateTime.Now;
             if (now < config.StartTime || now > config.EndTime)
                 return new ResponseModel { ErrorCode = ErrorCode.Exception, Message = "活动未开始或已过期" };
-            
+
             return new ResponseModel { ErrorCode = ErrorCode.None, Data = "" };
         }
 
@@ -63,8 +63,8 @@ namespace FJW.Wechat.Activity.Controllers
                 var userData = GetRepository().Query<TotalChanceModel>(it => it.MemberId == userId && it.Key == Key).FirstOrDefault();
                 if (userData != null)
                     total = userData;
-               
-                
+
+
                 //是否为卿(S)渠道用户(排除首投)
                 var notFirst = false;
                 var memberChennel = _respoRepository.GetMemberChennel(userId);
@@ -75,7 +75,7 @@ namespace FJW.Wechat.Activity.Controllers
 
                 var shares = _respoRepository.GetProductTypeShares(userId, config.StartTime, config.EndTime).ToList();
 
-                if(notFirst)
+                if (notFirst)
                     Logger.Info($"ChannelMemberBefore :MemberId : {UserInfo.Id} ,Data: {shares.ToJson()}");
                 if (notFirst && shares.Count > 0 && _respoRepository.GetChannelShares(userId, config.StartTime).Count() < 0)
                 {
@@ -145,7 +145,7 @@ namespace FJW.Wechat.Activity.Controllers
             }
             catch (Exception ex)
             {
-                Logger.Error("Summary :"+ex);
+                Logger.Error("Summary :" + ex);
             }
         }
 
@@ -205,7 +205,7 @@ namespace FJW.Wechat.Activity.Controllers
             TotalChanceModel friendData = new TotalChanceModel();
             if (type == 2)
             {
-                friendData = GetRepository().Query<TotalChanceModel>(it => Key==it.Key && it.MemberId == userChance.FriendId).FirstOrDefault();
+                friendData = GetRepository().Query<TotalChanceModel>(it => Key == it.Key && it.MemberId == userChance.FriendId).FirstOrDefault();
                 nowDistance = friendData?.Score ?? 0;
             }
 
@@ -229,7 +229,7 @@ namespace FJW.Wechat.Activity.Controllers
 
             for (int i = 0; i < rewardList.Count; i++)
             {
-                if(GetRepository().Query<LuckdrawModel>(it => (it.Key == Key && it.MemberId == UserInfo.Id )&& (rewardList[i].Score == it.Score|| i == it.Sequnce) ).ToList().Count>0)
+                if (GetRepository().Query<LuckdrawModel>(it => (it.Key == Key && it.MemberId == UserInfo.Id) && (rewardList[i].Score == it.Score || i == it.Sequnce)).ToList().Count > 0)
                     continue;
                 rewardlis.Add(i);
             }
@@ -305,35 +305,41 @@ namespace FJW.Wechat.Activity.Controllers
 
                 var config = OneTakeOneConfig.GetConfig();
                 var rewardItem = lastRewardData.FirstOrDefault(it => it.Sequnce == rewardIndex);
-                if (type==2&&(rewardItem != null || config.OneTakeOneRecordList[rewardIndex].Score > userChance.Score))
+
+                Logger.Info($"rewardItem :{ rewardItem.ToJson() }, memberId:{ memberId }");
+
+                if (type == 2 && (rewardItem != null || config.OneTakeOneRecordList[rewardIndex].Score > userChance.Score))
                     return Json(new ResponseModel { ErrorCode = ErrorCode.Exception, Message = "您已经领取过奖励了~~" });
 
-               
-                List<OneTakeOneRecord> rewardList = config.OneTakeOneRecordList.Where(item => item.Score <= userChance.Score ).ToList();
-                List<long> couponModelIds =new List<long>();
+
+                List<OneTakeOneRecord> rewardList = config.OneTakeOneRecordList.Where(item => item.Score <= userChance.Score).ToList();
+
+                Logger.Info($"rewardList :{ rewardList.ToJson() }, memberId:{ memberId }");
+
+                List<long> couponModelIds = new List<long>();
                 List<int> sequnceList = new List<int>();
                 List<OneTakeOneRecord> giverewardList = new List<OneTakeOneRecord>();
                 //最后奖励编号
                 //var lastRewardId = lastRewardData?.Sequnce ?? 0;
                 //当前能获取最大奖励编号
                 var canRewardId = rewardList.Count;
-                
+
                 long total;
                 for (int i = 0; i < canRewardId; i++)
                 {
 
-                    var hasreward = lastRewardData.Where(it => it.Sequnce == i).ToList().Count> 0;
-                    if(hasreward)
+                    var hasreward = lastRewardData.Where(it => it.Sequnce == i).ToList().Count > 0;
+                    if (hasreward)
                         continue;
 
                     if (type == 2)
                         i = rewardIndex;
-                    
+
 
                     total = rewardList[i].Score;
                     var rewardData = rewardList[i];
                     var randommax = 0;
-                    
+
                     if (total >= 1000 && total <= 3000)
                         randommax = 5;
                     else if ((total >= 8000 && total <= 100000) || total == 380000)
@@ -343,15 +349,22 @@ namespace FJW.Wechat.Activity.Controllers
                     var random = new Random();
                     var randowNum = random.Next(1, randommax);
 
+                    Logger.Info($"couponIndex :{ couponIndex }, memberId:{ memberId }");
+
                     //发单张卡券
                     if (type == 2)
                     {
                         if (couponIndex > randommax - 1)
-                            return Json(new ResponseModel {ErrorCode = ErrorCode.Exception, Message = "无效的卡券~"});
+                            return Json(new ResponseModel { ErrorCode = ErrorCode.Exception, Message = "无效的卡券~" });
                         randowNum = couponIndex;
-                        rewardData = rewardList[rewardIndex]; 
+                        rewardData = rewardList[rewardIndex];
                         i = canRewardId;
+
+                        Logger.Info($"type==2,rewardData :{ rewardData.ToJson() }, memberId:{ memberId }");
+
                     }
+
+                    Logger.Info($"randowNum :{ randowNum }, memberId:{ memberId }");
 
                     switch (randowNum)
                     {
@@ -385,6 +398,9 @@ namespace FJW.Wechat.Activity.Controllers
                 //发放奖励
                 if (couponModelIds.Count > 0)
                 {
+
+                    Logger.Info($"couponModelIds :{ couponModelIds.ToJson() }, memberId:{ memberId }");
+
                     List<LuckdrawModel> lis = giverewardList.Select((t, i) => new LuckdrawModel
                     {
                         MemberId = userInfo.MemberId,
@@ -394,7 +410,7 @@ namespace FJW.Wechat.Activity.Controllers
                         Name = t.Reward,
                         Prize = couponModelIds[i],
                         Remark = t.Address,
-                        Sequnce = type==2 ? rewardIndex:sequnceList[i],
+                        Sequnce = type == 2 ? rewardIndex : sequnceList[i],
                         Score = t.Score
                     }).ToList();
 
@@ -407,7 +423,7 @@ namespace FJW.Wechat.Activity.Controllers
                         repository.Add(item);
                     }
                 }
-                return Json(new ResponseModel { ErrorCode = ErrorCode.None ,Data="发放成功。"});
+                return Json(new ResponseModel { ErrorCode = ErrorCode.None, Data = "发放成功。" });
             }
             catch (Exception ex)
             {
@@ -428,10 +444,10 @@ namespace FJW.Wechat.Activity.Controllers
 
                 var config = OneTakeOneConfig.GetConfig();
                 List<OneTakeOneRecord> canrewardList = config.OneTakeOneRecordList.Where(item => item.Score <= userChance.Score).ToList();
-                
-                var nowrewardList = GetRepository().Query<LuckdrawModel>(it => it.Key==Key && it.MemberId == UserInfo.Id).ToList();
-              
-                    List<int> resultList = new List<int>();
+
+                var nowrewardList = GetRepository().Query<LuckdrawModel>(it => it.Key == Key && it.MemberId == UserInfo.Id).ToList();
+
+                List<int> resultList = new List<int>();
                 if (canrewardList.Count > nowrewardList.Count)
                 {
                     for (int i = nowrewardList.Count; i < canrewardList.Count; i++)
@@ -464,7 +480,7 @@ namespace FJW.Wechat.Activity.Controllers
             {
                 return Json(validateRes);
             }
-            var memberInfo =new Data.Model.RDBS.MemberModel();
+            var memberInfo = new Data.Model.RDBS.MemberModel();
             memberInfo = phone > 0 ? new SqlDataRepository(SqlConnectString).GetMemberId(phone) : new MemberRepository(SqlConnectString).GetMemberInfo(t);
 
             if (string.IsNullOrEmpty(memberInfo?.Phone))
