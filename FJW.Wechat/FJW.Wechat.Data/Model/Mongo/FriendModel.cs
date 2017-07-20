@@ -41,13 +41,18 @@ namespace FJW.Wechat.Data.Model.Mongo
         /// <summary>
         /// 日期
         /// </summary>
-        public long Date { get; set; }
+        public DateTime Date { get; set; }
         
         /// <summary>
         /// 最后绑定时间
         /// </summary>
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime? BindDate { get; set; }
-       
+
+        /// <summary>
+        /// 获得养份类型（1、肥料 2、阳光 3、 水分 4、系统赠送）
+        /// </summary>
+        public int Type { get; set; }
+
     }
 }

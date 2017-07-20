@@ -83,5 +83,10 @@ namespace FJW.Wechat.Data.Model.Mongo
         /// 成绩
         /// </summary>
         public int Score { get; set; }
+
+        /// <summary>
+        /// 类型 
+        /// </summary>
+        public int Type{ get; set; }
     }
 }

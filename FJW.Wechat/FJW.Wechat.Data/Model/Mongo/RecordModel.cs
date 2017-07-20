@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using FJW.Model.MongoDb;
 
 namespace FJW.Wechat.Data.Model.Mongo
@@ -74,6 +75,11 @@ namespace FJW.Wechat.Data.Model.Mongo
         /// 手机号
         /// </summary>
         public string Phone { get; set; }
-        
+
+        /// <summary>
+        ///  日期
+        /// </summary>
+        public DateTime Date { get; set; }
+
     }
 }

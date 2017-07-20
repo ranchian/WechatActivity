@@ -487,7 +487,7 @@ where MemberID = @memberId and ProductTypeParentID = 2 and ProductTypeID!=9 and 
                     new { memberId }).ToString();
             }
         }
-        public MemberModel GetMemberId(long phone)
+        public MemberModel GetMemberId(string phone)
         {
             using (var conn = GetDbConnection())
             {
@@ -495,6 +495,31 @@ where MemberID = @memberId and ProductTypeParentID = 2 and ProductTypeID!=9 and 
                     "select top 1 ID as MemberId, Phone from Basic..BD_Member Where IsDelete = 0 and Phone = @phone ",
                     new { phone }).FirstOrDefault();
             }
+        }
+
+        /// <summary>
+        /// 用户是否活动期间注册
+        /// </summary>
+        /// <returns></returns>
+        public bool IsActivityMember(string phone,string t, DateTime startTime, DateTime endTime)
+        {
+            using (var conn = GetDbConnection())
+            {
+                string sql = "";
+                if (!string.IsNullOrEmpty(phone))
+                {
+                    sql = "select top 1 ID from Basic..BD_Member Where IsDelete = 0 and Phone = @phone AND CreateTime >= @startTime and CreateTime < @endTime ";
+                    return conn.ExecuteScalar<long>(sql, new { phone, startTime, endTime }) > 0;
+                }
+                if (!string.IsNullOrEmpty(t))
+                {
+                    sql =
+                        "select top 1 MemberID, Phone, Token from dbo.BD_MemberLoginLog where IsDelete = 0 and Token = @token Phone = @phone AND LoginTime >= @startTime and LoginTime < @endTime order by LoginTime desc";
+                    return conn.ExecuteScalar<long>(sql, new { t, startTime, endTime }) > 0;
+                }
+            }
+            
+            return true;
         }
 
     }

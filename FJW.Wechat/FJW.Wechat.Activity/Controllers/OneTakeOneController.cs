@@ -481,7 +481,7 @@ namespace FJW.Wechat.Activity.Controllers
                 return Json(validateRes);
             }
             var memberInfo = new Data.Model.RDBS.MemberModel();
-            memberInfo = phone > 0 ? new SqlDataRepository(SqlConnectString).GetMemberId(phone) : new MemberRepository(SqlConnectString).GetMemberInfo(t);
+            memberInfo = phone > 0 ? new SqlDataRepository(SqlConnectString).GetMemberId(phone.ToString()) : new MemberRepository(SqlConnectString).GetMemberInfo(t);
 
             if (string.IsNullOrEmpty(memberInfo?.Phone))
                 return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Data = "", Message = "好友已生成新的邀请链接~" });

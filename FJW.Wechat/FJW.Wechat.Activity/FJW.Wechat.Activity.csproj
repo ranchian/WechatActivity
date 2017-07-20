@@ -97,6 +97,7 @@
     <Compile Include="ConfigModel\BoxWordConfig.cs" />
     <Compile Include="ConfigModel\CheckersConfig.cs" />
     <Compile Include="ConfigModel\CollectCardModel.cs" />
+    <Compile Include="ConfigModel\FlowersConfig.cs" />
     <Compile Include="ConfigModel\OneTakeOneConfig.cs" />
     <Compile Include="ConfigModel\DuanWuConfig.cs" />
     <Compile Include="ConfigModel\OpenboxConfig.cs" />
@@ -133,9 +134,11 @@
     <Compile Include="Models\CardExchangeModel.cs" />
     <Compile Include="Models\ResultModel.cs" />
     <Compile Include="Models\ScoreModel.cs" />
+    <Compile Include="Controllers\FlowersController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rules\BoxWordRule.cs" />
-    <Compile Include="TaskJobs\KeepliveJob.cs" />
+    <Compile Include="Controllers\TaskJobs\FlowersTaskJob.cs" />
+    <Compile Include="Controllers\TaskJobs\KeepliveJob.cs" />
     <Compile Include="TaskJobs\ArbordayTaskJob.cs" />
     <Compile Include="Unit\QiniuHelper.cs" />
   </ItemGroup>

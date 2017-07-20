@@ -269,6 +269,7 @@
     <Content Include="config\activity.duanwu.json" />
     <Content Include="config\activity.mothersday.json" />
     <Content Include="config\activity.onetakeone.json" />
+    <Content Include="config\activity.flowers.json" />
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>

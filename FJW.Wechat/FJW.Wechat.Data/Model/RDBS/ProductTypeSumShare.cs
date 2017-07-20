@@ -8,6 +8,11 @@ namespace FJW.Wechat.Data.Model.RDBS
     public class ProductTypeSumShare
     {
         /// <summary>
+        /// 产品名称
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
         /// 产品类型
         /// </summary>
         public long ProductTypeId { get; set; }

@@ -272,7 +272,7 @@ namespace FJW.Wechat.Activity.Controllers
 
             var userChance = GetRepository().Query<TotalChanceModel>(it => it.Key == Key && it.MemberId == UserInfo.Id).FirstOrDefault();
 
-            var memberInfo = new SqlDataRepository(SqlConnectString).GetMemberId(phone);
+            var memberInfo = new SqlDataRepository(SqlConnectString).GetMemberId(phone.ToString());
             if (memberInfo == null || memberInfo.MemberId <= 0)
                 return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Data = "邀请用户未注册~" });
             if (memberInfo.MemberId == UserInfo.Id)
