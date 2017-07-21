@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Web.Mvc;
-using System.Web.WebSockets;
-using FJW.SDK2Api.CardCoupon;
+
 using FJW.Unit;
+
 using FJW.Wechat.Data.Model.Mongo;
 using FJW.Wechat.Data;
 using FJW.Wechat.Activity.ConfigModel;
 using FJW.Wechat.Data.Model.RDBS;
-using Quartz.Util;
 
 namespace FJW.Wechat.Activity.Controllers
 {
@@ -348,11 +345,16 @@ namespace FJW.Wechat.Activity.Controllers
             }
 
             //是否新注册用户
-            var isNewMember = _respoRepository.IsActivityMember(friendInfo.Phone, t, _config.StartTime, _config.EndTime);
+            var isNewMember = _respoRepository.IsActivityMember(UserInfo.Phone, t, _config.StartTime, _config.EndTime);
+            var hasFriend =
+                GetRepository()
+                    .Query<FriendTotalChanceModel>(it => it.Key == Key && it.Type == 2 && it.MemberId == UserInfo.Id);
+
+            Logger.Info($"newmember : {UserInfo.Phone}  --- {isNewMember} ");
 
             //type : 2 活动链接注册好友 3 好友投资助力
-            var type = isNewMember ? 2 : 3;
-
+            var isNewMemberBind = isNewMember && !hasFriend.Any();
+            var type = isNewMemberBind ? 2 : 3;
 
             var friendData =
                 GetRepository()
@@ -371,10 +373,10 @@ namespace FJW.Wechat.Activity.Controllers
                     FriendId = friendInfo.MemberId,
                     FriendPhone = long.Parse(friendInfo.Phone),
                     BindDate = DateTime.Now,
-                    HelpCount = isNewMember ? 1 : 0,
+                    HelpCount = isNewMemberBind ? 1 : 0,
                     CreateTime = DateTime.Now,
                     Type = type,
-                    Remark = isNewMember ? "新注册用户" : "好友投资助力",
+                    Remark = isNewMemberBind ? "新注册用户" : "好友投资助力",
                     LastUpdateTime = DateTime.Now
                 });
             }
@@ -465,7 +467,7 @@ namespace FJW.Wechat.Activity.Controllers
             catch (Exception ex)
             {
                 Logger.Error($"FriendCount ： {ex}");
-                return Json(new ResponseModel {ErrorCode = ErrorCode.Exception, Message = ex.Message});
+                return Json(new ResponseModel {ErrorCode = ErrorCode.Exception});
             }
         }
 
@@ -536,7 +538,7 @@ namespace FJW.Wechat.Activity.Controllers
                 CreateTime = DateTime.Now,
                 LastUpdateTime = DateTime.Now
             });
-            Logger.Info($"DayBuyRecord 每日投资份额统计: {hasRecordData.ToJson()}");
+            Logger.Info($" MemberId :{userId} DayBuyRecord 每日投资份额统计: {hasRecordData.ToJson()}");
         }
 
         /// <summary>
@@ -632,7 +634,6 @@ namespace FJW.Wechat.Activity.Controllers
                 return null;
             }
         }
-
 
         /// <summary>
         /// 统计花朵
