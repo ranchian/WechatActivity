@@ -69,8 +69,7 @@ namespace FJW.Wechat.Activity.Controllers
                 //是否为卿(S)渠道用户(排除首投)
                 var notFirst = false;
                 var memberChennel = _respoRepository.GetMemberChennel(userId);
-                if (memberChennel?.Channel != null &&
-                    memberChennel.Channel.Equals("WQWLCPS", StringComparison.CurrentCultureIgnoreCase) &&
+                if (memberChennel?.Channel != null && memberChennel.Channel.Equals("WQWLCPS", StringComparison.CurrentCultureIgnoreCase) &&
                     memberChennel.CreateTime > _config.StartTime)
                     notFirst = true;
                 else if (new MemberRepository(SqlConnectString).DisableMemberInvite(userId))

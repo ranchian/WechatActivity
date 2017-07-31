@@ -97,28 +97,33 @@ namespace FJW.Wechat.Activity.Controllers
                 if (userData != null)
                     total = userData;
 
-                //是否为卿(S)渠道用户(排除月宝和季宝)
+                //是否为卿(S)渠道用户(排除月宝首投、季宝首投和复投)
                 var iswqwlCps = false;
+                var notFirst = false;
                 var memberChennel = _respoRepository.GetMemberChennel(userId);
 
                 if (memberChennel?.Channel != null && memberChennel.Channel.Equals("WQWLCPS", StringComparison.CurrentCultureIgnoreCase))
                     iswqwlCps = true;
-                //else if (new MemberRepository(SqlConnectString).DisableMemberInvite(userId))
-                //  notFirst = true;
+
+                if(memberChennel?.Channel != null && memberChennel.Channel.Equals("WQWLCPS", StringComparison.CurrentCultureIgnoreCase) &&
+                    memberChennel.CreateTime > _config.StartTime)
+                    notFirst = true;
+
+
 
                 var shares = _respoRepository.GetProductTypeShares(userId, _config.StartTime, _config.EndTime).ToList();
 
-                if (iswqwlCps)
+                if (iswqwlCps || notFirst)
                     Logger.Info($"ChannelMemberBefore :MemberId : {UserInfo.Id} ,Data: {shares.ToJson()}");
 
-                //排除月宝和季宝
+                //排除月宝首投、季宝首投和复投
                 if (iswqwlCps && shares.Count > 0)
                 {
+                    if (notFirst)
+                        shares.Where(it => it.ProductTypeId == 5).OrderByDescending(it => it.BuyTime).FirstOrDefault().BuyShares = 0;
                     foreach (var item in shares)
                     {
-                        if (item.ProductTypeId == 5)
-                            item.BuyShares = 0;
-                        else if (item.ProductTypeId == 6)
+                        if (item.ProductTypeId == 6)
                             item.BuyShares = 0;
                     }
                     Logger.Info($"ChannelMemberAfter :MemberId : {UserInfo.Id} ,Data: {shares.ToJson()}");
@@ -183,11 +188,18 @@ namespace FJW.Wechat.Activity.Controllers
 
             var userChance = GetRepository().Query<TotalChanceModel>(it => it.Key == Key && it.MemberId == UserInfo.Id).FirstOrDefault();
 
+            #region Test Code
+            if (userChance != null && (UserInfo.Phone == "15961956476" || UserInfo.Phone == "18761216965" || UserInfo.Phone == "15961956582" || UserInfo.Phone == "18014691671" || UserInfo.Phone == "15365705890"))
+            {
+                userChance.Total = 100000 + userChance.Score;
+            }
+            #endregion
+
             canUse = 0;
             //Used 自己使用  NotUse 给别人使用
             if (userChance != null)
                 canUse = userChance.Total - userChance.Used - userChance.NotUsed;
-
+           
             return userChance;
         }
 
@@ -287,7 +299,7 @@ namespace FJW.Wechat.Activity.Controllers
 
             //发放奖励
             var objId = long.Parse(DateTime.Now.ToString("yyyyMMddHHmmssffff"));
-            new MemberRepository(SqlConnectString).GiveMoney(UserInfo.Id, money, 55, objId);
+            new MemberRepository(SqlConnectString).GiveMoney(UserInfo.Id, money, _config.ActivityId, objId);
 
             GetRepository().Add(new LuckdrawModel
             {
