@@ -213,7 +213,7 @@ namespace FJW.Wechat.Activity.Controllers
                 return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Message = "请选择喜蛋种类~" });
             if (type > 0 && canUse <= 0)
                 return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Message = "快去投资，砸开喜蛋吧~" });
-            if ((type == 1 && canUse < 1) || (type == 2 && canUse < 10) || (type == 3 && canUse < 100))
+            if ((type == 1 && canUse < 100) || (type == 2 && canUse < 10) || (type == 3 && canUse < 1))
                 return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Message = "房金币不足哟~" });
 
 
@@ -433,7 +433,7 @@ namespace FJW.Wechat.Activity.Controllers
 
             if (count == 0)
                 return Json(new ResponseModel { ErrorCode = ErrorCode.None, Data = new { Count = canUse } });
-            if(count > canUse)
+            if (count > canUse)
                 return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Data = "", Message = "您的房金币不足哟~" });
 
             if (string.IsNullOrEmpty(friendInfo?.Phone))
@@ -477,14 +477,30 @@ namespace FJW.Wechat.Activity.Controllers
                 int canUse;
                 SelectCount(out canUse);
 
-                var resultData = GetRepository().Query<LuckdrawModel>(it => it.Key == Key && it.MemberId == UserInfo.Id).Select(it => new
+                List<RewardList> resultData = GetRepository().Query<LuckdrawModel>(it => it.Key == Key && it.MemberId == UserInfo.Id).Select(it => new RewardList
+                {
+                    Type = it.Type,
+                    Name = it.Name,
+                    Date = it.CreateTime
+                }).ToList();
+
+                var friendGiveData =
+                    GetRepository().Query<FriendTotalChanceModel>(it => it.Key == Key && it.FriendId == UserInfo.Id && it.HelpCount > 0 && it.MemberId != 0).Select(it => new RewardList
+                    {
+                        Type = it.Phone.ToString().Substring(0, 3) + "****" + it.Phone.ToString().Substring(7, 4),
+                        Name = it.HelpCount + "枚",
+                        Date = it.CreateTime
+                    });
+
+                resultData.AddRange(friendGiveData);
+
+                var result = resultData.OrderByDescending(it => it.Date).Select(it=> new
                 {
                     it.Type,
                     it.Name,
-                    Date = it.CreateTime.ToString("yyyy.MM.dd")
+                    Date = it.Date.ToString("yyyy.MM.dd")
                 });
-
-                return Json(new ResponseModel { ErrorCode = ErrorCode.None, Data = new { Count = canUse, RewardList = resultData } });
+                return Json(new ResponseModel { ErrorCode = ErrorCode.None, Data = new { Count = canUse, RewardList = result } });
             }
             catch (Exception ex)
             {
@@ -511,5 +527,14 @@ namespace FJW.Wechat.Activity.Controllers
                 return null;
             }
         }
+    }
+
+    public class RewardList
+    {
+        public string Type { get; set; }
+
+        public string Name { get; set; }
+
+        public DateTime Date { get; set; }
     }
 }
