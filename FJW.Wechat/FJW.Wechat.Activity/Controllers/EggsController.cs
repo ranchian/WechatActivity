@@ -104,14 +104,23 @@ namespace FJW.Wechat.Activity.Controllers
 
                 if (memberChennel?.Channel != null && memberChennel.Channel.Equals("WQWLCPS", StringComparison.CurrentCultureIgnoreCase))
                     iswqwlCps = true;
+                if (new MemberRepository(SqlConnectString).DisableMemberInvite(userId))
+                {
+                    Logger.Info("DisableMemberInvite : true ");
+                    iswqwlCps = true;
+                }
+                
 
-                if(memberChennel?.Channel != null && memberChennel.Channel.Equals("WQWLCPS", StringComparison.CurrentCultureIgnoreCase) &&
-                    memberChennel.CreateTime > _config.StartTime)
+                //_config.StartTime 屏蔽
+                //var dateTime = new DateTime(2017, 8, 8, 13, 0, 0);
+                
+                var shares = _respoRepository.GetProductTypeShares(userId, _config.StartTime, _config.EndTime).ToList();
+
+                var oldShares = _respoRepository.GetProductTypeShares(userId, new DateTime(2016,8,1), _config.StartTime).ToList();
+                if (iswqwlCps && (memberChennel.CreateTime > _config.StartTime|| oldShares.Count(it => it.ProductTypeId == 5) <= 0))
                     notFirst = true;
 
-
-
-                var shares = _respoRepository.GetProductTypeShares(userId, _config.StartTime, _config.EndTime).ToList();
+                
 
                 if (iswqwlCps || notFirst)
                     Logger.Info($"ChannelMemberBefore :MemberId : {UserInfo.Id} ,Data: {shares.ToJson()}");
@@ -119,8 +128,16 @@ namespace FJW.Wechat.Activity.Controllers
                 //排除月宝首投、季宝首投和复投
                 if (iswqwlCps && shares.Count > 0)
                 {
-                    if (notFirst)
-                        shares.Where(it => it.ProductTypeId == 5).OrderByDescending(it => it.BuyTime).FirstOrDefault().BuyShares = 0;
+                    if (notFirst && shares.Count(it => it.ProductTypeId == 5) > 0)
+                    {
+                        Logger.Info($"ProductTypeId = 5  BuyShareBefore{shares.Where(it => it.ProductTypeId == 5).OrderByDescending(it => it.BuyTime).FirstOrDefault().BuyShares}");
+
+                        var productTypeSumShare = shares.Where(it => it.ProductTypeId == 5).OrderByDescending(it => it.BuyTime).FirstOrDefault();
+                        if (productTypeSumShare != null)
+                            productTypeSumShare.BuyShares = 0;
+
+                        Logger.Info($"ProductTypeId = 5  BuyShareAfter{shares.Where(it => it.ProductTypeId == 5).OrderByDescending(it => it.BuyTime).FirstOrDefault().BuyShares}");
+                    }
                     foreach (var item in shares)
                     {
                         if (item.ProductTypeId == 6)
@@ -143,7 +160,7 @@ namespace FJW.Wechat.Activity.Controllers
                 //使用次数
                 var totalChanceModel = GetRepository().Query<TotalChanceModel>(it => it.Key == Key && it.MemberId == userId).FirstOrDefault();
 
-                //好友给予次数
+                //好友给予次数 
                 var friendGiveCount = GetRepository().Query<FriendTotalChanceModel>(it => it.Key == Key && it.FriendId == userId).Sum(it => it.HelpCount);
 
                 if (totalChanceModel != null)
@@ -189,7 +206,7 @@ namespace FJW.Wechat.Activity.Controllers
             var userChance = GetRepository().Query<TotalChanceModel>(it => it.Key == Key && it.MemberId == UserInfo.Id).FirstOrDefault();
 
             #region Test Code
-            if (userChance != null && (UserInfo.Phone == "15961956476" || UserInfo.Phone == "18761216965" || UserInfo.Phone == "15961956582" || UserInfo.Phone == "18014691671" || UserInfo.Phone == "15365705890"))
+            if (userChance != null && (UserInfo.Phone == "15961956476" || UserInfo.Phone == "18761216965"))
             {
                 userChance.Total = 100000 + userChance.Score;
             }
@@ -220,7 +237,7 @@ namespace FJW.Wechat.Activity.Controllers
             int canUse;
             var memberData = SelectCount(out canUse);
             if (type == 0)
-                return Json(new ResponseModel { ErrorCode = ErrorCode.None, Data = new { Count = canUse } });
+                return Json(new ResponseModel { ErrorCode = ErrorCode.None, Data = new { Count = canUse <= 0 ? 0 : canUse } });
             if (type < 1 || type > 3)
                 return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Message = "请选择喜蛋种类~" });
             if (type > 0 && canUse <= 0)
@@ -317,7 +334,7 @@ namespace FJW.Wechat.Activity.Controllers
             GetRepository().Update(memberData);
 
             SelectCount(out canUse);
-            return Json(new ResponseModel { ErrorCode = ErrorCode.None, Data = new { LuckName = money, LuckNum = luckNum, Count = canUse, OtherData = resultLuckData } });
+            return Json(new ResponseModel { ErrorCode = ErrorCode.None, Data = new { LuckName = money, LuckNum = luckNum, Count = canUse <= 0 ? 0 : canUse, OtherData = resultLuckData } });
         }
 
         /// <summary>
@@ -444,7 +461,7 @@ namespace FJW.Wechat.Activity.Controllers
             var memberData = SelectCount(out canUse);
 
             if (count == 0)
-                return Json(new ResponseModel { ErrorCode = ErrorCode.None, Data = new { Count = canUse } });
+                return Json(new ResponseModel { ErrorCode = ErrorCode.None, Data = new { Count = canUse <=0 ? 0: canUse } });
             if (count > canUse)
                 return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Data = "", Message = "您的房金币不足哟~" });
 
@@ -512,7 +529,7 @@ namespace FJW.Wechat.Activity.Controllers
                     it.Name,
                     Date = it.Date.ToString("yyyy.MM.dd")
                 });
-                return Json(new ResponseModel { ErrorCode = ErrorCode.None, Data = new { Count = canUse, RewardList = result } });
+                return Json(new ResponseModel { ErrorCode = ErrorCode.None, Data = new { Count = canUse <= 0 ? 0 : canUse, RewardList = result } });
             }
             catch (Exception ex)
             {

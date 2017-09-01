@@ -10,7 +10,8 @@ namespace FJW.Wechat.ConsoleApp
     {
         private static void Main(string[] args)
         { 
-            // Console.WriteLine("a".ToInt());
+
+            Console.WriteLine("a".ToInt());
             //// new T1().Test();
             // DateTime t1;
             // DateTime.TryParse("a", out t1);

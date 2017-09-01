@@ -90,6 +90,22 @@ select D.MemberID from Trading.dbo.TC_DisableMember D where MemberID = @memberId
         }
 
         /// <summary>
+        /// 是否为不可用的要求人（WQWL 为卿网络）
+        /// </summary>
+        /// <param name="memberId"></param>
+        /// <returns></returns>
+        public bool DisableMemberInviteWQWL(long memberId)
+        {
+            using (var conn = GetDbConnection())
+            {
+                const string sql = @"declare @memberId bigint;
+select @memberId = F.MemberID from Basic..BD_MemberInviteFriends F where F.IsDelete = 0 and F.FriendID = @friendId;
+select D.MemberID from Trading.dbo.TC_DisableMember D where D.Remark like '%为卿网络%' AND MemberID = @memberId;";
+                return conn.ExecuteScalar<long>(sql, new { friendId = memberId }) > 0;
+            }
+        }
+
+        /// <summary>
         /// 是否为不可用的要求人
         /// </summary>
         /// <param name="memberId"></param>
