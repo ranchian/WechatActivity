@@ -97,6 +97,7 @@
     <Compile Include="ConfigModel\BoxWordConfig.cs" />
     <Compile Include="ConfigModel\CheckersConfig.cs" />
     <Compile Include="ConfigModel\CollectCardModel.cs" />
+    <Compile Include="ConfigModel\SeptemberDzpConfig.cs" />
     <Compile Include="ConfigModel\EggsConfig.cs" />
     <Compile Include="ConfigModel\FlowersConfig.cs" />
     <Compile Include="ConfigModel\OneTakeOneConfig.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="Controllers\CheckersController.cs" />
     <Compile Include="Controllers\CollectCardController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
+    <Compile Include="Controllers\SeptemberDzpController.cs" />
     <Compile Include="Controllers\EggsController.cs" />
     <Compile Include="Controllers\OneTakeOneController.cs" />
     <Compile Include="Controllers\DuanWuController.cs" />

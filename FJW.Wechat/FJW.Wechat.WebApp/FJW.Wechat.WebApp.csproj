@@ -271,6 +271,7 @@
     <Content Include="config\activity.onetakeone.json" />
     <Content Include="config\activity.flowers.json" />
     <Content Include="config\activity.eggs.json" />
+    <Content Include="config\activity.septemberdzp.json" />
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
