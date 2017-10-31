@@ -44,7 +44,7 @@ namespace FJW.Wechat.WebApp
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
 
-            JobConfig.Start();
+            //JobConfig.Start();
 
 
         }
@@ -55,7 +55,7 @@ namespace FJW.Wechat.WebApp
         protected void Application_End()
         {
             RedisManager.Disponse();
-            JobConfig.Stop();
+            //JobConfig.Stop();
         }
     }
 }

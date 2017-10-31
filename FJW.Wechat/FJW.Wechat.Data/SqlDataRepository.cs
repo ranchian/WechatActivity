@@ -176,7 +176,7 @@ where MemberID = @memberId and BuyTime >= @startTime and BuyTime < @endTime and 
         public IEnumerable<ProductTypeSumShare> GetProductTypeShares(long memberId, DateTime startTime, DateTime endTime)
         {
             const string sql = @"select ProductTypeID, SUM(BuyShares) as BuyShares ,Min(BuyTime) as BuyTime  from Trading..TC_ProductBuy 
-where IsDelete = 0 and MemberID =  @memberId and BuyTime >= @startTime and BuyTime < @endTime and Status = 1
+where IsDelete = 0 and MemberID =  @memberId and BuyTime >= @startTime and BuyTime < @endTime and Status = 1 
 group by ProductTypeID";
             using (var conn = GetDbConnection())
             {

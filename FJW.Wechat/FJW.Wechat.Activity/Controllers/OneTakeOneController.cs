@@ -464,7 +464,6 @@ namespace FJW.Wechat.Activity.Controllers
             }
         }
 
-
         /// <summary>
         /// 绑定好友
         /// </summary>

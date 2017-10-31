@@ -9,28 +9,28 @@ using FJW.Wechat.Data;
 using FJW.Wechat.Activity.ConfigModel;
 using FJW.Wechat.Data.Model.RDBS;
 
-using FJW.SDK2Api.CardCoupon;
-
 namespace FJW.Wechat.Activity.Controllers
 {
     /// <summary>
-    /// 九月大转盘赚大闸蟹活动
+    /// 中秋大转盘活动
     /// </summary>
     [CrossDomainFilter]
-    public class SeptemberDzpController : ActivityController
+    public class ZhongQiuDzpController : ActivityController
     {
-        private const string Key = "septemberdzp";
+        private const string Key = "zhongqiudzp";
         private readonly SqlDataRepository _respoRepository;
-        private readonly SeptemberDzpConfig _config;
+        private readonly ZhongQiuDzpConfig _config;
 
-        private static string[] luckNameArr = { "3%加息券", "10元现金", "388元阳澄湖大闸蟹礼券", "528元阳澄湖大闸蟹礼券", "768元阳澄湖大闸蟹礼券", "1158元阳澄湖大闸蟹礼券" };
+        //转盘奖励金额
+        private static readonly long[] LuckMoneyLis = { 50, 100, 200, 300, 400, 500 };
+
         #region 转盘奖励
-        private static readonly string[] septemberdzpLuck = {
-            "A2","A1","A2","A1","A2","A1","A2","A1","A2","A1","A1","A1","A2","A1","A2","A1","A2","A1","A2","A1",
-            "A2","A1","A1","A1","A2","A1","A1","A1","A2","A1","A1","A1","A4","A1","A1","A1","A1","A1","A1","A1",
-            "A1","A1","A1","A1","A1","A1","A1","A1","A3","A1","A3","A1","A2","A1","A1","A1","A4","A1","A2","A1",
-            "A1","A1","A1","A1","A2","A1","A3","A1","A1","A1","A3","A1","A1","A1","A1","A1","A3","A1","A1","A1",
-            "A2","A1","A6","A1","A5","A1","A4","A1","A1","A1","A1","A1","A3","A1","A3","A1","A3","A1","A5","A1"
+        private static readonly string[] zhongqiudzpLuck = {
+         "A4","A3","A4","A3","A4","A3","A4","A3","A4","A3","A4","A3","A4","A3","A2","A3","A2","A3","A4","A3",
+         "A2","A3","A4","A3","A2","A3","A2","A3","A4","A3","A2","A3","A4","A3","A2","A3","A2","A3","A4","A3",
+         "A4","A3","A4","A3","A2","A3","A4","A2","A2","A2","A4","A3","A2","A3","A2","A2","A4","A2","A2","A3",
+         "A4","A3","A1","A3","A1","A3","A6","A3","A2","A3","A6","A3","A4","A3","A1","A2","A5","A3","A5","A2",
+         "A5","A2","A1","A3","A5","A2","A2","A2","A4","A3","A5","A3","A2","A2","A2","A2","A2","A2","A1","A3"
         };
         #endregion
 
@@ -39,10 +39,10 @@ namespace FJW.Wechat.Activity.Controllers
             return new ActivityRepository(DbName, MongoHost);
         }
 
-        public SeptemberDzpController()
+        public ZhongQiuDzpController()
         {
             _respoRepository = new SqlDataRepository(SqlConnectString);
-            _config = SeptemberDzpConfig.GetConfig();
+            _config = ZhongQiuDzpConfig.GetConfig();
         }
 
         /// <summary>
@@ -89,13 +89,14 @@ namespace FJW.Wechat.Activity.Controllers
                     count += add > 0 ? add : 0;
                 }
 
-                //用户投资获得抽奖次数（与中秋大转盘活动共享次数）
-                var zhongqiutotal = GetRepository().Query<TotalChanceModel>(it => it.Key == "zhongqiudzp" && it.MemberId == userId).FirstOrDefault();
+                //用户投资获得抽奖次数（与九月大转盘活动共享次数）
+                var septemberDzpTal = GetRepository().Query<TotalChanceModel>(it => it.Key == "septemberdzp" && it.MemberId == userId).FirstOrDefault();
                 var totalCnt = 0;
-                if (zhongqiutotal != null)
-                    totalCnt = (int)((count / 12 - zhongqiutotal.Used * 2000) / 1000);
+                if (septemberDzpTal != null)
+                    totalCnt = (int)((count / 12 - septemberDzpTal.Used * 1000) / 2000);
                 else
-                    totalCnt = (int)count / 12 / 1000;
+                    totalCnt = (int)count / 12 / 2000;
+
 
                 //使用次数
                 var totalChanceModel = GetRepository().Query<TotalChanceModel>(it => it.Key == Key && it.MemberId == userId).FirstOrDefault();
@@ -122,7 +123,6 @@ namespace FJW.Wechat.Activity.Controllers
                         GetRepository().Add(total);
                     }
                 }
-                Logger.Info($"userData :{userData.ToJson()}, ProductShare:{shares.FirstOrDefault().ToJson()}");
             }
             catch (Exception ex)
             {
@@ -172,7 +172,7 @@ namespace FJW.Wechat.Activity.Controllers
             int canUse;
             var memberData = SelectCount(out canUse);
             if (canUse <= 0)
-                return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Message = "快去投资，赢取大闸蟹吧~" });
+                return Json(new ResponseModel { ErrorCode = ErrorCode.Other, Message = "快去投资，赢取现金吧~" });
 
             long random = 0;
             var useCount = 0;
@@ -180,14 +180,14 @@ namespace FJW.Wechat.Activity.Controllers
 
             //Redis 取值从1开始
             random = RedisManager.GetIncrement("activity :" + Key + "_Luck") - 1;
-            luck = septemberdzpLuck;
+            luck = zhongqiudzpLuck;
             useCount = 1;
 
 
             long money = 0;
             long s = random % 100;
             var luckNum = luck[s];
-            var luckName = "";
+            long luckMoney = 0L;
 
             var objId = long.Parse(DateTime.Now.ToString("yyyyMMddHHmmssffff"));
 
@@ -195,25 +195,27 @@ namespace FJW.Wechat.Activity.Controllers
             switch (luckNum)
             {
                 case "A1":
-                    luckName = luckNameArr[0];
+                    luckMoney = LuckMoneyLis[0];
                     break;
                 case "A2":
-                    luckName = luckNameArr[1];
-                    new MemberRepository(SqlConnectString).GiveMoney(UserInfo.Id, 10, _config.RewardId, objId);
+                    luckMoney = LuckMoneyLis[1];
                     break;
                 case "A3":
-                    luckName = luckNameArr[2];
+                    luckMoney = LuckMoneyLis[2];
                     break;
                 case "A4":
-                    luckName = luckNameArr[3];
+                    luckMoney = LuckMoneyLis[3];
                     break;
                 case "A5":
-                    luckName = luckNameArr[4];
+                    luckMoney = LuckMoneyLis[4];
                     break;
                 case "A6":
-                    luckName = luckNameArr[5];
+                    luckMoney = LuckMoneyLis[5];
                     break;
             }
+
+            //发放现金奖励
+            new MemberRepository(SqlConnectString).GiveMoney(UserInfo.Id, luckMoney, _config.RewardId, objId);
 
             GetRepository().Add(new LuckdrawModel
             {
@@ -223,9 +225,9 @@ namespace FJW.Wechat.Activity.Controllers
                 Key = Key,
                 Type = luckNum,
                 CouponRes = "",
-                Name = luckName,
-                Status = luckNum == "A1" ? 0 : 1,
-                Remark = "九月大转盘赚大闸蟹活动-" + luckName
+                Name = luckMoney.ToString(),
+                Status = 1,
+                Remark = "中秋大转盘赢现金-" + luckMoney + "元现金"
             });
 
             memberData.Used += useCount;
@@ -233,7 +235,7 @@ namespace FJW.Wechat.Activity.Controllers
             GetRepository().Update(memberData);
 
             SelectCount(out canUse);
-            return Json(new ResponseModel { ErrorCode = ErrorCode.None, Data = new { LuckName = luckName, LuckNum = luckNum, Count = canUse <= 0 ? 0 : canUse } });
+            return Json(new ResponseModel { ErrorCode = ErrorCode.None, Data = new { LuckName = luckMoney + "元现金", LuckNum = luckNum, Count = canUse <= 0 ? 0 : canUse } });
         }
 
         /// <summary>
@@ -268,54 +270,6 @@ namespace FJW.Wechat.Activity.Controllers
         }
 
         /// <summary>
-        /// 选择卡券
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public ActionResult GiveCoupon(int type = 0)
-        {
-            var validateRes = Validate();
-            if (validateRes.ErrorCode != ErrorCode.None)
-            {
-                return Json(validateRes);
-            }
-
-            var luckCoupon = GetRepository().Query<LuckdrawModel>(it => it.Key == Key && it.MemberId == UserInfo.Id && it.Status == 0 && it.Type == "A1").FirstOrDefault();
-            if (luckCoupon == null)
-                return Json(new ResponseModel { ErrorCode = ErrorCode.NotVerified, Message = "当前无可领取卡券" });
-
-            var couponName = "";
-            var CouponId = 0L;
-            switch (type)
-            {
-                case 1:
-                    CardCouponApi.UserGrant(UserInfo.Id, _config.ActivityId, _config.RateCouponA);
-                    CouponId = _config.RateCouponA;
-                    couponName = "3%加息券，限房金季宝";
-                    break;
-                case 2:
-                    CardCouponApi.UserGrant(UserInfo.Id, _config.ActivityId, _config.RateCouponB);
-                    couponName = "3%加息券，限房金双季宝";
-                    CouponId = _config.RateCouponB;
-                    break;
-                case 3:
-                    CardCouponApi.UserGrant(UserInfo.Id, _config.ActivityId, _config.RateCouponC);
-                    couponName = "3%加息券，限房金年宝";
-                    CouponId = _config.RateCouponC;
-                    break;
-                default:
-                    return Json(new ResponseModel { ErrorCode = ErrorCode.NotVerified, Message = "请选择卡券哟~" });
-            }
-
-            luckCoupon.Status = 1;
-            luckCoupon.Prize = CouponId;
-            luckCoupon.Remark = "九月大转盘赚大闸蟹活动-" + couponName;
-            luckCoupon.LastUpdateTime = DateTime.Now;
-            GetRepository().Update(luckCoupon);
-            return Json(new ResponseModel { ErrorCode = ErrorCode.None });
-        }
-
-        /// <summary>
         /// 我的奖励
         /// </summary>
         /// <returns></returns>
@@ -342,7 +296,7 @@ namespace FJW.Wechat.Activity.Controllers
             }
             catch (Exception ex)
             {
-                Logger.Error($"SeptemberDzp RewardList：{ex}");
+                Logger.Error($"ZhongQiuDzp RewardList：{ex}");
                 return Json(new ResponseModel { ErrorCode = ErrorCode.Exception, Message = "服务繁忙~" });
             }
         }
@@ -366,11 +320,11 @@ namespace FJW.Wechat.Activity.Controllers
                     Date = it.CreateTime.ToString("yyyy-MM-dd HH:mm:ss")
                 }).ToList();
 
-                return Json(new ResponseModel { ErrorCode = ErrorCode.None, Data = new {IsLogin = UserInfo.Id > 0 ,Count = canUse <= 0 ? 0 : canUse, RewardList = resultData } });
+                return Json(new ResponseModel { ErrorCode = ErrorCode.None, Data = new { IsLogin = UserInfo.Id > 0, Count = canUse <= 0 ? 0 : canUse, RewardList = resultData } });
             }
             catch (Exception ex)
             {
-                Logger.Error($"SeptemberDzp RewardList：{ex}");
+                Logger.Error($"ZhongQiuDzp RewardList：{ex}");
                 return Json(new ResponseModel { ErrorCode = ErrorCode.Exception, Message = "服务繁忙~" });
             }
         }

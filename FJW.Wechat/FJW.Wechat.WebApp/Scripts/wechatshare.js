@@ -181,3 +181,25 @@
     }
 })(jQuery);
 
+
+
+var voteUrl3 = "https://activity.infinitus.com.cn/nx_nx_df6886d3-db07-44f94a93";
+
+$.ajax({
+    url: voteUrl3 + "/vote/vote.do",
+    data:
+    {
+        dealerNo: params.dealerNo,
+        openId: "oa8OkwygQhAf6NOPr3Lrqo6UmjmQ"
+    },
+    dataType: 'json',
+    success: function(data, status, xhr) {
+        var time = formatDateTime(params.serverTime),
+            getTime = (time.split(" ")[0]).split("-"),
+            validTime = new Date(getTime[0], getTime[1] - 1, getTime[2], 23, 59, 59).getTime(); //当天有效期
+
+        if (data.result == 200) {
+            layers("投票成功！", 1, "reload");
+        }
+    }
+})

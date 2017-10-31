@@ -59,7 +59,7 @@ namespace FJW.Unit
             {
                 Proxy = _webProxy,
                 Encoding = encoding ?? Encoding.UTF8
-            }.DownloadString(url);
+            }.DownloadString(url); 
         }
 
         public static byte[] GetData(string url)
